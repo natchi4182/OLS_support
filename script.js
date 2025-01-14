@@ -493,4 +493,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
+  // 「尿中Ca/尿中Cre」を自動計算
+  const calculateUrinaryCaRatio = () => {
+    // 「尿中Ca」と「尿中Cre」の入力フィールドを取得
+    const caInput = document.querySelector('input[name="尿中Ca"]');
+    const creInput = document.querySelector('input[name="尿中Cre"]');
+    const ratioInput = document.querySelector('input[name="尿中Ca/尿中Cre"]');
+
+    if (caInput && creInput && ratioInput) {
+      const caValue = parseFloat(caInput.value) || 0;
+      const creValue = parseFloat(creInput.value) || 0;
+
+      if (creValue !== 0) {
+        // 比率を計算して小数点第2位まで表示
+        const ratio = (caValue / creValue).toFixed(2);
+        ratioInput.value = ratio;
+      } else {
+        // 「尿中Cre」がゼロの場合は空欄
+        ratioInput.value = '';
+      }
+    }
+  };
+
+  // イベントリスナーを追加
+  const caInput = document.querySelector('input[name="尿中Ca"]');
+  const creInput = document.querySelector('input[name="尿中Cre"]');
+
+  if (caInput && creInput) {
+    caInput.addEventListener('input', calculateUrinaryCaRatio);
+    creInput.addEventListener('input', calculateUrinaryCaRatio);
+  }
+  
 }); // DOMContentLoaded end
