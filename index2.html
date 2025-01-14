@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="ja">
+  
 <head>
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>骨粗鬆症診療支援ツール</title>
+
   <script>
     /** keyToLabelMap は「フォーム name」 → 「ラベル」の対応表 */
     const keyToLabelMap = {
@@ -30,7 +34,9 @@
       femur_yam: "大腿骨近位YAM値"
     };
   </script>
+
   <link rel="stylesheet" href="https://natchi4182.github.io/OLS_support/styles.css">
+
 </head>
 
 <body>
@@ -55,7 +61,7 @@
     <fieldset>
       <legend>患者ID(※)</legend>
       <label for="patientIdInput">患者ID:</label>
-      <input type="text" id="patientIdInput" name="patient_id" required>
+      <input type="text" id="patientIdInput" name="patient_id" placeholder="暗号化処理したIDを記載してください" required>
     </fieldset>
 
     <fieldset>
