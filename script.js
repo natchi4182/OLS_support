@@ -493,9 +493,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // 「尿中Ca/尿中Cre」を自動計算
+  // -----------------------------
+  // 10) 検体検査データ テーブルの「尿中Ca/尿中Cre」を自動計算
+  // -----------------------------
   const calculateUrinaryCaRatio = () => {
-    // 「尿中Ca」と「尿中Cre」の入力フィールドを取得
     const caInput = document.querySelector('input[name="尿中Ca"]');
     const creInput = document.querySelector('input[name="尿中Cre"]');
     const ratioInput = document.querySelector('input[name="尿中Ca/尿中Cre"]');
@@ -504,13 +505,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       const caValue = parseFloat(caInput.value) || 0;
       const creValue = parseFloat(creInput.value) || 0;
 
+      // 比率を計算（Creがゼロの場合は空白を表示）
       if (creValue !== 0) {
-        // 比率を計算して小数点第2位まで表示
-        const ratio = (caValue / creValue).toFixed(2);
-        ratioInput.value = ratio;
+        ratioInput.value = (caValue / creValue).toFixed(2); // 小数点第2位まで
       } else {
-        // 「尿中Cre」がゼロの場合は空欄
-        ratioInput.value = '';
+        ratioInput.value = ''; // Creがゼロの場合
       }
     }
   };
@@ -523,5 +522,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     caInput.addEventListener('input', calculateUrinaryCaRatio);
     creInput.addEventListener('input', calculateUrinaryCaRatio);
   }
-  
+
+  const input = document.createElement('input');
+  input.type = 'number';
+  input.name = item.name;
+  input.step = item.step;
+  if (item.name === '尿中Ca/尿中Cre') {
+    input.readOnly = true; // 自動計算専用にする
+  }
+
 }); // DOMContentLoaded end
