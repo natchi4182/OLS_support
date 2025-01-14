@@ -78,23 +78,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   // -----------------------------
   // 3) 検体検査データ テーブルの生成
   // -----------------------------
-  const labDataTable = document.getElementById('labDataTable');
+  const labDataTable = document.getElementById('labDataTable').querySelector('tbody');
   let labDataItems = [];
 
+  // JSONデータを取得
   try {
     const response = await fetch('https://natchi4182.github.io/OLS_support/labDataItems.json');
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     labDataItems = await response.json();
-  } catch (err) {
-    console.error('Error loading labDataItems.json:', err);
+  } catch (error) {
+    console.error('検査データの読み込みに失敗しました:', error);
+    alert('検査データの読み込みに失敗しました。コンソールをご確認ください。');
+    return;
   }
 
+  // テーブルにデータ行を追加
   labDataItems.forEach(item => {
     const tr = document.createElement('tr');
+
+    // 検査項目
     const tdName = document.createElement('td');
     tdName.textContent = item.name;
     tr.appendChild(tdName);
 
+    // 入力欄
     const tdInput = document.createElement('td');
     const input = document.createElement('input');
     input.type = 'number';
@@ -102,21 +109,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     input.step = item.step;
     input.min = item.min || '';
     input.max = item.max || '';
-
     if (item.name === '尿中Ca/尿中Cre') input.readOnly = true; // 自動計算専用
-    input.addEventListener('input', saveFormData); // 保存処理
     tdInput.appendChild(input);
     tr.appendChild(tdInput);
 
+    // 単位
     const tdUnit = document.createElement('td');
-    tdUnit.textContent = item.unit;
+    tdUnit.textContent = item.unit || '';
     tr.appendChild(tdUnit);
 
+    // 正常値
     const tdNormal = document.createElement('td');
     tdNormal.textContent = '性別により異なる'; // 初期値
     tr.appendChild(tdNormal);
 
     labDataTable.appendChild(tr);
+  });
+
+  // ログ出力で確認
+  console.log('検査データが正常に表示されました。');
   });
 
   // -----------------------------
