@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.error('Error loading', jsonPath, err);
       alert(`選択肢の読み込みに失敗しました: ${selectId}`);
     }
-  }
+  };
 
   // -----------------------------
   // 4) populateCheckboxes
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.error('Error loading', jsonPath, err);
       alert(`チェックボックスの読み込みに失敗しました: ${nameAttr}`);
     }
-  }
+  };
 
   // -----------------------------
   // 5) 検体検査データ テーブルの生成
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (error) {
     console.error('labDataItems.jsonの読み込みに失敗しました:', error);
     alert('検体検査データの読み込みに失敗しました。コンソールを確認してください。');
-  }
+  };
 
   // labDataMap: 検査項目→単位の対応
   const labDataMap = {};
