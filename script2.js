@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   synchronizeInputs('femurBMDNumber', 'femurBMD');
   synchronizeInputs('femurYAMNumber', 'femurYAM');
 
+/***
   // -----------------------------
   //  hospital-doctor-retalation
   // -----------------------------
@@ -92,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       populateOptions(hospitalInput, Object.keys(data.hospitals), selectedHospital);
     }
   });
-
+*/
 
   
   const treeContainer = document.getElementById('treeContainer');
