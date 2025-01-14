@@ -163,7 +163,7 @@
 
     <fieldset>
       <legend>追加項目</legend>
-      <textarea id="otherinfoInput" inputmode="kana" name="otherinfo" rows="5"></textarea>
+      <textarea id="otherinfoInput" inputmode="kana" name="otherinfo" rows="5" placeholder="ここはフリーに何でも記載してください"></textarea>
     </fieldset>
 
     <fieldset>
@@ -204,6 +204,10 @@
     <button id="submitBtn">送信</button>
     <button id="copyBtn">コピー&GPT</button>
     <button type="button" id="clearBtn">クリア</button>
+    <br><span style="font-size: 0.8em">「確認」：この下の入力データ確認エリアにデータを表示
+    <br>「送信」：データベースにデータを保存
+    <br>「コピー&GPT」入力データ確認エリアのデータをクリップボードにコピーしてからGPTが立ち上がるのでGPTの入力欄にペーストしてください
+    <br>「クリア」表示されているデータをクリアして新たに入力するとき</span>
   </div>
 
   <textarea id="resultArea" placeholder="入力データ確認エリア"></textarea>
