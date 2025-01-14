@@ -46,79 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await populateCheckboxes('https://natchi4182.github.io/OLS_support/others.json' , 'othersContainer', 'others');
 
   // -----------------------------
-  // 3) populateSelect
-  // -----------------------------
-  async function populateSelect(jsonPath, selectId) {
-    try {
-      const res = await fetch(jsonPath);
-      if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-      }
-      const data = await res.json();
-      const select = document.getElementById(selectId);
-
-      data.items.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item;
-        option.textContent = item;
-        select.appendChild(option);
-      });
-    } catch(err) {
-      console.error('Error loading', jsonPath, err);
-      alert(`選択肢の読み込みに失敗しました: ${selectId}`);
-    }
-  };
-
-  // -----------------------------
-  // 4) populateCheckboxes
-  // -----------------------------
-  async function populateCheckboxes(jsonPath, containerId, nameAttr) {
-    try {
-      const res = await fetch(jsonPath);
-      if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-      }
-      const data = await res.json();
-      const container = document.getElementById(containerId);
-
-      // 変換対象ファイル
-      const convertTargets = [
-        'https://natchi4182.github.io/OLS_support/anticancer_meds.json',
-        'https://natchi4182.github.io/OLS_support/hrt_meds.json',
-        'https://natchi4182.github.io/OLS_support/osteoporosis_meds.json'
-      ];
-      const doConvert = convertTargets.includes(jsonPath);
-
-      data.items.forEach(item => {
-        // 特定ファイルだけ ® を上付きに変換
-        let displayItem = item;
-        if (doConvert) {
-        displayItem = item.replace(/®/g, '<sup>®</sup>');
-        }
-
-        const labelElem = document.createElement('label');
-        labelElem.classList.add('inline-label');
-
-        const input = document.createElement('input');
-        input.type = 'checkbox';
-        input.name = nameAttr;
-        input.value = item;
-        labelElem.appendChild(input);
-
-        const span = document.createElement('span');
-        span.innerHTML = ' ' + displayItem;
-        labelElem.appendChild(span);
-
-        container.appendChild(labelElem);
-      });
-    } catch(err) {
-      console.error('Error loading', jsonPath, err);
-      alert(`チェックボックスの読み込みに失敗しました: ${nameAttr}`);
-    }
-  };
-
-  // -----------------------------
-  // 5) 検体検査データ テーブルの生成
+  // 3) 検体検査データ テーブルの生成
   // -----------------------------
   // 外部JSONからlabDataItemsを取得
   let labDataItems = [];
@@ -131,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (error) {
     console.error('labDataItems.jsonの読み込みに失敗しました:', error);
     alert('検体検査データの読み込みに失敗しました。コンソールを確認してください。');
-  };
+  }
 
   // labDataMap: 検査項目→単位の対応
   const labDataMap = {};
@@ -172,19 +100,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     tdNormal.textContent = "性別により異なる"; // 初期表示
     tr.appendChild(tdNormal);
 
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.name = item.name;
-    input.step = item.step;
-    if (item.name === '尿中Ca/尿中Cre') {
-      input.readOnly = true; // 自動計算専用にする
-    };
-
     labDataTable.appendChild(tr);
   });
 
   // -----------------------------
-  // 6) 検体検査データ テーブルの「尿中Ca/尿中Cre」を自動計算
+  // 10) 検体検査データ テーブルの「尿中Ca/尿中Cre」を自動計算
   // -----------------------------
   const calculateUrinaryCaRatio = () => {
     const caInput = document.querySelector('input[name="尿中Ca"]');
@@ -213,177 +133,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     creInput.addEventListener('input', calculateUrinaryCaRatio);
   };
 
-  // -----------------------------
-  // 7) 検体検査データ テーブルの色変更と正常値の表示
-  // -----------------------------
-  function getSelectedSex() {
-    const sexRadios = document.querySelectorAll('input[name="sex"]');
-    for (let radio of sexRadios) {
-      if (radio.checked) {
-        return radio.value;
-      }
-    }
-    return null;
-  }
-
-  function getNormalValue(item) {
-    const selectedSex = getSelectedSex();
-    if (!selectedSex) {
-      return "性別により異なる"; // 性別が選択されていない場合
-    }
-
-    const normalRangeStr = item.normal ? item.normal[selectedSex] : null;
-    if (!normalRangeStr) {
-      return "未定義"; // 正常値が定義されていない場合
-    }
-
-    return normalRangeStr;
-  }
-
-  function validateLabInput(numberInput) {
-    const tr = numberInput.closest('tr');
-    const name = numberInput.name;
-    const value = parseFloat(numberInput.value);
-    const item = labDataItems.find(item => item.name === name);
-
-    if (item) {
-      const selectedSex = getSelectedSex();
-      if (!selectedSex) {
-        tr.style.backgroundColor = '';
-        return;
-      }
-
-      const normalRangeStr = getNormalValue(item);
-      if (normalRangeStr === "性別により異なる" || normalRangeStr === "未定義") {
-        tr.style.backgroundColor = '';
-        return;
-      }
-
-      const normalParts = normalRangeStr.split('〜').map(v => v.trim());
-
-      let min = parseFloat(normalParts[0]);
-      let max = parseFloat(normalParts[1]);
-
-      if (isNaN(max)) {
-        max = Infinity;
-      }
-
-      if (isNaN(value)) {
-        tr.style.backgroundColor = '';
-      } else if (value < min) {
-        tr.style.backgroundColor = '#bbdefb'; // 青系
-      } else if (value > max) {
-        tr.style.backgroundColor = '#ffebee'; // 赤系
-      } else {
-        tr.style.backgroundColor = '#e8f5e9'; // 緑系
-      }
-    }
-  }
-
-  function updateNormalValues() {
-    labDataItems.forEach(item => {
-      const input = document.querySelector(`input[name="${item.name}"]`);
-      if (input) {
-        const tr = input.closest('tr');
-        const tdNormal = tr.querySelector('td:nth-child(4)');
-        tdNormal.textContent = getNormalValue(item);
-        validateLabInput(input);
-      }
-    });
-  }
-
-  labDataTable.addEventListener('input', (e) => {
-    if (e.target && e.target.tagName.toLowerCase() === 'input') {
-      const input = e.target;
-      validateLabInput(input);
-    }
-  });
-
-  // 性別変更時に検査結果を再検証
-  const sexRadios = document.querySelectorAll('input[name="sex"]');
-  sexRadios.forEach(radio => {
-    radio.addEventListener('change', () => {
-      updateNormalValues();
-    });
-  });
-  
-  // -----------------------------
-  // 9) リアルタイムバリデーションとエラーメッセージの追加
-  // -----------------------------
-  const ageNumber = document.getElementById('ageNumber');
-  const ageInputRange = document.getElementById('ageInput');
-  const ageError = document.getElementById('ageError');
-
-  const validateAge = () => {
-    const value = parseInt(ageNumber.value, 10);
-    if (isNaN(value) || value < 0 || value > 120) {
-      ageNumber.style.border = '2px solid red';
-      ageInputRange.style.border = '2px solid red';
-      ageError.classList.remove('visually-hidden');
-    } else {
-      ageNumber.style.border = '';
-      ageInputRange.style.border = '';
-      ageError.classList.add('visually-hidden');
-    }
+  const input = document.createElement('input');
+  input.type = 'number';
+  input.name = item.name;
+  input.step = item.step;
+  if (item.name === '尿中Ca/尿中Cre') {
+    input.readOnly = true; // 自動計算専用にする
   };
 
-  ageNumber.addEventListener('input', validateAge);
-  ageInputRange.addEventListener('input', validateAge);
-
   // -----------------------------
-  // 10) データの保存と復元
-  // -----------------------------
-  // フォームのデータを保存
-  const formElement = document.getElementById('mainForm');
-  formElement.addEventListener('input', () => {
-    const formData = new FormData(formElement);
-    const data = {};
-    formData.forEach((value, key) => {
-      // チェックボックスは複数選択可能なので配列で保存
-      if (data[key]) {
-        if (Array.isArray(data[key])) {
-          data[key].push(value);
-        } else {
-          data[key] = [data[key], value];
-        }
-      } else {
-        data[key] = value;
-      }
-    });
-    localStorage.setItem('formData', JSON.stringify(data));
-  });
-
-  // ページ読み込み時にデータを復元
-  const savedData = JSON.parse(localStorage.getItem('formData'));
-  if (savedData) {
-    for (const key in savedData) {
-      if (savedData.hasOwnProperty(key)) {
-        const element = formElement.elements.namedItem(key);
-        if (element) {
-          if (element.type === 'radio' || element.type === 'checkbox') {
-            const values = Array.isArray(savedData[key]) ? savedData[key] : [savedData[key]];
-            Array.from(formElement.elements.namedItem(key)).forEach(radio => {
-              radio.checked = values.includes(radio.value);
-            });
-          } else {
-            element.value = savedData[key];
-          }
-        }
-      }
-    }
-
-    // 性別変更時に再検証と正常値の更新
-    const selectedSex = getSelectedSex();
-    if (selectedSex) {
-      updateNormalValues();
-
-      // 年齢バリデーションの再実行
-      validateAge();
-    }
-  }
-
-  // -----------------------------
-  // 8) ボタン別のイベント定義
+  // 4) ボタン別のイベント定義
   // -----------------------------
   // (A) 「確認」ボタン
   document.getElementById('checkBtn').addEventListener('click', (e) => {
@@ -530,5 +289,246 @@ document.addEventListener('DOMContentLoaded', async () => {
       validateAge();
     }
   });
+
+  // -----------------------------
+  // 5) populateSelect
+  // -----------------------------
+  async function populateSelect(jsonPath, selectId) {
+    try {
+      const res = await fetch(jsonPath);
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const data = await res.json();
+      const select = document.getElementById(selectId);
+
+      data.items.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        option.textContent = item;
+        select.appendChild(option);
+      });
+    } catch(err) {
+      console.error('Error loading', jsonPath, err);
+      alert(`選択肢の読み込みに失敗しました: ${selectId}`);
+    }
+  }
+
+  // -----------------------------
+  // 6) populateCheckboxes
+  // -----------------------------
+  async function populateCheckboxes(jsonPath, containerId, nameAttr) {
+    try {
+      const res = await fetch(jsonPath);
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const data = await res.json();
+      const container = document.getElementById(containerId);
+
+      // 変換対象ファイル
+      const convertTargets = [
+        'https://natchi4182.github.io/OLS_support/anticancer_meds.json',
+        'https://natchi4182.github.io/OLS_support/hrt_meds.json',
+        'https://natchi4182.github.io/OLS_support/osteoporosis_meds.json'
+      ];
+      const doConvert = convertTargets.includes(jsonPath);
+
+      data.items.forEach(item => {
+        // 特定ファイルだけ ® を上付きに変換
+        let displayItem = item;
+        if (doConvert) {
+        displayItem = item.replace(/®/g, '<sup>®</sup>');
+        }
+
+        const labelElem = document.createElement('label');
+        labelElem.classList.add('inline-label');
+
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.name = nameAttr;
+        input.value = item;
+        labelElem.appendChild(input);
+
+        const span = document.createElement('span');
+        span.innerHTML = ' ' + displayItem;
+        labelElem.appendChild(span);
+
+        container.appendChild(labelElem);
+      });
+    } catch(err) {
+      console.error('Error loading', jsonPath, err);
+      alert(`チェックボックスの読み込みに失敗しました: ${nameAttr}`);
+    }
+  }
+
+  // -----------------------------
+  // 7) 検体検査データ テーブルの色変更と正常値の表示
+  // -----------------------------
+  function getSelectedSex() {
+    const sexRadios = document.querySelectorAll('input[name="sex"]');
+    for (let radio of sexRadios) {
+      if (radio.checked) {
+        return radio.value;
+      }
+    }
+    return null;
+  }
+
+  function getNormalValue(item) {
+    const selectedSex = getSelectedSex();
+    if (!selectedSex) {
+      return "性別により異なる"; // 性別が選択されていない場合
+    }
+
+    const normalRangeStr = item.normal ? item.normal[selectedSex] : null;
+    if (!normalRangeStr) {
+      return "未定義"; // 正常値が定義されていない場合
+    }
+
+    return normalRangeStr;
+  }
+
+  function validateLabInput(numberInput) {
+    const tr = numberInput.closest('tr');
+    const name = numberInput.name;
+    const value = parseFloat(numberInput.value);
+    const item = labDataItems.find(item => item.name === name);
+
+    if (item) {
+      const selectedSex = getSelectedSex();
+      if (!selectedSex) {
+        tr.style.backgroundColor = '';
+        return;
+      }
+
+      const normalRangeStr = getNormalValue(item);
+      if (normalRangeStr === "性別により異なる" || normalRangeStr === "未定義") {
+        tr.style.backgroundColor = '';
+        return;
+      }
+
+      const normalParts = normalRangeStr.split('〜').map(v => v.trim());
+
+      let min = parseFloat(normalParts[0]);
+      let max = parseFloat(normalParts[1]);
+
+      if (isNaN(max)) {
+        max = Infinity;
+      }
+
+      if (isNaN(value)) {
+        tr.style.backgroundColor = '';
+      } else if (value < min) {
+        tr.style.backgroundColor = '#bbdefb'; // 青系
+      } else if (value > max) {
+        tr.style.backgroundColor = '#ffebee'; // 赤系
+      } else {
+        tr.style.backgroundColor = '#e8f5e9'; // 緑系
+      }
+    }
+  }
+
+  function updateNormalValues() {
+    labDataItems.forEach(item => {
+      const input = document.querySelector(`input[name="${item.name}"]`);
+      if (input) {
+        const tr = input.closest('tr');
+        const tdNormal = tr.querySelector('td:nth-child(4)');
+        tdNormal.textContent = getNormalValue(item);
+        validateLabInput(input);
+      }
+    });
+  }
+
+  labDataTable.addEventListener('input', (e) => {
+    if (e.target && e.target.tagName.toLowerCase() === 'input') {
+      const input = e.target;
+      validateLabInput(input);
+    }
+  });
+
+  // 性別変更時に検査結果を再検証
+  const sexRadios = document.querySelectorAll('input[name="sex"]');
+  sexRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      updateNormalValues();
+    });
+  });
+
+  // -----------------------------
+  // 8) リアルタイムバリデーションとエラーメッセージの追加
+  // -----------------------------
+  const ageNumber = document.getElementById('ageNumber');
+  const ageInputRange = document.getElementById('ageInput');
+  const ageError = document.getElementById('ageError');
+
+  const validateAge = () => {
+    const value = parseInt(ageNumber.value, 10);
+    if (isNaN(value) || value < 0 || value > 120) {
+      ageNumber.style.border = '2px solid red';
+      ageInputRange.style.border = '2px solid red';
+      ageError.classList.remove('visually-hidden');
+    } else {
+      ageNumber.style.border = '';
+      ageInputRange.style.border = '';
+      ageError.classList.add('visually-hidden');
+    }
+  };
+
+  ageNumber.addEventListener('input', validateAge);
+  ageInputRange.addEventListener('input', validateAge);
+
+  // -----------------------------
+  // 9) データの保存と復元
+  // -----------------------------
+  // フォームのデータを保存
+  const formElement = document.getElementById('mainForm');
+  formElement.addEventListener('input', () => {
+    const formData = new FormData(formElement);
+    const data = {};
+    formData.forEach((value, key) => {
+      // チェックボックスは複数選択可能なので配列で保存
+      if (data[key]) {
+        if (Array.isArray(data[key])) {
+          data[key].push(value);
+        } else {
+          data[key] = [data[key], value];
+        }
+      } else {
+        data[key] = value;
+      }
+    });
+    localStorage.setItem('formData', JSON.stringify(data));
+  });
+
+  // ページ読み込み時にデータを復元
+  const savedData = JSON.parse(localStorage.getItem('formData'));
+  if (savedData) {
+    for (const key in savedData) {
+      if (savedData.hasOwnProperty(key)) {
+        const element = formElement.elements.namedItem(key);
+        if (element) {
+          if (element.type === 'radio' || element.type === 'checkbox') {
+            const values = Array.isArray(savedData[key]) ? savedData[key] : [savedData[key]];
+            Array.from(formElement.elements.namedItem(key)).forEach(radio => {
+              radio.checked = values.includes(radio.value);
+            });
+          } else {
+            element.value = savedData[key];
+          }
+        }
+      }
+    }
+
+    // 性別変更時に再検証と正常値の更新
+    const selectedSex = getSelectedSex();
+    if (selectedSex) {
+      updateNormalValues();
+
+      // 年齢バリデーションの再実行
+      validateAge();
+    }
+  }
 
 }); // DOMContentLoaded end
