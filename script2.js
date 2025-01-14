@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   synchronizeInputs('femurBMDNumber', 'femurBMD');
   synchronizeInputs('femurYAMNumber', 'femurYAM');
 
-/***
   // -----------------------------
   //  hospital-doctor-retalation
   // -----------------------------
@@ -93,74 +92,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       populateOptions(hospitalInput, Object.keys(data.hospitals), selectedHospital);
     }
   });
-*/
 
-  
-  const treeContainer = document.getElementById('treeContainer');
-
-  // Google Apps Script APIのURL
-  const apiUrl2 = "https://script.google.com/macros/s/AKfycbzuFcfS79l-vv6JoRleA-03ANAXhKe6yIHHrm1FaBcDYU22IZ2fWFTTSBXfxTnlx_bxNA/exec"; // デプロイしたURLを貼り付け
-
-  // データを取得
-  const fetchData = async () => {
-    try {
-      const response = await fetch(apiUrl2);
-      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-      return await response.json();
-    } catch (error) {
-      console.error("データ取得エラー:", error);
-      return { hospitals: {}, doctors: {} };
-    }
-  };
-
-  const data = await fetchData();
-
-  // ツリー構造を生成
-  const createTree = (data) => {
-    const ul = document.createElement('ul');
-
-    Object.keys(data).forEach(hospital => {
-      const hospitalLi = document.createElement('li');
-      const hospitalSpan = document.createElement('span');
-      hospitalSpan.textContent = hospital;
-      hospitalSpan.classList.add('hospital-name');
-      hospitalLi.appendChild(hospitalSpan);
-
-      const doctorUl = document.createElement('ul');
-      data[hospital].forEach(doctor => {
-        const doctorLi = document.createElement('li');
-        const doctorSpan = document.createElement('span');
-        doctorSpan.textContent = doctor;
-        doctorSpan.classList.add('doctor-name');
-        doctorLi.appendChild(doctorSpan);
-        doctorUl.appendChild(doctorLi);
-      });
-
-      hospitalLi.appendChild(doctorUl);
-      ul.appendChild(hospitalLi);
-    });
-
-    return ul;
-  };
-
-  // ツリーを表示
-  treeContainer.appendChild(createTree(data.hospitals));
-
-  // ツリー表示のイベントリスナー
-  treeContainer.addEventListener('click', (event) => {
-    if (event.target.tagName === 'SPAN') {
-      const li = event.target.closest('li');
-      const nestedUl = li.querySelector('ul');
-
-      if (nestedUl) {
-        nestedUl.style.display = nestedUl.style.display === 'none' ? 'block' : 'none';
-      }
-    }
-  });
-
-
-  
-  
   // -----------------------------
   // 2) JSONファイルから各種選択肢を動的読込
   // -----------------------------
