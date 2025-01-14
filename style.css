@@ -1,0 +1,108 @@
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 20px auto;
+    }
+    fieldset {
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    legend {
+      font-weight: bold;
+    }
+    label {
+      display: block;
+      margin: 5px 0;
+    }
+    .inline-label {
+      display: inline-block;
+      margin-right: 15px;
+      margin-bottom: 5px;
+    }
+    select, input[type=text], input[type=number], textarea {
+      width: 100%;
+      max-width: 500px;
+      font-size: 1.5em;
+    }
+    .checkbox-group, .radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .checkbox-group label, .radio-group label {
+      display: inline-block;
+    }
+    table {
+      border-collapse: collapse;
+      margin-top: 10px;
+      width: 100%;
+    }
+    table th, table td {
+      border: 1px solid #ccc;
+      padding: 5px;
+      text-align: center;
+    }
+    .lab-table input[type="text"],
+    .lab-table input[type="number"] {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 3px;
+      width: 150px;
+      height: 60px;
+      font-size: 1.2em;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    /* クリアボタンのスタイル調整 */
+    #clearBtn {
+      background: #f44336; /* 赤系 */
+      margin-left: 10px;
+    }
+    #clearBtn:hover {
+      background: #d32f2f;
+    }
+    .long-slider {
+      width: 500px;
+    }
+    .short-slider {
+      width: 130px;
+    }
+    #resultArea {
+      width: 100%;
+      max-width: 500px;
+      height: 500px;
+      margin-top: 20px;
+      box-sizing: border-box;
+      font-size: 1em;
+      white-space: pre-wrap;
+    }
+    /* Visually Hidden Class for Accessibility */
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap; /* 文字が折り返されないようにする */
+      border: 0;
+    }
+    /* エラーメッセージのスタイル */
+    .error-message {
+      color: red;
+      font-size: 0.9em;
+      margin-left: 10px;
+    }
+  </style>
