@@ -46,6 +46,7 @@
     .lab-table input[type="text"],
     .lab-table input[type="number"] {
       width: 100%;
+      max-width: 500px;
       box-sizing: border-box;
     }
     button {
@@ -72,7 +73,8 @@
       background: #d32f2f;
     }
     .long-slider {
-      width: 500px;
+      width: 100%;
+      max-width: 500px;
     }
     .short-slider {
       width: 130px;
