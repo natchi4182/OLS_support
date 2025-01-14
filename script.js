@@ -308,6 +308,81 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   
   // -----------------------------
+  // 9) リアルタイムバリデーションとエラーメッセージの追加
+  // -----------------------------
+  const ageNumber = document.getElementById('ageNumber');
+  const ageInputRange = document.getElementById('ageInput');
+  const ageError = document.getElementById('ageError');
+
+  const validateAge = () => {
+    const value = parseInt(ageNumber.value, 10);
+    if (isNaN(value) || value < 0 || value > 120) {
+      ageNumber.style.border = '2px solid red';
+      ageInputRange.style.border = '2px solid red';
+      ageError.classList.remove('visually-hidden');
+    } else {
+      ageNumber.style.border = '';
+      ageInputRange.style.border = '';
+      ageError.classList.add('visually-hidden');
+    }
+  };
+
+  ageNumber.addEventListener('input', validateAge);
+  ageInputRange.addEventListener('input', validateAge);
+
+  // -----------------------------
+  // 10) データの保存と復元
+  // -----------------------------
+  // フォームのデータを保存
+  const formElement = document.getElementById('mainForm');
+  formElement.addEventListener('input', () => {
+    const formData = new FormData(formElement);
+    const data = {};
+    formData.forEach((value, key) => {
+      // チェックボックスは複数選択可能なので配列で保存
+      if (data[key]) {
+        if (Array.isArray(data[key])) {
+          data[key].push(value);
+        } else {
+          data[key] = [data[key], value];
+        }
+      } else {
+        data[key] = value;
+      }
+    });
+    localStorage.setItem('formData', JSON.stringify(data));
+  });
+
+  // ページ読み込み時にデータを復元
+  const savedData = JSON.parse(localStorage.getItem('formData'));
+  if (savedData) {
+    for (const key in savedData) {
+      if (savedData.hasOwnProperty(key)) {
+        const element = formElement.elements.namedItem(key);
+        if (element) {
+          if (element.type === 'radio' || element.type === 'checkbox') {
+            const values = Array.isArray(savedData[key]) ? savedData[key] : [savedData[key]];
+            Array.from(formElement.elements.namedItem(key)).forEach(radio => {
+              radio.checked = values.includes(radio.value);
+            });
+          } else {
+            element.value = savedData[key];
+          }
+        }
+      }
+    }
+
+    // 性別変更時に再検証と正常値の更新
+    const selectedSex = getSelectedSex();
+    if (selectedSex) {
+      updateNormalValues();
+
+      // 年齢バリデーションの再実行
+      validateAge();
+    }
+  }
+
+  // -----------------------------
   // 8) ボタン別のイベント定義
   // -----------------------------
   // (A) 「確認」ボタン
@@ -455,80 +530,5 @@ document.addEventListener('DOMContentLoaded', async () => {
       validateAge();
     }
   });
-
-  // -----------------------------
-  // 9) リアルタイムバリデーションとエラーメッセージの追加
-  // -----------------------------
-  const ageNumber = document.getElementById('ageNumber');
-  const ageInputRange = document.getElementById('ageInput');
-  const ageError = document.getElementById('ageError');
-
-  const validateAge = () => {
-    const value = parseInt(ageNumber.value, 10);
-    if (isNaN(value) || value < 0 || value > 120) {
-      ageNumber.style.border = '2px solid red';
-      ageInputRange.style.border = '2px solid red';
-      ageError.classList.remove('visually-hidden');
-    } else {
-      ageNumber.style.border = '';
-      ageInputRange.style.border = '';
-      ageError.classList.add('visually-hidden');
-    }
-  };
-
-  ageNumber.addEventListener('input', validateAge);
-  ageInputRange.addEventListener('input', validateAge);
-
-  // -----------------------------
-  // 10) データの保存と復元
-  // -----------------------------
-  // フォームのデータを保存
-  const formElement = document.getElementById('mainForm');
-  formElement.addEventListener('input', () => {
-    const formData = new FormData(formElement);
-    const data = {};
-    formData.forEach((value, key) => {
-      // チェックボックスは複数選択可能なので配列で保存
-      if (data[key]) {
-        if (Array.isArray(data[key])) {
-          data[key].push(value);
-        } else {
-          data[key] = [data[key], value];
-        }
-      } else {
-        data[key] = value;
-      }
-    });
-    localStorage.setItem('formData', JSON.stringify(data));
-  });
-
-  // ページ読み込み時にデータを復元
-  const savedData = JSON.parse(localStorage.getItem('formData'));
-  if (savedData) {
-    for (const key in savedData) {
-      if (savedData.hasOwnProperty(key)) {
-        const element = formElement.elements.namedItem(key);
-        if (element) {
-          if (element.type === 'radio' || element.type === 'checkbox') {
-            const values = Array.isArray(savedData[key]) ? savedData[key] : [savedData[key]];
-            Array.from(formElement.elements.namedItem(key)).forEach(radio => {
-              radio.checked = values.includes(radio.value);
-            });
-          } else {
-            element.value = savedData[key];
-          }
-        }
-      }
-    }
-
-    // 性別変更時に再検証と正常値の更新
-    const selectedSex = getSelectedSex();
-    if (selectedSex) {
-      updateNormalValues();
-
-      // 年齢バリデーションの再実行
-      validateAge();
-    }
-  }
 
 }); // DOMContentLoaded end
