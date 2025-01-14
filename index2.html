@@ -67,7 +67,7 @@
     <fieldset>
       <legend>年齢(※)</legend>
       <label for="ageInput">年齢:</label>
-      <input type="number" inputmode="numeric" id="ageNumber" name="age" min="0" max="120" step="1" required>
+      <input type="number" inputmode="numeric" id="ageNumber" name="age" min="0" max="120" step="1" placeholder="0〜120" required>
       <input type="range" class="long-slider" id="ageInput" min="0" max="120" step="1">
       <br>
       <span id="ageError" class="error-message visually-hidden">年齢は0から120の間で入力してください。</span>
@@ -91,11 +91,11 @@
     <fieldset>
       <legend>身長・体重</legend>
       <label for="heightInput">身長（cm）:</label>
-      <input type="number" inputmode="numeric" id="heightNumber" name="height" min="100" max="200" step="0.1">
+      <input type="number" inputmode="numeric" id="heightNumber" name="height" min="100" max="200" step="0.1" placeholder="100.0〜200.0">
       <input type="range" class="long-slider" id="heightInput" min="100" max="200" step="0.1">
       <hr>
       <label for="weightInput">体重（kg）:</label>
-      <input type="number" inputmode="numeric" id="weightNumber" name="weight" min="20" max="150" step="0.1">
+      <input type="number" inputmode="numeric" id="weightNumber" name="weight" min="20" max="150" step="0.1" placeholder="20.0〜150.0">
       <input type="range" class="long-slider" id="weightInput" min="20" max="150" step="0.1">
     </fieldset>
 
@@ -119,7 +119,6 @@
     <fieldset>
       <legend>基礎疾患</legend>
       <div id="diseaseContainer" class="checkbox-group">
-        <!-- diseases_list.jsonから読み込み、チェックボックス生成 -->
       </div>
     </fieldset>
 
@@ -169,17 +168,17 @@
     <fieldset>
       <legend>骨密度（直近3か月以内）</legend>
       <label for="lumbarBMD">腰椎（g/cm²）:</label>
-      <input type="number" inputmode="numeric" id="lumbarBMDNumber" name="lumbar_bmd" min="0.000" max="2.000" step="0.001">
+      <input type="number" inputmode="numeric" id="lumbarBMDNumber" name="lumbar_bmd" min="0.000" max="2.000" step="0.001" placeholder="0.000〜2.000">
       <input type="range" class="long-slider" id="lumbarBMD" min="0.000" max="2.000" step="0.001">
       <label for="lumbarYAM">YAM値（%）:</label>
-      <input type="number" inputmode="numeric" id="lumbarYAMNumber" name="lumbar_yam" min="0" max="200" step="1">
+      <input type="number" inputmode="numeric" id="lumbarYAMNumber" name="lumbar_yam" min="0" max="200" step="1" placeholder="0〜200">
       <input type="range" class="long-slider" id="lumbarYAM" min="0" max="200" step="1">
       <hr>
       <label for="femurBMD">大腿骨近位（g/cm²）:</label>
-      <input type="number" inputmode="numeric" id="femurBMDNumber" name="femur_bmd" min="0.000" max="2.000" step="0.001">
+      <input type="number" inputmode="numeric" id="femurBMDNumber" name="femur_bmd" min="0.000" max="2.000" step="0.001" placeholder="0.000〜2.000">
       <input type="range" class="long-slider" id="femurBMD" min="0.000" max="2.000" step="0.001">
       <label for="femurYAM">YAM値（%）:</label>
-      <input type="number" inputmode="numeric" id="femurYAMNumber" name="femur_yam" min="0" max="200" step="1">
+      <input type="number" inputmode="numeric" id="femurYAMNumber" name="femur_yam" min="0" max="200" step="1" placeholder="0〜200">
       <input type="range" class="long-slider" id="femurYAM" min="0" max="200" step="1">
     </fieldset>
 
