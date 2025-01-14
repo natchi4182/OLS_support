@@ -172,6 +172,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     tdNormal.textContent = "性別により異なる"; // 初期表示
     tr.appendChild(tdNormal);
 
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.name = item.name;
+    input.step = item.step;
+    if (item.name === '尿中Ca/尿中Cre') {
+      input.readOnly = true; // 自動計算専用にする
+    };
+
     labDataTable.appendChild(tr);
   });
 
@@ -203,14 +211,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (caInput && creInput) {
     caInput.addEventListener('input', calculateUrinaryCaRatio);
     creInput.addEventListener('input', calculateUrinaryCaRatio);
-  };
-
-  const input = document.createElement('input');
-  input.type = 'number';
-  input.name = item.name;
-  input.step = item.step;
-  if (item.name === '尿中Ca/尿中Cre') {
-    input.readOnly = true; // 自動計算専用にする
   };
 
   // -----------------------------
