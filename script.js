@@ -1,4 +1,3 @@
-<script>
   document.addEventListener('DOMContentLoaded', async () => {
 
     /** 
@@ -510,4 +509,3 @@
   // 10) その他の関数
   // -----------------------------
   // labDataMapは前述のスクリプト内で定義済み
-</script>
