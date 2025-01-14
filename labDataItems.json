@@ -30,7 +30,7 @@
     "step": "0.1" 
   },
   { 
-    "name": "U-Ca", 
+    "name": "尿中Ca", 
     "unit": "mg/dL", 
     "normal": { 
       "閉経前女性": "", 
@@ -40,7 +40,7 @@
     "step": "0.1" 
   },
   { 
-    "name": "U-Cre", 
+    "name": "尿中Cre", 
     "unit": "mg/dL", 
     "normal": { 
       "閉経前女性": "", 
