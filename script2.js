@@ -26,7 +26,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   synchronizeInputs('femurBMDNumber', 'femurBMD');
   synchronizeInputs('femurYAMNumber', 'femurYAM');
 
-//  hospital-doctor-retalation
+  // -----------------------------
+  //  hospital-doctor-retalation
+  // -----------------------------
   const hospitalInput = document.getElementById('hospitalInput');
   const doctorInput = document.getElementById('doctorInput');
 
@@ -48,12 +50,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   const data = await fetchData();
 
   // 病院と医師の選択肢を動的に作成
-  const populateOptions = (selectElement, options) => {
-    selectElement.innerHTML = '<option value="">-- 選択 --</option>';
+  const populateOptions = (selectElement, options, selectValue = "") => {
+    selectElement.innerHTML = '<option value="">--- 選 択 ---</option>';
     options.forEach(option => {
       const opt = document.createElement('option');
       opt.value = option;
       opt.textContent = option;
+      if (option === selectValue) {
+        opt.selected = true;
+      }
       selectElement.appendChild(opt);
     });
   };
@@ -65,22 +70,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 病院選択時の処理
   hospitalInput.addEventListener('change', () => {
     const selectedHospital = hospitalInput.value;
+    const selectedDoctor = doctorInput.value;
+
     if (selectedHospital) {
       const relatedDoctors = data.hospitals[selectedHospital] || [];
-      populateOptions(doctorInput, relatedDoctors);
+      populateOptions(doctorInput, relatedDoctors, relatedDoctors.includes(selectedDoctor) ? selectedDoctor : "");
     } else {
-      populateOptions(doctorInput, Object.keys(data.doctors));
+      populateOptions(doctorInput, Object.keys(data.doctors), selectedDoctor);
     }
   });
 
   // 医師選択時の処理
   doctorInput.addEventListener('change', () => {
     const selectedDoctor = doctorInput.value;
+    const selectedHospital = hospitalInput.value;
+
     if (selectedDoctor) {
       const relatedHospitals = data.doctors[selectedDoctor] || [];
-      populateOptions(hospitalInput, relatedHospitals);
+      populateOptions(hospitalInput, relatedHospitals, relatedHospitals.includes(selectedHospital) ? selectedHospital : "");
     } else {
-      populateOptions(hospitalInput, Object.keys(data.hospitals));
+      populateOptions(hospitalInput, Object.keys(data.hospitals), selectedHospital);
     }
   });
 
