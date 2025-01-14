@@ -494,6 +494,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // 「尿中Ca/尿中Cre」を自動計算
+  const ratioInput = document.querySelector('input[name="尿中Ca/尿中Cre"]');
+  if (ratioInput) {
+    ratioInput.readOnly = true;
+  }
+
   const calculateUrinaryCaRatio = () => {
     // 「尿中Ca」と「尿中Cre」の入力フィールドを取得
     const caInput = document.querySelector('input[name="尿中Ca"]');
