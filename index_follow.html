@@ -47,6 +47,18 @@
         .chart {
             margin-top: 20px;
         }
+        .data-list {
+            margin-top: 20px;
+        }
+        .data-list div {
+            cursor: pointer;
+            padding: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+        }
+        .data-list div:hover {
+            background-color: #f0f0f0;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -68,6 +80,10 @@
 
         <button type="submit">データ取得</button>
     </form>
+
+    <div class="data-list" id="data-list" style="display:none;">
+        <h2>該当するデータの日付を選択してください</h2>
+    </div>
 
     <div id="data-display" style="display:none;">
         <h2>患者データ</h2>
@@ -114,12 +130,94 @@
                 });
             }
 
+            function displayData(data, config) {
+                document.getElementById('data-display').style.display = 'block';
+                document.getElementById('text-display').textContent = config.text.map(index => data.c[index]?.v || '').join(', ');
+
+                // 表1と表2のデータ表示
+                const tables = [
+                    { id: 'table1', columns: config.table1 },
+                    { id: 'table2', columns: config.table2 }
+                ];
+
+                tables.forEach(tableInfo => {
+                    const table = document.getElementById(tableInfo.id);
+                    table.innerHTML = '';
+
+                    // ヘッダー作成
+                    const headerRow = document.createElement('tr');
+                    ['項目名', '値'].forEach(header => {
+                        const th = document.createElement('th');
+                        th.textContent = header;
+                        headerRow.appendChild(th);
+                    });
+                    table.appendChild(headerRow);
+
+                    // データ行作成
+                    tableInfo.columns.forEach(colIndex => {
+                        const row = document.createElement('tr');
+                        const itemName = data.c[colIndex]?.v || '';
+                        const value = data.c[colIndex]?.v || '';
+
+                        const itemCell = document.createElement('td');
+                        itemCell.textContent = itemName;
+                        row.appendChild(itemCell);
+
+                        const valueCell = document.createElement('td');
+                        valueCell.textContent = value;
+
+                        // 色付け
+                        const numValue = parseFloat(value);
+                        if (!isNaN(numValue)) {
+                            if (numValue < 10) valueCell.className = 'below-normal';
+                            else if (numValue > 20) valueCell.className = 'above-normal';
+                            else valueCell.className = 'normal';
+                        }
+
+                        row.appendChild(valueCell);
+                        table.appendChild(row);
+                    });
+                });
+
+                // グラフ描画
+                const charts = [
+                    { id: 'chart1', columns: config.chart1 },
+                    { id: 'chart2', columns: config.chart2 }
+                ];
+
+                charts.forEach(chartInfo => {
+                    const ctx = document.getElementById(chartInfo.id).getContext('2d');
+                    const labels = chartInfo.columns.map(colIndex => data.c[colIndex]?.v || '');
+                    const dataPoints = chartInfo.columns.map(colIndex => parseFloat(data.c[colIndex]?.v || 0));
+
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'データ',
+                                data: dataPoints,
+                                fill: false,
+                                borderColor: 'blue',
+                                tension: 0.1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: true
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+
             try {
-                // 設定ファイルを取得
                 const configResponse = await fetch(configUrl);
                 const config = await configResponse.json();
 
-                // 病院リストを取得して設定
                 const rows = await fetchSpreadsheetData('https://docs.google.com/spreadsheets/d/1EE-ZwN-f4TyOAgPMvc005ZButuoqF09v3mpKPLpPr54/gviz/tq?tqx=out:json');
                 const hospitalSet = new Set(rows.slice(1).map(row => row.c[1]?.v?.trim()));
                 Array.from(hospitalSet).sort().forEach(hospital => {
@@ -129,105 +227,32 @@
                     hospitalSelect.appendChild(option);
                 });
 
-                document.getElementById('patient-form').addEventListener('submit', async (event) => {
+                document.getElementById('patient-form').addEventListener('submit', (event) => {
                     event.preventDefault();
 
                     const hospital = hospitalSelect.value.trim();
                     const patientID = document.getElementById('patientID').value.trim();
 
-                    console.log('Selected Hospital:', hospital);
-                    console.log('Entered Patient ID:', patientID);
+                    const filteredData = filterPatientData(rows, hospital, patientID);
+                    const dataList = document.getElementById('data-list');
 
-                    const patientData = filterPatientData(rows, hospital, patientID);
-                    console.log('Filtered Data:', patientData);
+                    if (filteredData.length > 0) {
+                        dataList.style.display = 'block';
+                        dataList.innerHTML = '<h2>該当するデータの日付を選択してください</h2>';
 
-                    if (patientData.length === 0) {
+                        filteredData.forEach((data, index) => {
+                            const dateValue = data.c[0]?.v || '不明';
+                            const listItem = document.createElement('div');
+                            listItem.textContent = `データ ${index + 1}: 日付 ${dateValue}`;
+                            listItem.addEventListener('click', () => {
+                                dataList.style.display = 'none';
+                                displayData(data, config);
+                            });
+                            dataList.appendChild(listItem);
+                        });
+                    } else {
                         alert('該当するデータが見つかりませんでした。');
-                        return;
                     }
-
-                    // テキストデータ表示
-                    const textDisplay = config.text.map(index => patientData[0].c[index]?.v || '').join(', ');
-                    document.getElementById('text-display').textContent = textDisplay;
-
-                    // 表1と表2のデータ表示
-                    const tables = [
-                        { id: 'table1', columns: config.table1 },
-                        { id: 'table2', columns: config.table2 }
-                    ];
-
-                    tables.forEach(tableInfo => {
-                        const table = document.getElementById(tableInfo.id);
-                        table.innerHTML = '';
-
-                        // ヘッダー作成
-                        const headerRow = document.createElement('tr');
-                        ['項目名', '値'].forEach(header => {
-                            const th = document.createElement('th');
-                            th.textContent = header;
-                            headerRow.appendChild(th);
-                        });
-                        table.appendChild(headerRow);
-
-                        // データ行作成
-                        tableInfo.columns.forEach(colIndex => {
-                            const row = document.createElement('tr');
-                            const itemName = rows[0].c[colIndex]?.v || '';
-                            const value = patientData[0].c[colIndex]?.v || '';
-
-                            const itemCell = document.createElement('td');
-                            itemCell.textContent = itemName;
-                            row.appendChild(itemCell);
-
-                            const valueCell = document.createElement('td');
-                            valueCell.textContent = value;
-
-                            // 色付け
-                            const numValue = parseFloat(value);
-                            if (!isNaN(numValue)) {
-                                if (numValue < 10) valueCell.className = 'below-normal';
-                                else if (numValue > 20) valueCell.className = 'above-normal';
-                                else valueCell.className = 'normal';
-                            }
-
-                            row.appendChild(valueCell);
-                            table.appendChild(row);
-                        });
-                    });
-
-                    // グラフ描画
-                    const charts = [
-                        { id: 'chart1', columns: config.chart1 },
-                        { id: 'chart2', columns: config.chart2 }
-                    ];
-
-                    charts.forEach(chartInfo => {
-                        const ctx = document.getElementById(chartInfo.id).getContext('2d');
-                        const labels = chartInfo.columns.map(colIndex => rows[0].c[colIndex]?.v || '');
-                        const data = chartInfo.columns.map(colIndex => parseFloat(patientData[0].c[colIndex]?.v || 0));
-
-                        new Chart(ctx, {
-                            type: 'line',
-                            data: {
-                                labels: labels,
-                                datasets: [{
-                                    label: 'データ',
-                                    data: data,
-                                    fill: false,
-                                    borderColor: 'blue',
-                                    tension: 0.1
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                plugins: {
-                                    legend: {
-                                        display: true
-                                    }
-                                }
-                            }
-                        });
-                    });
                 });
             } catch (error) {
                 console.error('Initialization error:', error);
