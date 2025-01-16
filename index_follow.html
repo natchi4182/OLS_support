@@ -131,44 +131,43 @@
 
                 const hospital = hospitalSelect.value;
 //                const patientID = document.getElementById('patientID').value;
+                const patientID = document.getElementById('patientID').value.trim(); // 患者IDを取得
 
+                console.log('Selected Hospital:', hospital);
+                console.log('Entered Patient ID:', patientID);
 
-    const patientID = document.getElementById('patientID').value.trim(); // 患者IDを取得
+                // Google Spreadsheetからデータ取得
+                const response = await fetch('https://docs.google.com/spreadsheets/d/1EE-ZwN-f4TyOAgPMvc005ZButuoqF09v3mpKPLpPr54/gviz/tq?tqx=out:json');
+                const text = await response.text();
 
-    console.log('Selected Hospital:', hospital);
-    console.log('Entered Patient ID:', patientID);
+                // JSON形式に変換
+                const json = JSON.parse(text.substr(47).slice(0, -2));
+                const rows = json.table.rows;
 
-    // Google Spreadsheetからデータ取得
-    const response = await fetch('https://docs.google.com/spreadsheets/d/1EE-ZwN-f4TyOAgPMvc005ZButuoqF09v3mpKPLpPr54/gviz/tq?tqx=out:json');
-    const text = await response.text();
+                // データ全体をデバッグ出力
+                console.log('All Rows:', rows);
 
-    // JSON形式に変換
-    const json = JSON.parse(text.substr(47).slice(0, -2));
-    const rows = json.table.rows;
+                // 1行目（ヘッダー）をスキップしてデータをフィルタリング
+                const patientData = rows.slice(1).filter(row => {
+                    const hospitalName = row.c[1]?.v?.trim(); // 病院名は2列目
+                    const patientIDValue = row.c[3]?.v?.toString().trim(); // 患者IDは4列目
+                    console.log(`Row Hospital: ${hospitalName}, Row Patient ID: ${patientIDValue}`);
+                    return hospitalName === hospital && patientIDValue === patientID;
+                });
 
-    // データ全体をデバッグ出力
-    console.log('All Rows:', rows);
+                // フィルタリング結果をデバッグ出力
+                console.log('Filtered Data:', patientData);
 
-    // 1行目（ヘッダー）をスキップしてデータをフィルタリング
-    const patientData = rows.slice(1).filter(row => {
-        const hospitalName = row.c[1]?.v?.trim(); // 病院名は2列目
-        const patientIDValue = row.c[3]?.v?.toString().trim(); // 患者IDは4列目
-        console.log(`Row Hospital: ${hospitalName}, Row Patient ID: ${patientIDValue}`);
-        return hospitalName === hospital && patientIDValue === patientID;
-    });
+                if (patientData.length === 0) {
+                    alert('該当するデータが見つかりませんでした。');
+                    return;
+                }
 
-    // フィルタリング結果をデバッグ出力
-    console.log('Filtered Data:', patientData);
+                // データが見つかった場合、表示処理を続ける
+                const textDisplay = patientData[0].c.map(cell => cell?.v || '').join(', ');
+                document.getElementById('text-display').textContent = textDisplay;
 
-    if (patientData.length === 0) {
-        alert('該当するデータが見つかりませんでした。');
-        return;
-    }
-
-    // データが見つかった場合、表示処理を続ける
-    const textDisplay = patientData[0].c.map(cell => cell?.v || '').join(', ');
-    document.getElementById('text-display').textContent = textDisplay;
-
+                
                 
                 // 設定ファイルを取得
                 const configResponse = await fetch(configUrl);
