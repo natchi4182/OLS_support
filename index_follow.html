@@ -126,17 +126,13 @@
                     console.error('エラーが発生しました:', error);
                 });
 
-//            document.getElementById('patient-form').addEventListener('submit', async (event) => {
-//                event.preventDefault();
+            document.getElementById('patient-form').addEventListener('submit', async (event) => {
+                event.preventDefault();
 
-//                const hospital = hospitalSelect.value;
+                const hospital = hospitalSelect.value;
 //                const patientID = document.getElementById('patientID').value;
 
 
-document.getElementById('patient-form').addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const hospital = hospitalSelect.value.trim(); // 病院名を取得
     const patientID = document.getElementById('patientID').value.trim(); // 患者IDを取得
 
     console.log('Selected Hospital:', hospital);
