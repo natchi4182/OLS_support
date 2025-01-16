@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>患者データフォロー</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group select, .form-group input {
+            padding: 5px;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 300px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        table th {
+            background-color: #f4f4f4;
+        }
+        .normal {
+            background-color: #d4f4d4;
+        }
+        .below-normal {
+            background-color: #d4e4f4;
+        }
+        .above-normal {
+            background-color: #f4d4d4;
+        }
+        .chart {
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>患者データフォローシステム</h1>
+
+    <form id="patient-form">
+        <div class="form-group">
+            <label for="hospital">病院名:</label>
+            <select id="hospital" required>
+                <!-- 病院名リストはGoogle Spreadsheetから取得 -->
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="patientID">患者ID:</label>
+            <input type="text" id="patientID" required>
+        </div>
+
+        <button type="submit">データ取得</button>
+    </form>
+
+    <div id="data-display" style="display:none;">
+        <h2>患者データ</h2>
+        <div id="text-display">ここにテキストデータを表示します。</div>
+
+        <h3>表1</h3>
+        <table id="table1">
+            <!-- 表形式でデータを表示 -->
+        </table>
+
+        <h3>表2</h3>
+        <table id="table2">
+            <!-- 表形式でデータを表示 -->
+        </table>
+
+        <div class="chart">
+            <h3>グラフ1</h3>
+            <canvas id="chart1"></canvas>
+        </div>
+
+        <div class="chart">
+            <h3>グラフ2</h3>
+            <canvas id="chart2"></canvas>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hospitalSelect = document.getElementById('hospital');
+
+            // Google Spreadsheetから病院リストを取得して設定
+            fetch('YOUR_SPREADSHEET_URL_FOR_HOSPITALS')
+                .then(response => response.json())
+                .then(data => {
+                    data.hospitals.forEach(hospital => {
+                        const option = document.createElement('option');
+                        option.value = hospital.id;
+                        option.textContent = hospital.name;
+                        hospitalSelect.appendChild(option);
+                    });
+                });
+
+            document.getElementById('patient-form').addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const hospital = hospitalSelect.value;
+                const patientID = document.getElementById('patientID').value;
+
+                // Google Spreadsheetからデータ取得
+                const response = await fetch(`YOUR_SPREADSHEET_URL?hospital=${hospital}&patientID=${patientID}`);
+                const patientData = await response.json();
+
+                // データ表示
+                document.getElementById('data-display').style.display = 'block';
+
+                // テキスト表示
+                document.getElementById('text-display').textContent = patientData.text;
+
+                // 表1, 表2データ表示
+                const tables = [
+                    { id: 'table1', data: patientData.table1 },
+                    { id: 'table2', data: patientData.table2 }
+                ];
+
+                tables.forEach(tableInfo => {
+                    const table = document.getElementById(tableInfo.id);
+                    table.innerHTML = '';
+
+                    // ヘッダー行作成
+                    const headerRow = document.createElement('tr');
+                    ['項目名', '単位', '正常値', ...tableInfo.data.dates].forEach(header => {
+                        const th = document.createElement('th');
+                        th.textContent = header;
+                        headerRow.appendChild(th);
+                    });
+                    table.appendChild(headerRow);
+
+                    // データ行作成
+                    tableInfo.data.rows.forEach(row => {
+                        const dataRow = document.createElement('tr');
+
+                        row.forEach((cell, index) => {
+                            const td = document.createElement('td');
+                            td.textContent = cell;
+
+                            // 色付け (データセルのみ適用)
+                            if (index >= 3) {
+                                const value = parseFloat(cell);
+                                const normalRange = tableInfo.data.normalRange[index - 3];
+
+                                if (value < normalRange.min) td.className = 'below-normal';
+                                else if (value > normalRange.max) td.className = 'above-normal';
+                                else td.className = 'normal';
+                            }
+
+                            dataRow.appendChild(td);
+                        });
+
+                        table.appendChild(dataRow);
+                    });
+                });
+
+                // グラフ1, グラフ2データ表示
+                const charts = [
+                    { id: 'chart1', data: patientData.chart1 },
+                    { id: 'chart2', data: patientData.chart2 }
+                ];
+
+                charts.forEach(chartInfo => {
+                    const ctx = document.getElementById(chartInfo.id).getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: chartInfo.data.dates,
+                            datasets: chartInfo.data.datasets
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: true
+                                }
+                            }
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
