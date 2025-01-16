@@ -153,7 +153,6 @@
                     });
                     table.appendChild(headerRow);
 
-                    // データ行作成
                     tableInfo.columns.forEach(colIndex => {
                         const row = document.createElement('tr');
                         const itemName = data.c[colIndex]?.v || '';
@@ -219,6 +218,7 @@
                 const config = await configResponse.json();
 
                 const rows = await fetchSpreadsheetData('https://docs.google.com/spreadsheets/d/1EE-ZwN-f4TyOAgPMvc005ZButuoqF09v3mpKPLpPr54/gviz/tq?tqx=out:json');
+                const headers = rows[0].c.map(cell => cell?.v || ''); // ヘッダーを取得
                 const hospitalSet = new Set(rows.slice(1).map(row => row.c[1]?.v?.trim()));
                 Array.from(hospitalSet).sort().forEach(hospital => {
                     const option = document.createElement('option');
@@ -262,4 +262,3 @@
     </script>
 </body>
 </html>
-
