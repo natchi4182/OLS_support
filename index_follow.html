@@ -95,187 +95,144 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const hospitalSelect = document.getElementById('hospital');
+            const configUrl = 'https://natchi4182.github.io/OLS_support/dataconfig.json';
 
-            // 設定ファイルのURL
-            const configUrl = 'https://natchi4182.github.io/OLS_support/dataconfig.json'; // JSONファイルのパスを指定
-
-            // Google Spreadsheetから病院リストを取得して設定
-            fetch('https://docs.google.com/spreadsheets/d/1EE-ZwN-f4TyOAgPMvc005ZButuoqF09v3mpKPLpPr54/gviz/tq?tqx=out:json')
-                .then(response => response.text())
-                .then(text => {
-                    const json = JSON.parse(text.substr(47).slice(0, -2)); // JSON部分を抽出
-                    const rows = json.table.rows;
-
-                    const hospitalSet = new Set(); // 重複を除去するためのセット
-
-                    rows.forEach(row => {
-                        const hospitalName = row.c[1]?.v; // 病院名は2列目
-                        if (hospitalName) hospitalSet.add(hospitalName);
-                    });
-
-                    Array.from(hospitalSet).sort().forEach(hospitalName => {
-                        const option = document.createElement('option');
-                        option.value = hospitalName;
-                        option.textContent = hospitalName;
-                        hospitalSelect.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.error('エラーが発生しました:', error);
-                });
-
-            document.getElementById('patient-form').addEventListener('submit', async (event) => {
-                event.preventDefault();
-
-                const hospital = hospitalSelect.value;
-//                const patientID = document.getElementById('patientID').value;
-                const patientID = document.getElementById('patientID').value.trim(); // 患者IDを取得
-
-                console.log('Selected Hospital:', hospital);
-                console.log('Entered Patient ID:', patientID);
-
-                // Google Spreadsheetからデータ取得
-                const response = await fetch('https://docs.google.com/spreadsheets/d/1EE-ZwN-f4TyOAgPMvc005ZButuoqF09v3mpKPLpPr54/gviz/tq?tqx=out:json');
+            async function fetchSpreadsheetData(url) {
+                const response = await fetch(url);
                 const text = await response.text();
-
-                // JSON形式に変換
                 const json = JSON.parse(text.substr(47).slice(0, -2));
-                const rows = json.table.rows;
+                return json.table.rows;
+            }
 
-                // データ全体をデバッグ出力
-                console.log('All Rows:', rows);
-
-                // 1行目（ヘッダー）をスキップしてデータをフィルタリング
-                const patientData = rows.slice(1).filter(row => {
-                    const hospitalName = row.c[1]?.v?.trim(); // 病院名は2列目
-                    const patientIDValue = row.c[3]?.v?.toString().trim(); // 患者IDは4列目
-                    console.log(`Row Hospital: ${hospitalName}, Row Patient ID: ${patientIDValue}`);
+            function filterPatientData(rows, hospital, patientID) {
+                return rows.slice(1).filter(row => {
+                    const hospitalName = row.c[1]?.v?.trim();
+                    const patientIDValue = row.c[3]?.v?.toString().trim();
                     return hospitalName === hospital && patientIDValue === patientID;
                 });
+            }
 
-                // フィルタリング結果をデバッグ出力
-                console.log('Filtered Data:', patientData);
-
-                if (patientData.length === 0) {
-                    alert('該当するデータが見つかりませんでした。');
-                    return;
-                }
-
-                // データが見つかった場合、表示処理を続ける
-                const textDisplay = patientData[0].c.map(cell => cell?.v || '').join(', ');
-                document.getElementById('text-display').textContent = textDisplay;
-
-                
-                
+            try {
                 // 設定ファイルを取得
                 const configResponse = await fetch(configUrl);
                 const config = await configResponse.json();
 
-                // Google Spreadsheetからデータ取得
-                const response = await fetch('https://docs.google.com/spreadsheets/d/1EE-ZwN-f4TyOAgPMvc005ZButuoqF09v3mpKPLpPr54/gviz/tq?tqx=out:json');
-                const text = await response.text();
-
-                // JSON形式に変換
-                const json = JSON.parse(text.substr(47).slice(0, -2));
-                const rows = json.table.rows;
-
-                // データをフィルタリング
-                const patientData = rows.filter(row => {
-                    const hospitalName = row.c[1]?.v; // 病院名は2列目
-                    const patientIDValue = row.c[3]?.v; // 患者IDは4列目
-                    return hospitalName === hospital && patientIDValue === patientID;
+                // 病院リストを取得して設定
+                const rows = await fetchSpreadsheetData('https://docs.google.com/spreadsheets/d/1EE-ZwN-f4TyOAgPMvc005ZButuoqF09v3mpKPLpPr54/gviz/tq?tqx=out:json');
+                const hospitalSet = new Set(rows.slice(1).map(row => row.c[1]?.v?.trim()));
+                Array.from(hospitalSet).sort().forEach(hospital => {
+                    const option = document.createElement('option');
+                    option.value = hospital;
+                    option.textContent = hospital;
+                    hospitalSelect.appendChild(option);
                 });
 
-                if (patientData.length === 0) {
-                    alert('該当するデータが見つかりませんでした。');
-                    return;
-                }
+                document.getElementById('patient-form').addEventListener('submit', async (event) => {
+                    event.preventDefault();
 
-                // テキストデータ表示
-                const textDisplay = config.text.map(key => patientData[0].c[key]?.v || '').join(', ');
-                document.getElementById('text-display').textContent = textDisplay;
+                    const hospital = hospitalSelect.value.trim();
+                    const patientID = document.getElementById('patientID').value.trim();
 
-                // 表1と表2のデータ表示
-                const tables = [
-                    { id: 'table1', columns: config.table1 },
-                    { id: 'table2', columns: config.table2 }
-                ];
+                    console.log('Selected Hospital:', hospital);
+                    console.log('Entered Patient ID:', patientID);
 
-                tables.forEach(tableInfo => {
-                    const table = document.getElementById(tableInfo.id);
-                    table.innerHTML = '';
+                    const patientData = filterPatientData(rows, hospital, patientID);
+                    console.log('Filtered Data:', patientData);
 
-                    // ヘッダー作成
-                    const headerRow = document.createElement('tr');
-                    ['項目名', '値'].forEach(header => {
-                        const th = document.createElement('th');
-                        th.textContent = header;
-                        headerRow.appendChild(th);
+                    if (patientData.length === 0) {
+                        alert('該当するデータが見つかりませんでした。');
+                        return;
+                    }
+
+                    // テキストデータ表示
+                    const textDisplay = config.text.map(index => patientData[0].c[index]?.v || '').join(', ');
+                    document.getElementById('text-display').textContent = textDisplay;
+
+                    // 表1と表2のデータ表示
+                    const tables = [
+                        { id: 'table1', columns: config.table1 },
+                        { id: 'table2', columns: config.table2 }
+                    ];
+
+                    tables.forEach(tableInfo => {
+                        const table = document.getElementById(tableInfo.id);
+                        table.innerHTML = '';
+
+                        // ヘッダー作成
+                        const headerRow = document.createElement('tr');
+                        ['項目名', '値'].forEach(header => {
+                            const th = document.createElement('th');
+                            th.textContent = header;
+                            headerRow.appendChild(th);
+                        });
+                        table.appendChild(headerRow);
+
+                        // データ行作成
+                        tableInfo.columns.forEach(colIndex => {
+                            const row = document.createElement('tr');
+                            const itemName = rows[0].c[colIndex]?.v || '';
+                            const value = patientData[0].c[colIndex]?.v || '';
+
+                            const itemCell = document.createElement('td');
+                            itemCell.textContent = itemName;
+                            row.appendChild(itemCell);
+
+                            const valueCell = document.createElement('td');
+                            valueCell.textContent = value;
+
+                            // 色付け
+                            const numValue = parseFloat(value);
+                            if (!isNaN(numValue)) {
+                                if (numValue < 10) valueCell.className = 'below-normal';
+                                else if (numValue > 20) valueCell.className = 'above-normal';
+                                else valueCell.className = 'normal';
+                            }
+
+                            row.appendChild(valueCell);
+                            table.appendChild(row);
+                        });
                     });
-                    table.appendChild(headerRow);
 
-                    // データ行作成
-                    tableInfo.columns.forEach(colIndex => {
-                        const row = document.createElement('tr');
-                        const itemName = json.table.cols[colIndex]?.label || '';
-                        const value = patientData[0].c[colIndex]?.v || '';
+                    // グラフ描画
+                    const charts = [
+                        { id: 'chart1', columns: config.chart1 },
+                        { id: 'chart2', columns: config.chart2 }
+                    ];
 
-                        const itemCell = document.createElement('td');
-                        itemCell.textContent = itemName;
-                        row.appendChild(itemCell);
+                    charts.forEach(chartInfo => {
+                        const ctx = document.getElementById(chartInfo.id).getContext('2d');
+                        const labels = chartInfo.columns.map(colIndex => rows[0].c[colIndex]?.v || '');
+                        const data = chartInfo.columns.map(colIndex => parseFloat(patientData[0].c[colIndex]?.v || 0));
 
-                        const valueCell = document.createElement('td');
-                        valueCell.textContent = value;
-
-                        // 色付け
-                        const numValue = parseFloat(value);
-                        if (!isNaN(numValue)) {
-                            if (numValue < 10) valueCell.className = 'below-normal';
-                            else if (numValue > 20) valueCell.className = 'above-normal';
-                            else valueCell.className = 'normal';
-                        }
-
-                        row.appendChild(valueCell);
-                        table.appendChild(row);
-                    });
-                });
-
-                // グラフ描画
-                const charts = [
-                    { id: 'chart1', columns: config.chart1 },
-                    { id: 'chart2', columns: config.chart2 }
-                ];
-
-                charts.forEach(chartInfo => {
-                    const ctx = document.getElementById(chartInfo.id).getContext('2d');
-                    const labels = chartInfo.columns.map(colIndex => json.table.cols[colIndex]?.label || '');
-                    const data = chartInfo.columns.map(colIndex => parseFloat(patientData[0].c[colIndex]?.v || 0));
-
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'データ',
-                                data: data,
-                                fill: false,
-                                borderColor: 'blue',
-                                tension: 0.1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: true
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'データ',
+                                    data: data,
+                                    fill: false,
+                                    borderColor: 'blue',
+                                    tension: 0.1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        display: true
+                                    }
                                 }
                             }
-                        }
+                        });
                     });
                 });
-            });
+            } catch (error) {
+                console.error('Initialization error:', error);
+                alert('初期化中にエラーが発生しました。');
+            }
         });
     </script>
 </body>
