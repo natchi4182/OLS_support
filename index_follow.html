@@ -102,10 +102,16 @@
             fetch('https://docs.google.com/spreadsheets/d/15_gNZzb_KYwdl7mrDiqUREKKAngGeG4lgnnwyFAPALw')
                 .then(response => response.json())
                 .then(data => {
+                    const hospitalSet = new Set(); // 重複を除去するためのセット
+
                     data.hospitals.forEach(hospital => {
+                        hospitalSet.add(hospital.name); // 病院名をセットに追加
+                    });
+
+                    Array.from(hospitalSet).sort().forEach(hospitalName => {
                         const option = document.createElement('option');
-                        option.value = hospital.id;
-                        option.textContent = hospital.name;
+                        option.value = hospitalName;
+                        option.textContent = hospitalName;
                         hospitalSelect.appendChild(option);
                     });
                 });
