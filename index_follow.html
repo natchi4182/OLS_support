@@ -98,8 +98,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             const hospitalSelect = document.getElementById('hospital');
 
+            // 設定ファイルのURL
+            const configUrl = 'https://natchi4182.github.io/OLS_support/dataconfig.json'; // JSONファイルのパスを指定
+
             // Google Spreadsheetから病院リストを取得して設定
-            fetch('https://docs.google.com/spreadsheets/d/1EE-ZwN-f4TyOAgPMvc005ZButuoqF09v3mpKPLpPr54/gviz/tq?tqx=out:json')
+            fetch('https://docs.google.com/spreadsheets/d/15_gNZzb_KYwdl7mrDiqUREKKAngGeG4lgnnwyFAPALw/gviz/tq?tqx=out:json')
                 .then(response => response.text())
                 .then(text => {
                     const json = JSON.parse(text.substr(47).slice(0, -2)); // JSON部分を抽出
@@ -129,8 +132,12 @@
                 const hospital = hospitalSelect.value;
                 const patientID = document.getElementById('patientID').value;
 
+                // 設定ファイルを取得
+                const configResponse = await fetch(configUrl);
+                const config = await configResponse.json();
+
                 // Google Spreadsheetからデータ取得
-                const response = await fetch('https://docs.google.com/spreadsheets/d/1EE-ZwN-f4TyOAgPMvc005ZButuoqF09v3mpKPLpPr54/gviz/tq?tqx=out:json');
+                const response = await fetch('https://docs.google.com/spreadsheets/d/15_gNZzb_KYwdl7mrDiqUREKKAngGeG4lgnnwyFAPALw/gviz/tq?tqx=out:json');
                 const text = await response.text();
 
                 // JSON形式に変換
@@ -142,25 +149,21 @@
                     const hospitalName = row.c[1]?.v; // 病院名は2列目
                     const patientIDValue = row.c[3]?.v; // 患者IDは4列目
                     return hospitalName === hospital && patientIDValue === patientID;
-                }).map(row => {
-                    return {
-                        date: row.c[0]?.v || '', // 日付は1列目
-                        text: row.c[2]?.v || '', // テキストデータ (例: C列)
-                        table1: row.c.slice(5, 10), // 表1データ
-                        table2: row.c.slice(10, 15), // 表2データ
-                        chart1: row.c.slice(15, 20), // グラフ1データ
-                        chart2: row.c.slice(20, 25)  // グラフ2データ
-                    };
                 });
 
-                // 必要なデータを表示
-                document.getElementById('data-display').style.display = 'block';
-                document.getElementById('text-display').textContent = patientData[0]?.text || '該当データがありません';
+                if (patientData.length === 0) {
+                    alert('該当するデータが見つかりませんでした。');
+                    return;
+                }
+
+                // テキストデータ表示
+                const textDisplay = config.text.map(key => patientData[0].c[key]?.v || '').join(', ');
+                document.getElementById('text-display').textContent = textDisplay;
 
                 // 表1と表2のデータ表示
                 const tables = [
-                    { id: 'table1', data: patientData[0]?.table1 },
-                    { id: 'table2', data: patientData[0]?.table2 }
+                    { id: 'table1', columns: config.table1 },
+                    { id: 'table2', columns: config.table2 }
                 ];
 
                 tables.forEach(tableInfo => {
@@ -177,41 +180,49 @@
                     table.appendChild(headerRow);
 
                     // データ行作成
-                    tableInfo.data?.forEach(row => {
-                        const dataRow = document.createElement('tr');
-                        row.forEach((cell, index) => {
-                            const td = document.createElement('td');
-                            td.textContent = cell?.v || '';
+                    tableInfo.columns.forEach(colIndex => {
+                        const row = document.createElement('tr');
+                        const itemName = json.table.cols[colIndex]?.label || '';
+                        const value = patientData[0].c[colIndex]?.v || '';
 
-                            // 色付け (データセルのみ適用)
-                            if (index === 1) {
-                                const value = parseFloat(cell?.v || 0);
-                                if (value < 10) td.className = 'below-normal';
-                                else if (value > 20) td.className = 'above-normal';
-                                else td.className = 'normal';
-                            }
+                        const itemCell = document.createElement('td');
+                        itemCell.textContent = itemName;
+                        row.appendChild(itemCell);
 
-                            dataRow.appendChild(td);
-                        });
-                        table.appendChild(dataRow);
+                        const valueCell = document.createElement('td');
+                        valueCell.textContent = value;
+
+                        // 色付け
+                        const numValue = parseFloat(value);
+                        if (!isNaN(numValue)) {
+                            if (numValue < 10) valueCell.className = 'below-normal';
+                            else if (numValue > 20) valueCell.className = 'above-normal';
+                            else valueCell.className = 'normal';
+                        }
+
+                        row.appendChild(valueCell);
+                        table.appendChild(row);
                     });
                 });
 
-                // グラフ描画ロジック (グラフ1, グラフ2)
+                // グラフ描画
                 const charts = [
-                    { id: 'chart1', data: patientData[0]?.chart1 },
-                    { id: 'chart2', data: patientData[0]?.chart2 }
+                    { id: 'chart1', columns: config.chart1 },
+                    { id: 'chart2', columns: config.chart2 }
                 ];
 
                 charts.forEach(chartInfo => {
                     const ctx = document.getElementById(chartInfo.id).getContext('2d');
+                    const labels = chartInfo.columns.map(colIndex => json.table.cols[colIndex]?.label || '');
+                    const data = chartInfo.columns.map(colIndex => parseFloat(patientData[0].c[colIndex]?.v || 0));
+
                     new Chart(ctx, {
                         type: 'line',
                         data: {
-                            labels: chartInfo.data.map(d => d?.v || ''),
+                            labels: labels,
                             datasets: [{
                                 label: 'データ',
-                                data: chartInfo.data.map(d => parseFloat(d?.v || 0)),
+                                data: data,
                                 fill: false,
                                 borderColor: 'blue',
                                 tension: 0.1
