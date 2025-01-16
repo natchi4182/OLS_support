@@ -99,13 +99,17 @@
             const hospitalSelect = document.getElementById('hospital');
 
             // Google Spreadsheetから病院リストを取得して設定
-            fetch('https://docs.google.com/spreadsheets/d/15_gNZzb_KYwdl7mrDiqUREKKAngGeG4lgnnwyFAPALw')
-                .then(response => response.json())
-                .then(data => {
+            fetch('https://docs.google.com/spreadsheets/d/1EE-ZwN-f4TyOAgPMvc005ZButuoqF09v3mpKPLpPr54/gviz/tq?tqx=out:json')
+                .then(response => response.text())
+                .then(text => {
+                    const json = JSON.parse(text.substr(47).slice(0, -2)); // JSON部分を抽出
+                    const rows = json.table.rows;
+
                     const hospitalSet = new Set(); // 重複を除去するためのセット
 
-                    data.hospitals.forEach(hospital => {
-                        hospitalSet.add(hospital.name); // 病院名をセットに追加
+                    rows.forEach(row => {
+                        const hospitalName = row.c[1]?.v; // 病院名は2列目
+                        if (hospitalName) hospitalSet.add(hospitalName);
                     });
 
                     Array.from(hospitalSet).sort().forEach(hospitalName => {
@@ -114,6 +118,9 @@
                         option.textContent = hospitalName;
                         hospitalSelect.appendChild(option);
                     });
+                })
+                .catch(error => {
+                    console.error('エラーが発生しました:', error);
                 });
 
             document.getElementById('patient-form').addEventListener('submit', async (event) => {
@@ -123,28 +130,46 @@
                 const patientID = document.getElementById('patientID').value;
 
                 // Google Spreadsheetからデータ取得
-                const response = await fetch(`https://docs.google.com/spreadsheets/d/1EE-ZwN-f4TyOAgPMvc005ZButuoqF09v3mpKPLpPr54?hospital=${hospital}&patientID=${patientID}`);
-                const patientData = await response.json();
+                const response = await fetch('https://docs.google.com/spreadsheets/d/1EE-ZwN-f4TyOAgPMvc005ZButuoqF09v3mpKPLpPr54/gviz/tq?tqx=out:json');
+                const text = await response.text();
 
-                // データ表示
+                // JSON形式に変換
+                const json = JSON.parse(text.substr(47).slice(0, -2));
+                const rows = json.table.rows;
+
+                // データをフィルタリング
+                const patientData = rows.filter(row => {
+                    const hospitalName = row.c[1]?.v; // 病院名は2列目
+                    const patientIDValue = row.c[3]?.v; // 患者IDは4列目
+                    return hospitalName === hospital && patientIDValue === patientID;
+                }).map(row => {
+                    return {
+                        date: row.c[0]?.v || '', // 日付は1列目
+                        text: row.c[2]?.v || '', // テキストデータ (例: C列)
+                        table1: row.c.slice(5, 10), // 表1データ
+                        table2: row.c.slice(10, 15), // 表2データ
+                        chart1: row.c.slice(15, 20), // グラフ1データ
+                        chart2: row.c.slice(20, 25)  // グラフ2データ
+                    };
+                });
+
+                // 必要なデータを表示
                 document.getElementById('data-display').style.display = 'block';
+                document.getElementById('text-display').textContent = patientData[0]?.text || '該当データがありません';
 
-                // テキスト表示
-                document.getElementById('text-display').textContent = patientData.text;
-
-                // 表1, 表2データ表示
+                // 表1と表2のデータ表示
                 const tables = [
-                    { id: 'table1', data: patientData.table1 },
-                    { id: 'table2', data: patientData.table2 }
+                    { id: 'table1', data: patientData[0]?.table1 },
+                    { id: 'table2', data: patientData[0]?.table2 }
                 ];
 
                 tables.forEach(tableInfo => {
                     const table = document.getElementById(tableInfo.id);
                     table.innerHTML = '';
 
-                    // ヘッダー行作成
+                    // ヘッダー作成
                     const headerRow = document.createElement('tr');
-                    ['項目名', '単位', '正常値', ...tableInfo.data.dates].forEach(header => {
+                    ['項目名', '値'].forEach(header => {
                         const th = document.createElement('th');
                         th.textContent = header;
                         headerRow.appendChild(th);
@@ -152,34 +177,30 @@
                     table.appendChild(headerRow);
 
                     // データ行作成
-                    tableInfo.data.rows.forEach(row => {
+                    tableInfo.data?.forEach(row => {
                         const dataRow = document.createElement('tr');
-
                         row.forEach((cell, index) => {
                             const td = document.createElement('td');
-                            td.textContent = cell;
+                            td.textContent = cell?.v || '';
 
                             // 色付け (データセルのみ適用)
-                            if (index >= 3) {
-                                const value = parseFloat(cell);
-                                const normalRange = tableInfo.data.normalRange[index - 3];
-
-                                if (value < normalRange.min) td.className = 'below-normal';
-                                else if (value > normalRange.max) td.className = 'above-normal';
+                            if (index === 1) {
+                                const value = parseFloat(cell?.v || 0);
+                                if (value < 10) td.className = 'below-normal';
+                                else if (value > 20) td.className = 'above-normal';
                                 else td.className = 'normal';
                             }
 
                             dataRow.appendChild(td);
                         });
-
                         table.appendChild(dataRow);
                     });
                 });
 
-                // グラフ1, グラフ2データ表示
+                // グラフ描画ロジック (グラフ1, グラフ2)
                 const charts = [
-                    { id: 'chart1', data: patientData.chart1 },
-                    { id: 'chart2', data: patientData.chart2 }
+                    { id: 'chart1', data: patientData[0]?.chart1 },
+                    { id: 'chart2', data: patientData[0]?.chart2 }
                 ];
 
                 charts.forEach(chartInfo => {
@@ -187,8 +208,14 @@
                     new Chart(ctx, {
                         type: 'line',
                         data: {
-                            labels: chartInfo.data.dates,
-                            datasets: chartInfo.data.datasets
+                            labels: chartInfo.data.map(d => d?.v || ''),
+                            datasets: [{
+                                label: 'データ',
+                                data: chartInfo.data.map(d => parseFloat(d?.v || 0)),
+                                fill: false,
+                                borderColor: 'blue',
+                                tension: 0.1
+                            }]
                         },
                         options: {
                             responsive: true,
