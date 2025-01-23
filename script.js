@@ -597,34 +597,48 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
     // 要素を取得
-    const showPolicyBtn = document.getElementById("show-policy-btn");
     const modal = document.getElementById("modal");
     const modalOverlay = document.getElementById("modal-overlay");
     const closeBtn = document.getElementById("close-btn");
-    const policyContent = document.getElementById("policy-content");
+    const modalTitle = document.getElementById("modal-title");
+    const modalContent = document.getElementById("modal-content");
 
-    // プライバシーポリシーボタンをクリックした時
-    showPolicyBtn.addEventListener("click", () => {
-      // JSONファイルを読み込み
-      fetch("privacy_policy.json")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("プライバシーポリシーを取得できませんでした。");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          // JSONデータをHTMLに挿入
-          policyContent.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-          modal.style.display = "block";
-          modalOverlay.style.display = "block";
-        })
-        .catch((error) => {
-          console.error(error);
-          policyContent.innerHTML = "<p>プライバシーポリシーを読み込むことができませんでした。</p>";
-          modal.style.display = "block";
-          modalOverlay.style.display = "block";
-        });
+    // ボタンをクリックした時の処理
+    document.querySelectorAll(".show-modal-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        const file = button.dataset.file; // ボタンのdata-file属性からファイル名を取得
+
+        // JSONファイルを読み込む
+        fetch(file)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`${file} を取得できませんでした。`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            // JSONデータを整形して表示
+            modalTitle.textContent = data.title || "タイトル";
+            const sections = data.sections || [];
+            modalContent.innerHTML = sections
+              .map(
+                section => `
+                  <h3>${section.heading}</h3>
+                  <p>${section.content}</p>
+                `
+              )
+              .join("");
+            modal.style.display = "block";
+            modalOverlay.style.display = "block";
+          })
+          .catch(error => {
+            console.error(error);
+            modalTitle.textContent = "エラー";
+            modalContent.innerHTML = "<p>コンテンツを読み込むことができませんでした。</p>";
+            modal.style.display = "block";
+            modalOverlay.style.display = "block";
+          });
+      });
     });
 
     // モーダルを閉じるボタン
