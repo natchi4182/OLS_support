@@ -20,8 +20,15 @@
       margin-right: 15px;
       margin-bottom: 5px;
     }
-    .hidden {
-      display: none;
+    .content {
+      overflow: hidden; /* アニメーション用 */
+      transition: height 0.3s ease, opacity 0.3s ease;
+      height: 0; /* 初期状態で閉じる */
+      opacity: 0;
+    }
+    .content.open {
+      height: auto; /* 開いた状態 */
+      opacity: 1;
     }
     select, input[type=text], input[type=number], textarea {
       width: 90%;
