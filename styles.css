@@ -144,10 +144,10 @@
       width: 130px;
       height: 40px;
       font-size: 0.5em;
+    }
     #modal-button:hover {
       background-color: #0056b3;
       color: white;
-    }
     }
     #close-btn {
       display: inline-block;
