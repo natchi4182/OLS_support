@@ -216,16 +216,18 @@
 
   <hr>
   <!-- ボタン -->
-  <button id="show-policy-btn" style="font-size: 0.8em">プライバシーポリシー</button>
+  <button class="show-modal-btn" data-file="privacy_policy.json" style="font-size: 0.8em">プライバシーポリシー</button>
+  <button class="show-modal-btn" data-file="disclaimer.json" style="font-size: 0.8em">免責事項</button>
+  <button class="show-modal-btn" data-file="help.json" style="font-size: 0.8em">ヘルプ</button>
 
   <!-- モーダルオーバーレイ -->
   <div id="modal-overlay"></div>
 
   <!-- モーダル -->
   <div id="modal">
-    <h2>プライバシーポリシー</h2>
-    <div id="policy-content">
-      <!-- プライバシーポリシーの内容がここに表示される -->
+    <h2 id="modal-title">タイトル</h2>
+    <div id="modal-content">
+      <!-- コンテンツがここに表示される -->
     </div>
     <button id="close-btn">閉じる</button>
   </div>
