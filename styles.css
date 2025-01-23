@@ -131,17 +131,17 @@
       background-color: rgba(0, 0, 0, 0.5);
       z-index: 999;
     }
-    #modal-button {
+    #modal-btn {
       margin-top: 20px;
       padding: 10px 15px;
-      background: #4CAF50;
+      background: #007BFF;
       color: #fff;
       border: none;
       cursor: pointer;
-      border-radius: 3px;
+      border-radius: 5px;
       width: 120px;
-      height: 40px;
-      font-size: 0.8em;
+      height: 30px;
+      font-size: 0.7em;
     }
     #close-btn {
       display: inline-block;
@@ -154,8 +154,8 @@
       border-radius: 5px;
       cursor: pointer;
       width: 120px;
-      height: 40px;
-      font-size: 0.8em;
+      height: 30px;
+      font-size: 0.7em;
     }
     #close-btn:hover {
       background-color: #0056b3;
