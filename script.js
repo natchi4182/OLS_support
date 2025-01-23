@@ -364,11 +364,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       const doConvert = convertTargets.includes(jsonPath);
 
       data.items.forEach(item => {
-        // 特定ファイルだけ ® を上付きに変換
-        let displayItem = item;
-        if (doConvert) {
-        displayItem = item.replace(/®/g, '<sup>®</sup>');
-        }
+        if (item === "separator") {
+          // 横線を挿入
+          const separator = document.createElement('div');
+          separator.style.borderTop = '1px solid #ccc';
+          separator.style.margin = '10px 0';
+          container.appendChild(separator);
+        } else {
+          // 特定ファイルだけ ® を上付きに変換
+          let displayItem = item;
+          if (doConvert) {
+          displayItem = item.replace(/®/g, '<sup>®</sup>');
+          }
 
         const labelElem = document.createElement('label');
         labelElem.classList.add('inline-label');
