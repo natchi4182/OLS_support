@@ -58,7 +58,7 @@
       cursor: pointer;
       border-radius: 3px;
       width: 150px;
-      height: 60px;
+      height: 40px;
       font-size: 1.2em;
     }
     button:hover {
@@ -139,9 +139,9 @@
       border: none;
       cursor: pointer;
       border-radius: 5px;
-      width: 120px;
+      width: 125px;
       height: 20px;
-      font-size: 0.6em;
+      font-size: 0.5em;
     }
     #close-btn {
       display: inline-block;
@@ -153,9 +153,9 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      width: 120px;
+      width: 125px;
       height: 20px;
-      font-size: 0.6em;
+      font-size: 0.5em;
     }
     #close-btn:hover {
       background-color: #0056b3;
