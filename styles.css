@@ -63,6 +63,7 @@
     }
     button:hover {
       background: #45a049;
+      color: #000;
     }
     /* クリアボタンのスタイル調整 */
     #clearBtn {
@@ -71,6 +72,7 @@
     }
     #clearBtn:hover {
       background: #d32f2f;
+      color: #000;
     }
     .long-slider {
       width: 100%;
@@ -142,6 +144,10 @@
       width: 130px;
       height: 40px;
       font-size: 0.5em;
+    #modal-button:hover {
+      background-color: #0056b3;
+      color: #000;
+    }
     }
     #close-btn {
       display: inline-block;
@@ -159,6 +165,7 @@
     }
     #close-btn:hover {
       background-color: #0056b3;
+      color: #000;
     }
     hr {
       border: none;            /* デフォルトのボーダーを無効化 */
