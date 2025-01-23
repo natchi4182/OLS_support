@@ -103,6 +103,13 @@
             statusMessage.className = "success-message";
             statusMessage.textContent = "送信が完了しました！";
             document.getElementById("inquiry-form").reset();
+
+            // 3秒後に閉じて元のページに戻る
+            setTimeout(() => {
+              window.close(); // ポップアップを閉じる
+              window.location.href = "index.html"; // 元のページにリダイレクト
+            }, 3000);
+
           } else {
             statusMessage.style.display = "block";
             statusMessage.className = "error-message";
@@ -116,6 +123,7 @@
           statusMessage.className = "error-message";
           statusMessage.textContent = "送信中にエラーが発生しました。";
         });
+
     });
   </script>
 </body>
