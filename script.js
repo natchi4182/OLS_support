@@ -366,9 +366,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       data.items.forEach(item => {
         if (item === "separator") {
           // 横線を挿入
-          const separator = document.createElement('div');
-          separator.style.borderTop = '1px solid #ccc';
-          separator.style.margin = '10px 0';
+          const separator = document.createElement('hr');
           container.appendChild(separator);
         } else {
           // 特定ファイルだけ ® を上付きに変換
