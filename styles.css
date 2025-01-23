@@ -53,7 +53,7 @@
       margin-top: 20px;
       padding: 10px 15px;
       background: #D2FAD2;
-      color: #fff;
+      color: white;
       border: none;
       cursor: pointer;
       border-radius: 3px;
@@ -63,7 +63,7 @@
     }
     button:hover {
       background: #45a049;
-      color: #000;
+      color: white;
     }
     /* クリアボタンのスタイル調整 */
     #clearBtn {
@@ -72,7 +72,7 @@
     }
     #clearBtn:hover {
       background: #d32f2f;
-      color: #000;
+      color: white;
     }
     .long-slider {
       width: 100%;
@@ -137,7 +137,7 @@
       margin-top: 20px;
       padding: 10px 15px;
       background: #D2E8FA;
-      color: #fff;
+      color: white;
       border: none;
       cursor: pointer;
       border-radius: 5px;
@@ -146,7 +146,7 @@
       font-size: 0.5em;
     #modal-button:hover {
       background-color: #0056b3;
-      color: #000;
+      color: white;
     }
     }
     #close-btn {
@@ -165,12 +165,12 @@
     }
     #close-btn:hover {
       background-color: #0056b3;
-      color: #000;
+      color: white;
     }
     hr {
       border: none;            /* デフォルトのボーダーを無効化 */
       border-top: 1px solid #ccc; /* 上部に細い横線を追加 */
       margin: 10px 0;          /* 上下の余白を設定 */
       width: 100%;             /* 横幅を全体に広げる */
-      color: #D3D3D3;
+      color: #E0E0E0;
     }
