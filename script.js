@@ -1,4 +1,16 @@
 document.addEventListener('DOMContentLoaded', async () => {
+  const legend = document.querySelector('legend');
+  const container = document.getElementById('diseaseContainer');
+
+  legend.addEventListener('click', () => {
+    // 表示状態を切り替える
+    if (container.classList.contains('hidden')) {
+      container.classList.remove('hidden'); // 開く
+    } else {
+      container.classList.add('hidden'); // 閉じる
+    }
+  });
+
   // -----------------------------
   // 1) スライダーと数値の要素を同期
   // -----------------------------
