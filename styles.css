@@ -140,8 +140,8 @@
       cursor: pointer;
       border-radius: 5px;
       width: 120px;
-      height: 30px;
-      font-size: 0.7em;
+      height: 20px;
+      font-size: 0.6em;
     }
     #close-btn {
       display: inline-block;
@@ -154,8 +154,8 @@
       border-radius: 5px;
       cursor: pointer;
       width: 120px;
-      height: 30px;
-      font-size: 0.7em;
+      height: 20px;
+      font-size: 0.6em;
     }
     #close-btn:hover {
       background-color: #0056b3;
