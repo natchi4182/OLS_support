@@ -131,6 +131,18 @@
       background-color: rgba(0, 0, 0, 0.5);
       z-index: 999;
     }
+    #modal-button {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 3px;
+      width: 120px;
+      height: 40px;
+      font-size: 0.8em;
+    }
     #close-btn {
       display: inline-block;
       margin-top: 20px;
@@ -141,6 +153,9 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      width: 120px;
+      height: 40px;
+      font-size: 0.8em;
     }
     #close-btn:hover {
       background-color: #0056b3;
