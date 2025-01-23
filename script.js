@@ -377,20 +377,21 @@ document.addEventListener('DOMContentLoaded', async () => {
           displayItem = item.replace(/®/g, '<sup>®</sup>');
           }
 
-        const labelElem = document.createElement('label');
-        labelElem.classList.add('inline-label');
+          const labelElem = document.createElement('label');
+          labelElem.classList.add('inline-label');
 
-        const input = document.createElement('input');
-        input.type = 'checkbox';
-        input.name = nameAttr;
-        input.value = item;
-        labelElem.appendChild(input);
+          const input = document.createElement('input');
+          input.type = 'checkbox';
+          input.name = nameAttr;
+          input.value = item;
+          labelElem.appendChild(input);
 
-        const span = document.createElement('span');
-        span.innerHTML = ' ' + displayItem;
-        labelElem.appendChild(span);
+          const span = document.createElement('span');
+          span.innerHTML = ' ' + displayItem;
+          labelElem.appendChild(span);
 
-        container.appendChild(labelElem);
+          container.appendChild(labelElem);
+        }
       });
     } catch(err) {
       console.error('Error loading', jsonPath, err);
