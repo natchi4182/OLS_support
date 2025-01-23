@@ -595,5 +595,48 @@ document.addEventListener('DOMContentLoaded', async () => {
     caInput.addEventListener('input', calculateUrinaryCaRatio);
     creInput.addEventListener('input', calculateUrinaryCaRatio);
   }
+
+    // 要素を取得
+    const showPolicyBtn = document.getElementById("show-policy-btn");
+    const modal = document.getElementById("modal");
+    const modalOverlay = document.getElementById("modal-overlay");
+    const closeBtn = document.getElementById("close-btn");
+    const policyContent = document.getElementById("policy-content");
+
+    // プライバシーポリシーボタンをクリックした時
+    showPolicyBtn.addEventListener("click", () => {
+      // JSONファイルを読み込み
+      fetch("privacy_policy.json")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("プライバシーポリシーを取得できませんでした。");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // JSONデータをHTMLに挿入
+          policyContent.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+          modal.style.display = "block";
+          modalOverlay.style.display = "block";
+        })
+        .catch((error) => {
+          console.error(error);
+          policyContent.innerHTML = "<p>プライバシーポリシーを読み込むことができませんでした。</p>";
+          modal.style.display = "block";
+          modalOverlay.style.display = "block";
+        });
+    });
+
+    // モーダルを閉じるボタン
+    closeBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+      modalOverlay.style.display = "none";
+    });
+
+    // オーバーレイをクリックしても閉じる
+    modalOverlay.addEventListener("click", () => {
+      modal.style.display = "none";
+      modalOverlay.style.display = "none";
+    });
   
 }); // DOMContentLoaded end
