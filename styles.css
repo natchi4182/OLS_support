@@ -19,6 +19,7 @@
       display: inline-block;
       margin-right: 15px;
       margin-bottom: 5px;
+    }
     select, input[type=text], input[type=number], textarea {
       width: 90%;
       max-width: 500px;
