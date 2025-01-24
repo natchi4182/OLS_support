@@ -220,7 +220,7 @@
     hr {
       border: none;            /* デフォルトのボーダーを無効化 */
       border-top: 1px solid #eee; /* 上部に細い横線を追加 */
-      margin: 10px 0;          /* 上下の余白を設定 */
+      margin: 5px 0;          /* 上下の余白を設定 */
       width: 100%;             /* 横幅を全体に広げる */
       color: #E8E8E8;
     }
