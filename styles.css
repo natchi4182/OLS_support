@@ -12,12 +12,12 @@
       transition: height 0.3s ease, opacity 0.3s ease;
       height: auto;
       opacity: 1;
-      background-color: white;
+      background-color: #F0F8FF;
     }
     fieldset.shrunk {
       height: 0.5em;
       opacity: 1;
-      background-color: #F0F8FF;
+      background-color: #DCEEFF;
       padding: 10px;
     }
     fieldset.non-shrunkable {
