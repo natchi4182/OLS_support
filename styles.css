@@ -15,16 +15,22 @@
       background-color: #F0F8FF;
       cursor: default;
     }
-    fieldset.shrunk {
-      height: 0.5em;
+    fieldset.shrunkable {
+      height: auto;
       opacity: 1;
-      background-color: #DCEEFF;
-      padding: 10px;
-      cursor: pointer;
+      background-color: #F0F8FF;
     }
     fieldset.non-shrunkable {
       height: auto;
       opacity: 1;
+      background-color: #FFEFD2;
+    }
+    fieldset.shrunkable.shrunk {
+      height: 0.5em;
+      opacity: 1;
+      padding: 10px;
+      cursor: pointer;
+      background-color: #B0D0FF;
     }
     legend {
       cursor: pointer;
