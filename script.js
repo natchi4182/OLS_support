@@ -177,21 +177,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   legends.forEach(legend => {
     const fieldset = legend.parentElement; // 対応する<fieldset>を取得
-    const content = fieldset.querySelector('.content'); // フィールドセット内の.contentを取得
 
-    // legendをクリックしたときの処理
+    // <legend>をクリックした時の処理
     legend.addEventListener('click', () => {
-      if (fieldset.classList.contains('shrunk')) {
-        // 開く
-        content.classList.remove('hidden'); // 内容を表示
-        fieldset.classList.remove('shrunk'); // フィールドセットの高さを戻す
-        fieldset.style.height = `${fieldset.scrollHeight}px`; // 高さを計算して設定
-      } else {
-        // 閉じる
-        content.classList.add('hidden'); // 内容を非表示
-        fieldset.classList.add('shrunk'); // フィールドセットの高さを縮小
-        fieldset.style.height = '2.5em'; // legendの高さ分だけに設定
+      if (fieldset.classList.contains('shrunkable')) {
+        // 縮小可能な場合のみ切り替え
+        if (fieldset.classList.contains('shrunk')) {
+          // 開く
+          fieldset.style.height = 'auto';
+          fieldset.classList.remove('shrunk');
+        } else {
+          // 縮小する
+          fieldset.style.height = '2.5em'; // legend分の高さ
+          fieldset.classList.add('shrunk');
+        }
       }
+      // non-shrunkableはクリックしても何もしない
     });
   });
 
