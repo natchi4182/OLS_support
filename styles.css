@@ -15,10 +15,10 @@
       background-color: white;
     }
     fieldset.shrunk {
-      height: 1em;
+      height: 0.5em;
       opacity: 1;
       background-color: #F0F8FF;
-      padding: 0;
+      padding: 10px;
     }
     fieldset.non-shrunkable {
       height: auto;
