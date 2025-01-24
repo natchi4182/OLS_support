@@ -47,8 +47,8 @@
   <h4>※:必須項目</h4>
 
   <form id="mainForm">
-      <fieldset>
-      <legend class="non-collapsible">医療機関名・医師名(※)</legend>
+    <fieldset class="non-shrunkable">
+      <legend>医療機関名・医師名(※)</legend>
       <label for="hospitalInput">医療機関を選択してください:</label>
       <select id="hospitalInput" name="hospital" required>
         <option value="">--- 選 択 ---</option>
@@ -62,14 +62,14 @@
       <span style="font-size: 0.8em">医療機関名・医師名の追加は<a href="https://docs.google.com/spreadsheets/d/15_gNZzb_KYwdl7mrDiqUREKKAngGeG4lgnnwyFAPALw/edit?usp=sharing" target="_blank" rel="noopener noreferrer">こちら</a>をクリックして追加入力できます。</span>
     </fieldset>
 
-    <fieldset>
-      <legend class="non-collapsible">患者ID(※)</legend>
+    <fieldset class="non-shrunkable">
+      <legend>患者ID(※)</legend>
       <label for="patientIdInput">患者ID:</label>
       <input type="text" id="patientIdInput" name="patient_id" placeholder="暗号化処理したIDを入力" required>
     </fieldset>
 
-    <fieldset>
-      <legend class="non-collapsible">年齢(※)</legend>
+    <fieldset class="non-shrunkable">
+      <legend>年齢(※)</legend>
       <label for="ageInput">年齢:</label>
       <input type="number" inputmode="numeric" id="ageNumber" name="age" min="0" max="120" step="1" placeholder="0〜120" required>
       <input type="range" class="long-slider" id="ageInput" min="0" max="120" step="1">
@@ -77,8 +77,8 @@
       <span id="ageError" class="error-message visually-hidden">年齢は0から120の間で入力してください。</span>
     </fieldset>
 
-    <fieldset>
-      <legend class="non-collapsible">性別(※)</legend>
+    <fieldset class="non-shrunkable">
+      <legend>性別(※)</legend>
       <div class="radio-group">
         <label class="inline-label">
           <input type="radio" name="sex" value="閉経前女性" required aria-required="true"> 閉経前女性
@@ -92,8 +92,8 @@
       </div>
     </fieldset>
 
-    <fieldset>
-      <legend class="non-collapsible">身長・体重</legend>
+    <fieldset class="non-shrunkable">
+      <legend>身長・体重</legend>
       <label for="heightInput">身長（cm）:</label>
       <input type="number" inputmode="numeric" id="heightNumber" name="height" min="100" max="200" step="0.1" placeholder="100.0〜200.0">
       <input type="range" class="long-slider" id="heightInput" min="100" max="200" step="0.1">
@@ -103,8 +103,8 @@
       <input type="range" class="long-slider" id="weightInput" min="20" max="150" step="0.1">
     </fieldset>
 
-    <fieldset>
-      <legend class="non-collapsible">生活習慣</legend>
+    <fieldset class="non-shrunkable">
+      <legend>生活習慣</legend>
       <label for="smokingInput">現在の喫煙について選択してください:</label>
       <select id="smokingInput" name="smoking">
         <option value="">--- 選 択 ---</option>
@@ -119,57 +119,57 @@
       <br>　　　ワイン: グラス1杯 120ml　　　食前酒: シングル 60ml</span>
     </fieldset>
 
-    <fieldset>
-      <legend class="collapsible">基礎疾患</legend>
-      <div id="diseaseContainer" class="checkbox-group" class="content">
+    <fieldset class="shrunkable">
+      <legend>基礎疾患</legend>
+      <div id="diseaseContainer" class="checkbox-group">
       </div>
     </fieldset>
 
-    <fieldset>
-      <legend class="collapsible">骨折歴（骨粗鬆症性のみ）</legend>
-      <div id="fractureHistoryContainer" class="checkbox-group" class="content">
+    <fieldset class="shrunkable">
+      <legend>骨折歴（骨粗鬆症性のみ）</legend>
+      <div id="fractureHistoryContainer" class="checkbox-group">
       </div>
     </fieldset>
 
-    <fieldset>
-      <legend class="collapsible">使用中の骨粗鬆症治療薬</legend>
+    <fieldset class="shrunkable">
+      <legend>使用中の骨粗鬆症治療薬</legend>
       <div id="osteoporosisMedsContainer" class="checkbox-group">
       </div>
     </fieldset>
 
-    <fieldset>
-      <legend class="collapsible">HRT（ホルモン補充療法）</legend>
+    <fieldset class="shrunkable">
+      <legend>HRT（ホルモン補充療法）</legend>
       <div id="hrtMedsContainer" class="checkbox-group">
       </div>
     </fieldset>
 
-    <fieldset>
-      <legend class="collapsible">骨代謝・骨折・転倒関連薬剤</legend>
+    <fieldset class="shrunkable">
+      <legend>骨代謝・骨折・転倒関連薬剤</legend>
       <div id="boneMetabolismMedsContainer" class="checkbox-group">
       </div>
     </fieldset>
 
-    <fieldset>
-      <legend class="collapsible">骨代謝に関連する抗癌剤</legend>
+    <fieldset class="shrunkable">
+      <legend>骨代謝に関連する抗癌剤</legend>
       <div id="anticancerMedsContainer" class="checkbox-group">
       </div>
       <br><span style="font-size: 0.8em">　　　▲: 骨量増加作用　　　▼: 骨量減少作用
       <br>　　　▶︎: 骨量減少抑制作用</span>
     </fieldset>
 
-    <fieldset>
-      <legend class="collapsible">その他</legend>
+    <fieldset class="shrunkable">
+      <legend>その他</legend>
       <div id="othersContainer" class="checkbox-group">
       </div>
     </fieldset>
 
-    <fieldset>
-      <legend class="non-collapsible">追加項目</legend>
+    <fieldset class="non-shrunkable">
+      <legend>追加項目</legend>
       <textarea id="otherinfoInput" inputmode="kana" name="otherinfo" rows="5" placeholder="ここはフリーに何でも記載してください"></textarea>
     </fieldset>
 
-    <fieldset>
-      <legend class="collapsible">骨密度（直近3か月以内）</legend>
+    <fieldset class="shrunkable">
+      <legend>骨密度（直近3か月以内）</legend>
       <label for="lumbarBMD">腰椎（g/cm²）:</label>
       <input type="number" inputmode="numeric" id="lumbarBMDNumber" name="lumbar_bmd" min="0.000" max="2.000" step="0.001" placeholder="0.000〜2.000">
       <input type="range" class="long-slider" id="lumbarBMD" min="0.000" max="2.000" step="0.001">
@@ -185,8 +185,8 @@
       <input type="range" class="long-slider" id="femurYAM" min="0" max="200" step="1">
     </fieldset>
 
-    <fieldset>
-      <legend class="collapsible">検体検査データ（直近3か月以内）</legend>
+    <fieldset class="shrunkable">
+      <legend>検体検査データ（直近3か月以内）</legend>
       <table class="lab-table">
         <thead>
           <tr>
