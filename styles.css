@@ -12,10 +12,13 @@
       transition: height 0.3s ease, opacity 0.3s ease;
       height: auto;
       opacity: 1;
+      background-color: white;
     }
     fieldset.shrunk {
       height: 1em;
       opacity: 1;
+      background-color: #F0F8FF;
+      padding: 0;
     }
     fieldset.non-shrunkable {
       height: auto;
@@ -24,6 +27,13 @@
     legend {
       cursor: pointer;
       font-weight: bold;
+    }
+    .content {
+      transition: opacity 0.3s ease; /* 内容部分の透明度をアニメーション */
+      opacity: 1; /* デフォルトで表示 */
+    }
+    .content.hidden {
+      opacity: 0; /* 非表示状態 */
     }
     label {
       display: block;
