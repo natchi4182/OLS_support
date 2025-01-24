@@ -48,7 +48,7 @@
 
   <form id="mainForm">
       <fieldset>
-      <legend>医療機関名・医師名(※)</legend>
+      <legend2>医療機関名・医師名(※)</legend2>
       <label for="hospitalInput">医療機関を選択してください:</label>
       <select id="hospitalInput" name="hospital" required>
         <option value="">--- 選 択 ---</option>
@@ -63,13 +63,13 @@
     </fieldset>
 
     <fieldset>
-      <legend>患者ID(※)</legend>
+      <legend2>患者ID(※)</legend2>
       <label for="patientIdInput">患者ID:</label>
       <input type="text" id="patientIdInput" name="patient_id" placeholder="暗号化処理したIDを入力" required>
     </fieldset>
 
     <fieldset>
-      <legend>年齢(※)</legend>
+      <legend2>年齢(※)</legend2>
       <label for="ageInput">年齢:</label>
       <input type="number" inputmode="numeric" id="ageNumber" name="age" min="0" max="120" step="1" placeholder="0〜120" required>
       <input type="range" class="long-slider" id="ageInput" min="0" max="120" step="1">
@@ -78,7 +78,7 @@
     </fieldset>
 
     <fieldset>
-      <legend>性別(※)</legend>
+      <legend2>性別(※)</legend2>
       <div class="radio-group">
         <label class="inline-label">
           <input type="radio" name="sex" value="閉経前女性" required aria-required="true"> 閉経前女性
@@ -93,7 +93,7 @@
     </fieldset>
 
     <fieldset>
-      <legend>身長・体重</legend>
+      <legend2>身長・体重</legend2>
       <label for="heightInput">身長（cm）:</label>
       <input type="number" inputmode="numeric" id="heightNumber" name="height" min="100" max="200" step="0.1" placeholder="100.0〜200.0">
       <input type="range" class="long-slider" id="heightInput" min="100" max="200" step="0.1">
@@ -104,7 +104,7 @@
     </fieldset>
 
     <fieldset>
-      <legend>生活習慣</legend>
+      <legend2>生活習慣</legend2>
       <label for="smokingInput">現在の喫煙について選択してください:</label>
       <select id="smokingInput" name="smoking">
         <option value="">--- 選 択 ---</option>
@@ -164,12 +164,12 @@
     </fieldset>
 
     <fieldset>
-      <legend>追加項目</legend>
+      <legend2>追加項目</legend2>
       <textarea id="otherinfoInput" inputmode="kana" name="otherinfo" rows="5" placeholder="ここはフリーに何でも記載してください"></textarea>
     </fieldset>
 
     <fieldset>
-      <legend>骨密度（直近3か月以内）</legend>
+      <legend2>骨密度（直近3か月以内）</legend2>
       <label for="lumbarBMD">腰椎（g/cm²）:</label>
       <input type="number" inputmode="numeric" id="lumbarBMDNumber" name="lumbar_bmd" min="0.000" max="2.000" step="0.001" placeholder="0.000〜2.000">
       <input type="range" class="long-slider" id="lumbarBMD" min="0.000" max="2.000" step="0.001">
