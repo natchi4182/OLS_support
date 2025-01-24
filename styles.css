@@ -7,6 +7,7 @@
       margin-bottom: 20px;
       border: 3px solid #ccc;
       padding: 10px;
+      margin: 10px 0;
       overflow: hidden;
       transition: height 0.3s ease, opacity 0.3s ease;
       height: auto;
@@ -14,18 +15,15 @@
     }
     fieldset.shrunk {
       height: 2.5em;
-      opacity: 0;
+      opacity: 1;
+    }
+    fieldset.non-shrunkable {
+      height: auto;
+      opacity: 1;
     }
     legend {
       cursor: pointer;
       font-weight: bold;
-    }
-    .content {
-      transition: opacity 0.3s ease;
-      opacity: 1;
-    }
-    .content.hidden {
-      opacity: 0;
     }
     label {
       display: block;
