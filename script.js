@@ -195,6 +195,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
+  const fieldsets = document.querySelectorAll('fieldset.shrunkable'); // 縮小可能なフィールドセットを取得
+
+  fieldsets.forEach(fieldset => {
+    const content = fieldset.querySelector('.content'); // 各フィールドセット内の.contentを取得
+
+    // フィールドセット全体をクリック可能にする
+    fieldset.addEventListener('click', (event) => {
+      // 他のクリックイベントを防止
+      if (fieldset.classList.contains('shrunk')) {
+        // 開く
+        content.classList.remove('hidden');
+        fieldset.classList.remove('shrunk');
+        fieldset.style.height = 'auto';
+      } else {
+        // 縮小する
+        content.classList.add('hidden');
+        fieldset.classList.add('shrunk');
+        fieldset.style.height = '1.5em';
+      }
+    });
+  });
+  
   // -----------------------------
   // 4) ボタン別のイベント定義
   // -----------------------------
