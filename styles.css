@@ -84,7 +84,7 @@
     button {
       margin-top: 20px;
       padding: 10px 15px;
-      background: #D2FAD2;
+      background: #B8E8B8;
       color: white;
       border: none;
       cursor: pointer;
@@ -99,7 +99,7 @@
     }
     /* クリアボタンのスタイル調整 */
     #clearBtn {
-      background: #FAD2D2; /* 赤系 */
+      background: #E8B8B8; /* 赤系 */
       margin-left: 10px;
     }
     #clearBtn:hover {
@@ -168,7 +168,7 @@
     #modal-button {
       margin-top: 20px;
       padding: 10px 15px;
-      background: #D2E8FA;
+      background: #B8CCE8;
       color: white;
       border: none;
       cursor: pointer;
@@ -185,7 +185,7 @@
       display: inline-block;
       margin-top: 20px;
       padding: 10px 20px;
-      background-color: #D2E8FA;
+      background-color: #B8CCE8;
       color: white;
       text-align: center;
       border: none;
