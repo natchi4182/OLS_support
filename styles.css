@@ -19,26 +19,29 @@
       display: inline-block;
       margin-right: 15px;
       margin-bottom: 5px;
-    }
-    .content {
-      overflow: hidden; /* アニメーション用 */
-      transition: height 0.3s ease, opacity 0.3s ease;
-      height: 0; /* 初期状態で閉じる */
-      opacity: 0;
-    }
-    .content.open {
-      height: auto; /* 開いた状態 */
-      opacity: 1;
-    }
     select, input[type=text], input[type=number], textarea {
       width: 90%;
       max-width: 500px;
       font-size: 1.5em;
     }
-    .checkbox-group, .radio-group {
+    .radio-group {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
+    }
+    .checkbox-group, table {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      overflow: hidden;
+      transition: height 0.3s ease, opacity 0.3s ease;
+      height: auto;
+      opacity: 1;
+    }
+    .checkbox-group.hidden, .radio-group.hidden, table.hidden {
+      height: 0; /* 非表示状態の高さ */
+      opacity: 0; /* 非表示 */
+      display: block; /* アニメーションを維持するため、blockに変更 */
     }
     .checkbox-group label, .radio-group label {
       display: inline-block;
