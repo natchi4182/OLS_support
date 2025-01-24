@@ -12,17 +12,20 @@
       height: auto;
       opacity: 1;
     }
-    fieldset.hidden {
-      padding: 0px;
-      height: 0;
+    fieldset.shrunk {
+      height: 2.5em;
       opacity: 0;
     }
     legend {
       cursor: pointer;
       font-weight: bold;
     }
-    legend.non-collapsible {
-      cursor: default;
+    .content {
+      transition: opacity 0.3s ease;
+      opacity: 1;
+    }
+    .content.hidden {
+      opacity: 0;
     }
     label {
       display: block;
