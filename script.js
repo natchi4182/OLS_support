@@ -1,16 +1,4 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  const legend = document.querySelector('legend');
-  const container = document.getElementById('diseaseContainer');
-
-  legend.addEventListener('click', () => {
-    // 表示状態を切り替える
-    if (container.classList.contains('hidden')) {
-      container.classList.remove('hidden'); // 開く
-    } else {
-      container.classList.add('hidden'); // 閉じる
-    }
-  });
-
   // -----------------------------
   // 1) スライダーと数値の要素を同期
   // -----------------------------
@@ -180,6 +168,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     tr.appendChild(tdNormal);
 
     labDataTable.appendChild(tr);
+  });
+
+  const legends = document.querySelectorAll('legend'); // 全ての<legend>を取得
+
+  legends.forEach(legend => {
+    const content = legend.nextElementSibling; // <legend>の次の兄弟要素を取得 (.checkbox-groupやtable)
+    
+    // 初期状態で開いた状態にする
+    content.style.height = `${content.scrollHeight}px`;
+
+    // <legend>をクリックした時の処理
+    legend.addEventListener('click', () => {
+      if (content.classList.contains('hidden')) {
+        // 開く
+        content.style.height = `${content.scrollHeight}px`;
+        content.style.opacity = '1';
+        content.classList.remove('hidden');
+      } else {
+        // 閉じる
+        content.style.height = '0';
+        content.style.opacity = '0';
+        content.classList.add('hidden');
+      }
+    });
   });
 
   // -----------------------------
