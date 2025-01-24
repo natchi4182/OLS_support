@@ -170,26 +170,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     labDataTable.appendChild(tr);
   });
 
-  const legends = document.querySelectorAll('legend'); // 全ての<legend>を取得
+  const collapsiblelegends = document.querySelectorAll('.collapsible');
 
-  legends.forEach(legend => {
-    const content = legend.nextElementSibling; // <legend>の次の兄弟要素を取得 (.checkbox-groupやtable)
+  collapsiblelegends.forEach(legend => {
+    const fieldset = legend.parentElement;
     
-    // 初期状態で開いた状態にする
-    content.style.height = `${content.scrollHeight}px`;
-
     // <legend>をクリックした時の処理
     legend.addEventListener('click', () => {
-      if (content.classList.contains('hidden')) {
+      if (fieldset.classList.contains('hidden')) {
         // 開く
-        content.style.height = `${content.scrollHeight}px`;
-        content.style.opacity = '1';
-        content.classList.remove('hidden');
+        fieldset.style.height = `${fieldset.scrollHeight}px`;
+        fieldset.style.opacity = '1';
+        fieldset.classList.remove('hidden');
       } else {
         // 閉じる
-        content.style.height = '0';
-        content.style.opacity = '0';
-        content.classList.add('hidden');
+        fieldset.style.height = '0';
+        fieldset.style.opacity = '0';
+        fieldset.classList.add('hidden');
       }
     });
   });
