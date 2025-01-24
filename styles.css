@@ -8,10 +8,7 @@
       border: 3px solid #ccc;
       padding: 10px;
     }
-    legend {
-      font-weight: bold;
-    }
-    legend2 {
+    legend, legend2 {
       font-weight: bold;
     }
     label {
