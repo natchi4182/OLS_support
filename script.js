@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // -----------------------------
-  // fieldset shrunk
+  // legendによる開閉
   // -----------------------------
   const legends = document.querySelectorAll('legend'); // すべてのlegendを取得
 
@@ -180,7 +180,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const content = fieldset.querySelector('.content'); // フィールドセット内の.contentを取得
 
     // legendをクリックしたときの処理
-    legend.addEventListener('click', () => {
+    legend.addEventListener('click', (event) => {
+      event.stopPropagation(); // フィールドセットのクリックイベントを無効化
+
       if (fieldset.classList.contains('shrunk')) {
         // 開く
         content.classList.remove('hidden'); // 内容を表示
@@ -195,28 +197,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
+  // -----------------------------
+  // fieldsetクリックによる開閉
+  // -----------------------------
   const fieldsets = document.querySelectorAll('fieldset.shrunkable'); // 縮小可能なフィールドセットを取得
 
   fieldsets.forEach(fieldset => {
     const content = fieldset.querySelector('.content'); // 各フィールドセット内の.contentを取得
 
     // フィールドセット全体をクリック可能にする
-    fieldset.addEventListener('click', (event) => {
-      // 他のクリックイベントを防止
+    fieldset.addEventListener('click', () => {
       if (fieldset.classList.contains('shrunk')) {
-        // 開く
+        // 開く (閉じているときのみ動作)
         content.classList.remove('hidden');
         fieldset.classList.remove('shrunk');
         fieldset.style.height = 'auto';
-      } else {
-        // 縮小する
-        content.classList.add('hidden');
-        fieldset.classList.add('shrunk');
-        fieldset.style.height = '1.5em';
       }
+      // 開いているときは何もしない
     });
   });
-  
+
   // -----------------------------
   // 4) ボタン別のイベント定義
   // -----------------------------
