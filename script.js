@@ -170,23 +170,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     labDataTable.appendChild(tr);
   });
 
-  const collapsiblelegends = document.querySelectorAll('.collapsible');
+  // -----------------------------
+  // fieldset shrunk
+  // -----------------------------
+  const legends = document.querySelectorAll('legend'); // すべてのlegendを取得
 
-  collapsiblelegends.forEach(legend => {
-    const fieldset = legend.parentElement;
-    
-    // <legend>をクリックした時の処理
+  legends.forEach(legend => {
+    const fieldset = legend.parentElement; // 対応する<fieldset>を取得
+    const content = fieldset.querySelector('.content'); // フィールドセット内の.contentを取得
+
+    // legendをクリックしたときの処理
     legend.addEventListener('click', () => {
-      if (fieldset.classList.contains('hidden')) {
+      if (fieldset.classList.contains('shrunk')) {
         // 開く
-        fieldset.style.height = `${fieldset.scrollHeight}px`;
-        fieldset.style.opacity = '1';
-        fieldset.classList.remove('hidden');
+        content.classList.remove('hidden'); // 内容を表示
+        fieldset.classList.remove('shrunk'); // フィールドセットの高さを戻す
+        fieldset.style.height = `${fieldset.scrollHeight}px`; // 高さを計算して設定
       } else {
         // 閉じる
-        fieldset.style.height = '0';
-        fieldset.style.opacity = '0';
-        fieldset.classList.add('hidden');
+        content.classList.add('hidden'); // 内容を非表示
+        fieldset.classList.add('shrunk'); // フィールドセットの高さを縮小
+        fieldset.style.height = '2.5em'; // legendの高さ分だけに設定
       }
     });
   });
