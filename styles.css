@@ -11,6 +11,9 @@
     legend {
       font-weight: bold;
     }
+    legend2 {
+      font-weight: bold;
+    }
     label {
       display: block;
       margin: 5px 0;
@@ -30,7 +33,7 @@
       flex-wrap: wrap;
       gap: 10px;
     }
-    .checkbox-group, table {
+    .checkbox-group {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
@@ -51,6 +54,10 @@
       border-collapse: collapse;
       margin-top: 10px;
       width: 100%;
+      overflow: hidden;
+      transition: height 0.3s ease, opacity 0.3s ease;
+      height: auto;
+      opacity: 1;
     }
     table th, table td {
       border: 1px solid #ccc;
