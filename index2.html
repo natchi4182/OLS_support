@@ -1,1 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+  
+<head>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>骨粗鬆症診療支援ツール</title>
+
+  <script>
+    /** keyToLabelMap は「フォーム name」 → 「ラベル」の対応表 */
+    const keyToLabelMap = {
+      hospital: "医療機関名",
+      doctor: "医師名",
+      patient_id: "患者ID",
+      age: "年齢",
+      sex: "性別",
+      height: "身長",
+      weight: "体重",
+      smoking: "現在の喫煙状況",
+      alcohol: "アルコール摂取量",
+      diseases: "基礎疾患",
+      fracture_history: "骨脆弱性骨折の既往",
+      osteoporosis_meds: "現在投与中の骨粗鬆症治療薬",
+      hrt_meds: "ホルモン補充療法",
+      bone_metabolism_meds: "骨代謝，骨折，転倒に関連する薬剤",
+      anticancer_meds: "骨代謝に関連する抗癌剤の使用",
+      others: "その他",
+      otherinfo: "その他の情報",
+      lumbar_bmd: "腰椎骨密度",
+      lumbar_yam: "腰椎YAM値",
+      femur_bmd: "大腿骨近位骨密度",
+      femur_yam: "大腿骨近位YAM値"
+    };
+  </script>
+
+  <link rel="stylesheet" href="https://natchi4182.github.io/OLS_support/styles.css">
+
+</head>
+
+<body>
+
+  <h1>骨粗鬆症診療支援ツール</h1>
+  <span style="font-size: 0.5em">本ツールはデータ入力，整理をしつつGPTを活用して診療のサポートを行うためのツールですが，特にGPTの回答を盲信しないようにしてください。現在は正式公開前の試験運用となっておりますので無断で公開しないでください。勝手に学会発表したり論文化したり商用化したりしたら訴えますからね。あとAI活用するために自腹を切っていますので，かわいそうにと思った方はいつでも寄付金を承っておりますのでよろしくお願いします。なお，内容は予告なく改変します。ご要望等ありましたらご連絡ください。とはいってもできることとできないことがありますけどね。</span>
+
+  <h4>※:必須項目</h4>
+  <h4>青いフィールドはタイトルをクリックしてフィールドを開閉できます</h4>
+
+  <form id="mainForm">
+    <fieldset class="non-shrunkable">
+      <legend>医療機関名・医師名(※)</legend>
+      <label for="hospitalInput">医療機関を選択してください:</label>
+      <select id="hospitalInput" name="hospital" required>
+        <option value="">--- 選 択 ---</option>
+      </select>
+
+      <label for="doctorInput">医師を選択してください:</label>
+      <select id="doctorInput" name="doctor" required>
+        <option value="">--- 選 択 ---</option>
+      </select>
+      <hr>
+      <span style="font-size: 0.8em">医療機関名・医師名の追加は<a href="https://docs.google.com/spreadsheets/d/15_gNZzb_KYwdl7mrDiqUREKKAngGeG4lgnnwyFAPALw/edit?usp=sharing" target="_blank" rel="noopener noreferrer">こちら</a>をクリックして追加入力できます。</span>
+    </fieldset>
+
+    <fieldset class="non-shrunkable">
+      <legend>患者ID(※)</legend>
+      <label for="patientIdInput">患者ID:</label>
+      <input type="text" id="patientIdInput" name="patient_id" placeholder="暗号化処理したIDを入力" required>
+    </fieldset>
+
+    <fieldset class="non-shrunkable">
+      <legend>年齢(※)</legend>
+      <label for="ageInput">年齢:</label>
+      <input type="number" inputmode="numeric" id="ageNumber" name="age" min="0" max="120" step="1" placeholder="0〜120" required>
+      <input type="range" class="long-slider" id="ageInput" min="0" max="120" step="1">
+      <br>
+      <span id="ageError" class="error-message visually-hidden">年齢は0から120の間で入力してください。</span>
+    </fieldset>
+
+    <fieldset class="non-shrunkable">
+      <legend>性別(※)</legend>
+      <div class="radio-group">
+        <label class="inline-label">
+          <input type="radio" name="sex" value="閉経前女性" required aria-required="true"> 閉経前女性
+        </label>
+        <label class="inline-label">
+          <input type="radio" name="sex" value="閉経後女性" aria-required="true"> 閉経後女性
+        </label>
+        <label class="inline-label">
+          <input type="radio" name="sex" value="男性" aria-required="true"> 男性
+        </label>
+      </div>
+    </fieldset>
+
+    <fieldset class="non-shrunkable">
+      <legend>身長・体重</legend>
+      <label for="heightInput">身長（cm）:</label>
+      <input type="number" inputmode="numeric" id="heightNumber" name="height" min="100" max="200" step="0.1" placeholder="100.0〜200.0">
+      <input type="range" class="long-slider" id="heightInput" min="100" max="200" step="0.1">
+      <hr>
+      <label for="weightInput">体重（kg）:</label>
+      <input type="number" inputmode="numeric" id="weightNumber" name="weight" min="20" max="150" step="0.1" placeholder="20.0〜150.0">
+      <input type="range" class="long-slider" id="weightInput" min="20" max="150" step="0.1">
+    </fieldset>
+
+    <fieldset class="non-shrunkable">
+      <legend>生活習慣</legend>
+      <label for="smokingInput">現在の喫煙について選択してください:</label>
+      <select id="smokingInput" name="smoking">
+        <option value="">--- 選 択 ---</option>
+      </select>
+      <hr>
+      <label for="alcoholInput">アルコール摂取について選択してください:</label>
+      <select id="alcoholInput" name="alcohol">
+        <option value="">--- 選 択 ---</option>
+      </select>
+      <br><span style="font-size: 0.8em">アルコール摂取量1単位=8～10g
+      <br>　　　ビール: グラス1杯 285ml　　　蒸留酒: シングル 30ml
+      <br>　　　ワイン: グラス1杯 120ml　　　食前酒: シングル 60ml</span>
+    </fieldset>
+
+    <fieldset class="shrunkable">
+      <legend>基礎疾患</legend>
+      <div id="diseaseContainer" class="checkbox-group content">
+      </div>
+    </fieldset>
+
+    <fieldset class="shrunkable">
+      <legend>骨折歴（骨粗鬆症性のみ）</legend>
+      <div id="fractureHistoryContainer" class="checkbox-group content">
+      </div>
+    </fieldset>
+
+    <fieldset class="shrunkable">
+      <legend>使用中の骨粗鬆症治療薬</legend>
+      <div id="osteoporosisMedsContainer" class="checkbox-group content">
+      </div>
+    </fieldset>
+
+    <fieldset class="shrunkable">
+      <legend>HRT（ホルモン補充療法）</legend>
+      <div id="hrtMedsContainer" class="checkbox-group content">
+      </div>
+    </fieldset>
+
+    <fieldset class="shrunkable">
+      <legend>骨代謝・骨折・転倒関連薬剤</legend>
+      <div id="boneMetabolismMedsContainer" class="checkbox-group content">
+      </div>
+    </fieldset>
+
+    <fieldset class="shrunkable">
+      <legend>骨代謝に関連する抗癌剤</legend>
+      <div id="anticancerMedsContainer" class="checkbox-group content">
+      </div>
+      <br><span style="font-size: 0.8em">　　　▲: 骨量増加作用　　　▼: 骨量減少作用
+      <br>　　　▶︎: 骨量減少抑制作用</span>
+    </fieldset>
+
+    <fieldset class="shrunkable">
+      <legend>その他</legend>
+      <div id="othersContainer" class="checkbox-group content">
+      </div>
+    </fieldset>
+
+    <fieldset class="non-shrunkable">
+      <legend>追加項目</legend>
+      <textarea id="otherinfoInput" inputmode="kana" name="otherinfo" rows="5" placeholder="追加情報はこの欄に自由に何でも記載してください。ただし個人情報特定につながる記述はしないようにしてください。"></textarea>
+    </fieldset>
+
+    <fieldset class="non-shrunkable">
+      <legend>骨密度（直近3か月以内）</legend>
+      <label for="lumbarBMD">腰椎（g/cm²）:</label>
+      <input type="number" inputmode="numeric" id="lumbarBMDNumber" name="lumbar_bmd" min="0.000" max="2.000" step="0.001" placeholder="0.000〜2.000">
+      <input type="range" class="long-slider" id="lumbarBMD" min="0.000" max="2.000" step="0.001">
+      <label for="lumbarYAM">YAM値（%）:</label>
+      <input type="number" inputmode="numeric" id="lumbarYAMNumber" name="lumbar_yam" min="0" max="200" step="1" placeholder="0〜200">
+      <input type="range" class="long-slider" id="lumbarYAM" min="0" max="200" step="1">
+      <hr>
+      <label for="femurBMD">大腿骨近位（g/cm²）:</label>
+      <input type="number" inputmode="numeric" id="femurBMDNumber" name="femur_bmd" min="0.000" max="2.000" step="0.001" placeholder="0.000〜2.000">
+      <input type="range" class="long-slider" id="femurBMD" min="0.000" max="2.000" step="0.001">
+      <label for="femurYAM">YAM値（%）:</label>
+      <input type="number" inputmode="numeric" id="femurYAMNumber" name="femur_yam" min="0" max="200" step="1" placeholder="0〜200">
+      <input type="range" class="long-slider" id="femurYAM" min="0" max="200" step="1">
+    </fieldset>
+
+    <fieldset class="shrunkable">
+      <legend>検体検査データ（直近3か月以内）</legend>
+      <table class="lab-table content">
+        <thead>
+          <tr>
+            <th style="width: 150px;">項目名</th>
+            <th style="width: 150px;">結果</th>
+            <th style="width: 150px;">単位</th>
+            <th style="width: 200px;">正常値・参考値</th>
+          </tr>
+        </thead>
+        <tbody id="labDataTable"></tbody>
+      </table>
+    </fieldset>
+  </form>
+
+  <div class="button-row">
+    <button id="checkBtn">確認</button>
+    <button id="submitBtn">送信</button>
+    <button id="copyBtn">コピー&GPT</button>
+    <button type="button" id="clearBtn">クリア</button>
+    <br><span style="font-size: 0.8em">「確認」: この下の入力データ確認エリアにデータを表示します。
+    <br>「送信」: データベースにデータを保存します。
+    <br>「コピー&GPT」: 入力データ確認エリアのデータをクリップボードにコピーしてからGPTが立ち上がるのでGPTの入力欄にペーストしてください。その際にGPT側には医療機関名，医師名，患者IDは送信されません。
+    <br>「クリア」: 表示されているデータをクリアします。</span>
+  </div>
+
+  <textarea id="resultArea" placeholder="入力データ確認エリア"></textarea>
+
+  <hr>
+  <!-- ボタン -->
+  <button id="modal-button" class="show-modal-btn" data-file="privacy_policy.json">プライバシーポリシー</button>
+  <button id="modal-button" class="show-modal-btn" data-file="disclaimer.json">免責事項</button>
+  <button id="modal-button" class="show-modal-btn" data-file="help.json">ヘルプ</button>
+  <button id="modal-button" onclick="location.href='inquiry_form.html'">問い合わせ・ご要望</button>
+
+  <!-- モーダルオーバーレイ -->
+  <div id="modal-overlay"></div>
+
+  <!-- モーダル -->
+  <div id="modal">
+    <h2 id="modal-title">タイトル</h2>
+    <div id="modal-content">
+      <!-- コンテンツがここに表示される -->
+    </div>
+    <button id="close-btn">閉じる</button>
+  </div>
+  
+  <script src="https://natchi4182.github.io/OLS_support/script.js"></script>
+
+</body>
+
+</html>
