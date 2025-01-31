@@ -680,7 +680,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               .map(
                 section => `
                   <h3>${section.heading}</h3>
-                  <p>${section.content}</p>
+                  <p>${section.content.replace(/\n/g, "<br>")}</p>
                 `
               )
               .join("");
