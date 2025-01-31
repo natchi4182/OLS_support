@@ -268,6 +268,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     for (const [key, value] of formData.entries()) {
       if (value === '') continue;
 
+      // 出力しない項目をスキップ
+      if (["hospital", "doctor", "patient_id"].includes(key)) continue;
+      
       let labelKey = keyToLabelMap[key] || key;
       let cleanValue = value.replace(/<sup>®<\/sup>/g, "");  // ®マーク削除
       const unit = labDataMap[key];
