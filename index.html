@@ -166,7 +166,7 @@
 
     <fieldset class="non-shrunkable">
       <legend>追加項目</legend>
-      <textarea id="otherinfoInput" inputmode="kana" name="otherinfo" rows="5" placeholder="ここはフリーに何でも記載してください"></textarea>
+      <textarea id="otherinfoInput" inputmode="kana" name="otherinfo" rows="5" placeholder="追加情報はこの欄に自由に何でも記載してください。ただし個人情報特定につながる記述はしないようにしてください。"></textarea>
     </fieldset>
 
     <fieldset class="non-shrunkable">
@@ -207,10 +207,10 @@
     <button id="submitBtn">送信</button>
     <button id="copyBtn">コピー&GPT</button>
     <button type="button" id="clearBtn">クリア</button>
-    <br><span style="font-size: 0.8em">「確認」：この下の入力データ確認エリアにデータを表示
-    <br>「送信」：データベースにデータを保存
-    <br>「コピー&GPT」入力データ確認エリアのデータをクリップボードにコピーしてからGPTが立ち上がるのでGPTの入力欄にペーストしてください
-    <br>「クリア」表示されているデータをクリアして新たに入力するとき</span>
+    <br><span style="font-size: 0.8em">「確認」: この下の入力データ確認エリアにデータを表示します。
+    <br>「送信」: データベースにデータを保存します。
+    <br>「コピー&GPT」: 入力データ確認エリアのデータをクリップボードにコピーしてからGPTが立ち上がるのでGPTの入力欄にペーストしてください。その際にGPT側には医療機関名，医師名，患者IDは送信されません。
+    <br>「クリア」: 表示されているデータをクリアします。</span>
   </div>
 
   <textarea id="resultArea" placeholder="入力データ確認エリア"></textarea>
