@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>結果報告書</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; }
+    h2 { text-align: center; }
+    .report-container { border: 1px solid #ccc; padding: 15px; }
+    pre { white-space: pre-wrap; font-size: 1.1em; }
+  </style>
+</head>
+<body>
+  <h2>結果報告書</h2>
+  <div class="report-container">
+    <pre id="reportContent">データを取得中...</pre>
+  </div>
+
+  <script>
+    // URLからパラメータを取得し、報告書を作成
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      let reportText = "【結果報告書】\n\n";
+
+      params.forEach((value, key) => {
+        reportText += `${key}: ${value}\n`;
+      });
+
+      document.getElementById("reportContent").textContent = reportText;
+    }
+
+    // ページ読み込み時にデータ取得
+    window.onload = getQueryParams;
+  </script>
+</body>
+</html>
