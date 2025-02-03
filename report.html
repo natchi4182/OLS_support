@@ -55,7 +55,7 @@
       </tr>
       <tr>
         <td>血清カルシウム値 (mg/dL)</td>
-        <td id="Ca"></td>
+        <td id="補正Ca"></td>
         <td>8.8 - 10.1</td>
       </tr>
       <tr>
@@ -65,12 +65,12 @@
       </tr>
       <tr>
         <td>骨形成マーカー (BAP) (μg/L)</td>
-        <td id="bapLevel"></td>
+        <td id="BAP"></td>
         <td id="bapRange"></td>
       </tr>
       <tr>
         <td>骨吸収マーカー (TRACP-5b) (mU/dL)</td>
-        <td id="tracpLevel"></td>
+        <td id="TRACP-5b"></td>
         <td id="tracpRange"></td>
       </tr>
     </table>
@@ -127,25 +127,25 @@
       const params = new URLSearchParams(window.location.search);
 
       document.getElementById("hospital").textContent = params.get("hospital") || "未入力";
-      document.getElementById("doctor").textContent = params.get("医師") || "未入力";
-      document.getElementById("age").textContent = params.get("年齢") || "未入力";
-      document.getElementById("sex").textContent = params.get("性別") || "未入力";
-      document.getElementById("height").textContent = params.get("身長") || "未入力";
-      document.getElementById("weight").textContent = params.get("体重") || "未入力";
-      document.getElementById("smoking").textContent = params.get("現在の喫煙状況") || "未入力";
-      document.getElementById("alcohol").textContent = params.get("アルコール摂取量") || "未入力";
-      document.getElementById("diseases").textContent = params.get("基礎疾患") || "未入力";
-      document.getElementById("fracture_history").textContent = params.get("骨脆弱性骨折の既往") || "未入力";
-      document.getElementById("osteoporosis_meds").textContent = params.get("現在投与中の骨粗鬆症治療薬") || "未入力";
-      document.getElementById("hrt_meds").textContent = params.get("ホルモン補充療法") || "未入力";
-      document.getElementById("bone_metabolism_meds").textContent = params.get("骨代謝，骨折，転倒に関連する薬剤") || "未入力";
-      document.getElementById("anticancer_meds").textContent = params.get("骨代謝に関連する抗癌剤などの使用") || "未入力";
-      document.getElementById("others").textContent = params.get("その他") || "未入力";
+      document.getElementById("doctor").textContent = params.get("doctor") || "未入力";
+      document.getElementById("age").textContent = params.get("age") || "未入力";
+      document.getElementById("sex").textContent = params.get("sex") || "未入力";
+      document.getElementById("height").textContent = params.get("height") || "未入力";
+      document.getElementById("weight").textContent = params.get("weight") || "未入力";
+      document.getElementById("smoking").textContent = params.get("smoking") || "未入力";
+      document.getElementById("alcohol").textContent = params.get("alcohol") || "未入力";
+      document.getElementById("diseases").textContent = params.get("diseases") || "未入力";
+      document.getElementById("fracture_history").textContent = params.get("fracture_history") || "未入力";
+      document.getElementById("osteoporosis_meds").textContent = params.get("osteoporosis_meds") || "未入力";
+      document.getElementById("hrt_meds").textContent = params.get("hrt_meds") || "未入力";
+      document.getElementById("bone_metabolism_meds").textContent = params.get("bone_metabolism_meds") || "未入力";
+      document.getElementById("anticancer_meds").textContent = params.get("anticancer_meds") || "未入力";
+      document.getElementById("others").textContent = params.get("others") || "未入力";
       document.getElementById("bmd_exam_date").textContent = params.get("bmd_exam_date") || "-";
-      document.getElementById("lumbar_yam").textContent = params.get("lumber_yam") || "-";
-      document.getElementById("femur_yam").textContent = params.get("大腿骨近位部YAM値") || "-";
-      document.getElementById("lab_exam_date").textContent = params.get("検体検査日") || "-";
-      document.getElementById("Ca").textContent = params.get("補正Ca") || "-";
+      document.getElementById("lumbar_yam").textContent = params.get("lumbar_yam") || "-";
+      document.getElementById("femur_yam").textContent = params.get("femur_yam") || "-";
+      document.getElementById("lab_exam_date").textContent = params.get("lab_exam_date") || "-";
+      document.getElementById("補正Ca").textContent = params.get("補正Ca") || "-";
       document.getElementById("P").textContent = params.get("P") || "-";
       document.getElementById("25OH ビタミンD").textContent = params.get("25OH ビタミンD") || "-";
       document.getElementById("BAP").textContent = params.get("BAP") || "-";
