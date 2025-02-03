@@ -17,169 +17,13 @@
 <body>
   <h2>骨粗鬆症患者用サマリー</h2>
   <div class="report-container">
-    <p>名前: <span id="patientName"></span></p>
-    <p>診療機関: 市立三次中央病院 整形外科</p>
-
-    <div class="section-title">骨粗鬆症の診断</div>
-    <p><span id="diagnosis"></span></p>
-
-    <div class="section-title">骨密度</div>
-    <table class="report-table">
-      <tr>
-        <th>部位</th>
-        <th>％YAM</th>
-      </tr>
-      <tr>
-        <td>腰椎</td>
-        <td id="lumbarYAM"></td>
-      </tr>
-      <tr>
-        <td>大腿骨近位部</td>
-        <td id="femurYAM"></td>
-      </tr>
-      <tr>
-        <td>橈骨</td>
-        <td id="radiusYAM"></td>
-      </tr>
-    </table>
-
-    <p>80％以上が目標です。70％未満は骨粗鬆症、60％未満は重症骨粗鬆症で骨折リスクが高い状態です。</p>
-
-    <div class="section-title">リスク因子</div>
-    <p>疾患: <span id="riskDiseases"></span></p>
-    <p>薬剤: <span id="riskMeds"></span></p>
-    <p>生活習慣: <span id="riskLifestyle"></span></p>
-
-    <div class="section-title">骨代謝マーカー</div>
-    <table class="report-table">
-      <tr>
-        <th>項目</th>
-        <th>結果</th>
-        <th>適正範囲</th>
-      </tr>
-      <tr>
-        <td>血清カルシウム値 (mg/dL)</td>
-        <td id="caLevel"></td>
-        <td>8.8 - 10.1</td>
-      </tr>
-      <tr>
-        <td>血清ビタミンD (ng/mL)</td>
-        <td id="vitDLevel"></td>
-        <td>30 以上</td>
-      </tr>
-      <tr>
-        <td>骨形成マーカー (BAP) (μg/L)</td>
-        <td id="bapLevel"></td>
-        <td id="bapRange"></td>
-      </tr>
-      <tr>
-        <td>骨吸収マーカー (TRACP-5b) (mU/dL)</td>
-        <td id="tracpLevel"></td>
-        <td id="tracpRange"></td>
-      </tr>
-    </table>
-
-    <div class="section-title">今後10年間の骨折リスク</div>
-    <table class="report-table">
-      <tr>
-        <th>指標</th>
-        <th>全ての骨折 (%)</th>
-        <th>大腿骨骨折 (%)</th>
-      </tr>
-      <tr>
-        <td>FRAX</td>
-        <td id="frax1"></td>
-        <td id="frax2"></td>
-      </tr>
-      <tr>
-        <td>QFracture</td>
-        <td id="qfracture1"></td>
-        <td id="qfracture2"></td>
-      </tr>
-    </table>
-
-    <p>※ いずれかの値が15％を超える場合、治療が必要です。</p>
-
-    <div class="section-title">現在の薬物治療</div>
-    <table class="report-table">
-      <tr>
-        <th>薬剤名</th>
-        <th>投与間隔</th>
-        <th>投与方法</th>
-      </tr>
-      <tr>
-        <td id="med1"></td>
-        <td id="med1Interval"></td>
-        <td id="med1Method"></td>
-      </tr>
-      <tr>
-        <td id="med2"></td>
-        <td id="med2Interval"></td>
-        <td id="med2Method"></td>
-      </tr>
-    </table>
-
-    <div class="report-footer">
-      <p>次回診察: <span id="nextCheckup"></span></p>
-      <p>ID: <span id="patientID"></span></p>
-      <p>半年～1年ごとに検査を受けましょう。</p>
-    </div>
-  </div>
-
-  <script>
-    function getQueryParams() {
-      const params = new URLSearchParams(window.location.search);
-
-      document.getElementById("patientName").textContent = params.get("名前") || "未入力";
-      document.getElementById("diagnosis").textContent = params.get("診断") || "-";
-      document.getElementById("lumbarYAM").textContent = params.get("腰椎YAM") || "-";
-      document.getElementById("femurYAM").textContent = params.get("大腿骨近位部YAM") || "-";
-      document.getElementById("radiusYAM").textContent = params.get("橈骨YAM") || "-";
-      document.getElementById("riskDiseases").textContent = params.get("リスク因子疾患") || "-";
-      document.getElementById("riskMeds").textContent = params.get("リスク因子薬剤") || "-";
-      document.getElementById("riskLifestyle").textContent = params.get("リスク因子生活習慣") || "-";
-      document.getElementById("caLevel").textContent = params.get("Ca") || "-";
-      document.getElementById("vitDLevel").textContent = params.get("25OH-vitD") || "-";
-      document.getElementById("bapLevel").textContent = params.get("BAP") || "-";
-      document.getElementById("tracpLevel").textContent = params.get("TRACP-5b") || "-";
-      document.getElementById("frax1").textContent = params.get("FRAX1") || "-";
-      document.getElementById("frax2").textContent = params.get("FRAX2") || "-";
-      document.getElementById("med1").textContent = params.get("薬剤名1") || "-";
-      document.getElementById("med1Interval").textContent = params.get("投与間隔1") || "-";
-      document.getElementById("med1Method").textContent = params.get("投与方法1") || "-";
-      document.getElementById("patientID").textContent = params.get("ID") || "-";
-      document.getElementById("nextCheckup").textContent = params.get("次回再診") || "未定";
-    }
-
-    window.onload = getQueryParams;
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>骨粗鬆症患者用サマリー</title>
-  <style>
-    body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
-    h2 { text-align: center; }
-    .report-container { border: 2px solid #000; padding: 20px; }
-    .section-title { font-weight: bold; font-size: 1.2em; margin-top: 20px; border-bottom: 1px solid #000; padding-bottom: 5px; }
-    .report-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    .report-table th, .report-table td { border: 1px solid #000; padding: 8px; text-align: center; }
-    .report-footer { margin-top: 30px; font-size: 0.9em; text-align: center; }
-  </style>
-</head>
-<body>
-  <h2>骨粗鬆症患者用サマリー</h2>
-  <div class="report-container">
-    <p>診療機関: <span id="hospital"></span>    医師: <span id="doctor"></span></p>
-    <p>ID: <input type="text" id="patientID" name="patientID" required>    名前: <input type="text" id="patientName" name="patientName" required></p>
-    <p>年齢: <span id="age"></span>歳    性別: <span id="sex"></span></p>
+    <p style="white-space: pre;">診療機関: <span id="hospital"></span>　　医師: <span id="doctor"></span></p>
+    <p style="white-space: pre;">ID: <input type="text" id="patientID" name="patientID" required>　　名前: <input type="text" id="patientName" name="patientName" required></p>
+    <p style="white-space: pre;">年齢: <span id="age">歳　　</span>性別: <span id="sex"></span></p>
+    <p style="white-space: pre;">身長: <span id="height">cm　　</span>体重: <span id="weight">kg</span></p>
     
     <div class="section-title">骨粗鬆症の診断</div>
-    <p><span id="diagnosis"></span></p>
+    <p><span id="diseases"></span></p>
 
     <div class="section-title">骨密度</div>
     <table class="report-table">
@@ -200,11 +44,11 @@
     <p>80％以上が目標です。70％未満は骨粗鬆症、60％未満は重症骨粗鬆症で骨折リスクが高い状態です。</p>
 
     <div class="section-title">リスク因子</div>
-    <p>疾患: <span id="riskDiseases"></span></p>
-    <p>薬剤: <span id="riskMeds"></span></p>
-    <p>生活習慣: <span id="riskLifestyle"></span></p>
+    <p>疾患: <span id="diseases"></span></p>
+    <p style="white-space: pre;">薬剤: <span id="bone_metabolism_meds"></span>，　　抗癌剤など/ <span id="anticancer_meds"></span></p>
+    <p style="white-space: pre;">生活習慣: 喫煙/ <span id="smoking"></span>，　　アルコール摂取/ <span id="alcohol"></span></p>
 
-    <div class="section-title">骨代謝マーカー</div>
+    <div class="section-title">骨代謝マーカーなど</div>
     <table class="report-table">
       <tr>
         <th>項目</th>
