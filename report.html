@@ -126,7 +126,7 @@
     function getQueryParams() {
       const params = new URLSearchParams(window.location.search);
 
-      document.getElementById("hospital").textContent = params.get("医療機関") || "未入力";
+      document.getElementById("hospital").textContent = params.get("hospital") || "未入力";
       document.getElementById("doctor").textContent = params.get("医師") || "未入力";
       document.getElementById("age").textContent = params.get("年齢") || "未入力";
       document.getElementById("sex").textContent = params.get("性別") || "未入力";
@@ -141,13 +141,13 @@
       document.getElementById("bone_metabolism_meds").textContent = params.get("骨代謝，骨折，転倒に関連する薬剤") || "未入力";
       document.getElementById("anticancer_meds").textContent = params.get("骨代謝に関連する抗癌剤などの使用") || "未入力";
       document.getElementById("others").textContent = params.get("その他") || "未入力";
-      document.getElementById("bmd_exam_date").textContent = params.get("骨密度測定日") || "-";
-      document.getElementById("lumbar_yam").textContent = params.get("腰椎YAM値") || "-";
+      document.getElementById("bmd_exam_date").textContent = params.get("bmd_exam_date") || "-";
+      document.getElementById("lumbar_yam").textContent = params.get("lumber_yam") || "-";
       document.getElementById("femur_yam").textContent = params.get("大腿骨近位部YAM値") || "-";
       document.getElementById("lab_exam_date").textContent = params.get("検体検査日") || "-";
-      document.getElementById("補正Ca").textContent = params.get("Ca") || "-";
+      document.getElementById("Ca").textContent = params.get("補正Ca") || "-";
       document.getElementById("P").textContent = params.get("P") || "-";
-      document.getElementById("25OH ビタミンD").textContent = params.get("25OHビタミンD") || "-";
+      document.getElementById("25OH ビタミンD").textContent = params.get("25OH ビタミンD") || "-";
       document.getElementById("BAP").textContent = params.get("BAP") || "-";
       document.getElementById("TRACP-5b").textContent = params.get("TRACP-5b") || "-";
       document.getElementById("eGFR").textContent = params.get("eGFR") || "-";
