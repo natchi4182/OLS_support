@@ -3,34 +3,156 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>結果報告書</title>
+  <title>骨粗鬆症患者用サマリー</title>
   <style>
-    body { font-family: sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; }
+    body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
     h2 { text-align: center; }
-    .report-container { border: 1px solid #ccc; padding: 15px; }
-    pre { white-space: pre-wrap; font-size: 1.1em; }
+    .report-container { border: 2px solid #000; padding: 20px; }
+    .section-title { font-weight: bold; font-size: 1.2em; margin-top: 20px; border-bottom: 1px solid #000; padding-bottom: 5px; }
+    .report-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .report-table th, .report-table td { border: 1px solid #000; padding: 8px; text-align: center; }
+    .report-footer { margin-top: 30px; font-size: 0.9em; text-align: center; }
   </style>
 </head>
 <body>
-  <h2>結果報告書</h2>
+  <h2>骨粗鬆症患者用サマリー</h2>
   <div class="report-container">
-    <pre id="reportContent">データを取得中...</pre>
+    <p>名前: <span id="patientName"></span></p>
+    <p>診療機関: <span id="hospital"></span></p>
+
+    <div class="section-title">骨粗鬆症の診断</div>
+    <p><span id="diagnosis"></span></p>
+
+    <div class="section-title">骨密度</div>
+    <table class="report-table">
+      <tr>
+        <th>部位</th>
+        <th>％YAM</th>
+      </tr>
+      <tr>
+        <td>腰椎</td>
+        <td id="lumbar_yam"></td>
+      </tr>
+      <tr>
+        <td>大腿骨近位部</td>
+        <td id="femur_yam"></td>
+      </tr>
+    </table>
+
+    <p>80％以上が目標です。70％未満は骨粗鬆症、60％未満は重症骨粗鬆症で骨折リスクが高い状態です。</p>
+
+    <div class="section-title">リスク因子</div>
+    <p>疾患: <span id="riskDiseases"></span></p>
+    <p>薬剤: <span id="riskMeds"></span></p>
+    <p>生活習慣: <span id="riskLifestyle"></span></p>
+
+    <div class="section-title">骨代謝マーカー</div>
+    <table class="report-table">
+      <tr>
+        <th>項目</th>
+        <th>結果</th>
+        <th>適正範囲</th>
+      </tr>
+      <tr>
+        <td>血清カルシウム値 (mg/dL)</td>
+        <td id="Ca"></td>
+        <td>8.8 - 10.1</td>
+      </tr>
+      <tr>
+        <td>血清ビタミンD (ng/mL)</td>
+        <td id="25OH ビタミンD"></td>
+        <td>30 以上</td>
+      </tr>
+      <tr>
+        <td>骨形成マーカー (BAP) (μg/L)</td>
+        <td id="bapLevel"></td>
+        <td id="bapRange"></td>
+      </tr>
+      <tr>
+        <td>骨吸収マーカー (TRACP-5b) (mU/dL)</td>
+        <td id="tracpLevel"></td>
+        <td id="tracpRange"></td>
+      </tr>
+    </table>
+
+    <div class="section-title">今後10年間の骨折リスク</div>
+    <table class="report-table">
+      <tr>
+        <th>指標</th>
+        <th>全ての骨折 (%)</th>
+        <th>大腿骨骨折 (%)</th>
+      </tr>
+      <tr>
+        <td>FRAX</td>
+        <td id="frax1"></td>
+        <td id="frax2"></td>
+      </tr>
+      <tr>
+        <td>QFracture</td>
+        <td id="qfracture1"></td>
+        <td id="qfracture2"></td>
+      </tr>
+    </table>
+
+    <p>※ いずれかの値が15％を超える場合、治療が必要です。</p>
+
+    <div class="section-title">現在の薬物治療</div>
+    <table class="report-table">
+      <tr>
+        <th>薬剤名</th>
+        <th>投与間隔</th>
+        <th>投与方法</th>
+      </tr>
+      <tr>
+        <td id="med1"></td>
+        <td id="med1Interval"></td>
+        <td id="med1Method"></td>
+      </tr>
+      <tr>
+        <td id="med2"></td>
+        <td id="med2Interval"></td>
+        <td id="med2Method"></td>
+      </tr>
+    </table>
+
+    <div class="report-footer">
+      <p>次回診察: <span id="nextCheckup"></span></p>
+      <p>ID: <span id="patientID"></span></p>
+      <p>半年～1年ごとに検査を受けましょう。</p>
+    </div>
   </div>
 
   <script>
-    // URLからパラメータを取得し、報告書を作成
     function getQueryParams() {
       const params = new URLSearchParams(window.location.search);
-      let reportText = "【結果報告書】\n\n";
 
-      params.forEach((value, key) => {
-        reportText += `${key}: ${value}\n`;
-      });
-
-      document.getElementById("reportContent").textContent = reportText;
+      document.getElementById("hospital").textContent = params.get("医療機関") || "未入力";
+      document.getElementById("doctor").textContent = params.get("医師") || "未入力";
+      document.getElementById("age").textContent = params.get("年齢") || "未入力";
+      document.getElementById("sex").textContent = params.get("性別") || "未入力";
+      document.getElementById("height").textContent = params.get("身長") || "未入力";
+      document.getElementById("weight").textContent = params.get("体重") || "未入力";
+      document.getElementById("smoking").textContent = params.get("現在の喫煙状況") || "未入力";
+      document.getElementById("alcohol").textContent = params.get("アルコール摂取量") || "未入力";
+      document.getElementById("diseases").textContent = params.get("基礎疾患") || "未入力";
+      document.getElementById("fracture_history").textContent = params.get("骨脆弱性骨折の既往") || "未入力";
+      document.getElementById("osteoporosis_meds").textContent = params.get("現在投与中の骨粗鬆症治療薬") || "未入力";
+      document.getElementById("hrt_meds").textContent = params.get("ホルモン補充療法") || "未入力";
+      document.getElementById("bone_metabolism_meds").textContent = params.get("骨代謝，骨折，転倒に関連する薬剤") || "未入力";
+      document.getElementById("anticancer_meds").textContent = params.get("骨代謝に関連する抗癌剤などの使用") || "未入力";
+      document.getElementById("others").textContent = params.get("その他") || "未入力";
+      document.getElementById("bmd_exam_date").textContent = params.get("骨密度測定日") || "-";
+      document.getElementById("lumbar_yam").textContent = params.get("腰椎YAM値") || "-";
+      document.getElementById("femur_yam").textContent = params.get("大腿骨近位部YAM値") || "-";
+      document.getElementById("lab_exam_date").textContent = params.get("検体検査日") || "-";
+      document.getElementById("補正Ca").textContent = params.get("Ca") || "-";
+      document.getElementById("P").textContent = params.get("P") || "-";
+      document.getElementById("25OH ビタミンD").textContent = params.get("25OHビタミンD") || "-";
+      document.getElementById("BAP").textContent = params.get("BAP") || "-";
+      document.getElementById("TRACP-5b").textContent = params.get("TRACP-5b") || "-";
+      document.getElementById("eGFR").textContent = params.get("eGFR") || "-";
     }
 
-    // ページ読み込み時にデータ取得
     window.onload = getQueryParams;
   </script>
 </body>
