@@ -670,6 +670,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     creInput.addEventListener('input', calculateUrinaryCaRatio);
   }
 
+  // FRAX
+  document.getElementById("calculateFraxBtn").addEventListener("click", function() {
+    let formData = {
+        age: document.getElementById("age").value,
+        height: document.getElementById("height").value,
+        weight: document.getElementById("weight").value,
+        diseases: Array.from(document.querySelectorAll("input[name='diseases']:checked")).map(el => el.value),
+        bone_metabolism_meds: Array.from(document.querySelectorAll("input[name='bone_metabolism_meds']:checked")).map(el => el.value),
+        femur_bmd: document.getElementById("femur_bmd").value ? parseFloat(document.getElementById("femur_bmd").value) : null,
+        fracture_history: document.getElementById("fracture_history").value,
+        smoking: document.getElementById("smoking").value,
+        alcohol: document.getElementById("alcohol").value
+    };
+
+    let result = calculateFRAX(formData);
+
+    document.getElementById("majorFractureRisk").innerText = `主要骨折リスク: ${result.majorFractureRisk}%`;
+    document.getElementById("hipFractureRisk").innerText = `股関節骨折リスク: ${result.hipFractureRisk}%`;
+  });
+  
     // 要素を取得
     const modal = document.getElementById("modal");
     const modalOverlay = document.getElementById("modal-overlay");
