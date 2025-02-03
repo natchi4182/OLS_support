@@ -340,6 +340,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  // (D) 「結果報告書」ボタン
+  document.getElementById('reportBtn').addEventListener('click', () => {
+    const form = document.getElementById('mainForm');
+    const formData = new FormData(form);
+
+    // URLパラメータの作成
+    const params = new URLSearchParams();
+
+    for (const [key, value] of formData.entries()) {
+      if (value.trim() !== "") {
+        params.append(key, value);
+      }
+    }
+
+    // `report.html` を開き、パラメータを付与してデータを渡す
+    window.open(`report.html?${params.toString()}`, "_blank");
+  });
+
   // (E) 「クリア」ボタン
   document.getElementById('clearBtn').addEventListener('click', () => {
     if (confirm('入力データをクリアしてよろしいですか？')) {
