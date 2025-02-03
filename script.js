@@ -726,11 +726,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       modal.style.display = "none";
       modalOverlay.style.display = "none";
     });
-  
-}); // DOMContentLoaded end
 
 // FRAX
-window.onload = function() {
   document.getElementById("calculateFraxBtn").addEventListener("click", function() {
     let formData = {
         age: document.getElementById("age").value,
@@ -749,5 +746,5 @@ window.onload = function() {
     document.getElementById("majorFractureRisk").innerText = `主要骨折リスク: ${result.majorFractureRisk}%`;
     document.getElementById("hipFractureRisk").innerText = `股関節骨折リスク: ${result.hipFractureRisk}%`;
   });
-};
 
+}); // DOMContentLoaded end
