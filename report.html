@@ -23,7 +23,7 @@
     <p style="white-space: pre;">身長: <span id="height"></span>cm　　体重: <span id="weight"></span>kg</p>
     
     <div class="section-title">骨粗鬆症の診断</div>
-    <p><span id="diseases"></span></p>
+    <p><span class="diseases"></span></p>
 
     <div class="section-title">骨密度</div>
     <table class="report-table">
@@ -44,8 +44,8 @@
     <p>80％以上が目標です。70％未満は骨粗鬆症、60％未満は重症骨粗鬆症で骨折リスクが高い状態です。</p>
 
     <div class="section-title">リスク因子</div>
-    <p>疾患: <span id="diseases"></span></p>
-    <p style="white-space: pre;">薬剤: <span id="bone_metabolism_meds"></span>，　　抗癌剤など/ <span id="anticancer_meds"></span></p>
+    <p>疾患: <span class="diseases"></span></p>
+    <p style="white-space: pre;">薬剤: <span class="bone_metabolism_meds"></span>，　　抗癌剤など/ <span class="anticancer_meds"></span></p>
     <p style="white-space: pre;">生活習慣: 喫煙/ <span id="smoking"></span>，　　アルコール摂取/ <span id="alcohol"></span></p>
 
     <div class="section-title">骨代謝マーカーなど</div>
@@ -127,21 +127,15 @@
     function getQueryParams() {
       const params = new URLSearchParams(window.location.search);
 
-      document.getElementById("hospital").textContent = params.get("hospital") || "未入力";
-      document.getElementById("doctor").textContent = params.get("doctor") || "未入力";
-      document.getElementById("age").textContent = params.get("age") || "未入力";
-      document.getElementById("sex").textContent = params.get("sex") || "未入力";
-      document.getElementById("height").textContent = params.get("height") || "未入力";
-      document.getElementById("weight").textContent = params.get("weight") || "未入力";
-      document.getElementById("smoking").textContent = params.get("smoking") || "未入力";
-      document.getElementById("alcohol").textContent = params.get("alcohol") || "未入力";
-      document.getElementById("diseases").textContent = params.get("diseases") || "未入力";
-      document.getElementById("fracture_history").textContent = params.get("fracture_history") || "未入力";
-      document.getElementById("osteoporosis_meds").textContent = params.get("osteoporosis_meds") || "未入力";
-      document.getElementById("hrt_meds").textContent = params.get("hrt_meds") || "未入力";
-      document.getElementById("bone_metabolism_meds").textContent = params.get("bone_metabolism_meds") || "未入力";
-      document.getElementById("anticancer_meds").textContent = params.get("anticancer_meds") || "未入力";
-      document.getElementById("others").textContent = params.get("others") || "未入力";
+      // 単一のデータ（今まで通り）
+      document.getElementById("hospital").textContent = params.get("hospital") || "-";
+      document.getElementById("doctor").textContent = params.get("doctor") || "-;
+      document.getElementById("age").textContent = params.get("age") || "-";
+      document.getElementById("sex").textContent = params.get("sex") || "-";
+      document.getElementById("height").textContent = params.get("height") || "-";
+      document.getElementById("weight").textContent = params.get("weight") || "-";
+      document.getElementById("smoking").textContent = params.get("smoking") || "-";
+      document.getElementById("alcohol").textContent = params.get("alcohol") || "-";
       document.getElementById("bmd_exam_date").textContent = params.get("bmd_exam_date") || "-";
       document.getElementById("lumbar_yam").textContent = params.get("lumbar_yam") || "-";
       document.getElementById("femur_yam").textContent = params.get("femur_yam") || "-";
@@ -152,6 +146,24 @@
       document.getElementById("BAP").textContent = params.get("BAP") || "-";
       document.getElementById("TRACP-5b").textContent = params.get("TRACP-5b") || "-";
       document.getElementById("eGFR").textContent = params.get("eGFR") || "-";
+
+      // 複数のデータを処理する
+      function setMultipleValues(className, paramName) {
+        const elements = document.querySelectorAll("." + className);
+        const values = params.getAll(paramName); // パラメータから全て取得
+
+        elements.forEach((el, index) => {
+          el.textContent = values[index] || "-"; // 該当する要素にセット
+        });
+      }
+
+      setMultipleValues("diseases", "diseases");
+      setMultipleValues("fracture_history", "fracture_history");
+      setMultipleValues("osteoporosis_meds", "osteoporosis_meds");
+      setMultipleValues("hrt_meds", "hrt_meds");
+      setMultipleValues("bone_metabolism_meds", "bone_metabolism_meds");
+      setMultipleValues("anticancer_meds", "anticancer_meds");
+      setMultipleValues("others", "others");
     }
 
     window.onload = getQueryParams;
