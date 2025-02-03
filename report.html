@@ -58,22 +58,32 @@
       <tr>
         <td>血清カルシウム値 (mg/dL)</td>
         <td id="補正Ca"></td>
-        <td>8.8 - 10.1</td>
+        <td id="補正Ca_range"></td>
+      </tr>
+      <tr>
+        <td>血清リン値 (mg/dL)</td>
+        <td id="P"></td>
+        <td id="P_range"></td>
+      </tr>
+      <tr>
+        <td>eGFR (mL/min/1.73m²)</td>
+        <td id="eGFR"></td>
+        <td id="eGFR_range"></td>
       </tr>
       <tr>
         <td>血清ビタミンD (ng/mL)</td>
         <td id="25OHビタミンD"></td>
-        <td>30 以上</td>
+        <td id="25OHビタミンD_range"></td>
       </tr>
       <tr>
         <td>骨形成マーカー (BAP) (μg/L)</td>
         <td id="BAP"></td>
-        <td id="bapRange"></td>
+        <td id="BAP_range"></td>
       </tr>
       <tr>
         <td>骨吸収マーカー (TRACP-5b) (mU/dL)</td>
         <td id="TRACP-5b"></td>
-        <td id="tracpRange"></td>
+        <td id="TRACP-5b_range"></td>
       </tr>
     </table>
 
@@ -124,16 +134,17 @@
   </div>
 
   <script>
-  function getQueryParams() {
+  async function getQueryParams() {
     const params = new URLSearchParams(window.location.search);
 
-    console.log(params.toString()); // URLのデバッグ表示
+    // JSONデータを取得
+    const response = await fetch('https://natchi4182.github.io/OLS_support/labDataItems.json');
+    const labDataItems = await response.json();
+    const selectedSex = params.get("sex");
 
-    // 単一データの取得
     function setSingleValue(id, key) {
       const el = document.getElementById(id);
       if (el) el.textContent = params.get(key) || "-";
-      else console.warn(`ID ${id} が見つかりません`);
     }
 
     setSingleValue("hospital", "hospital");
@@ -155,6 +166,14 @@
     setSingleValue("TRACP-5b", "TRACP-5b");
     setSingleValue("eGFR", "eGFR");
 
+    // 適正範囲の設定
+    labDataItems.forEach(item => {
+      const rangeEl = document.getElementById(`${item.name}_range`);
+      if (rangeEl && item.normal[selectedSex]) {
+        rangeEl.textContent = item.normal[selectedSex];
+      }
+    });
+ 
     // 複数データの取得
     function setMultipleValues(className, paramName) {
       const elements = document.querySelectorAll("." + className);
