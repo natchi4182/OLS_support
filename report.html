@@ -73,7 +73,7 @@
       <tr>
         <td>血清ビタミンD (ng/mL)</td>
         <td id="25OHビタミンD"></td>
-        <td id="25OHビタミンD_range"></td>
+        <td id="vitaminD_range"></td>
       </tr>
       <tr>
         <td>骨形成マーカー (BAP) (μg/L)</td>
@@ -168,7 +168,8 @@
 
     // 適正範囲の設定
     labDataItems.forEach(item => {
-      const rangeEl = document.getElementById(`${item.name}_range`);
+      let rangeId = item.name === "25OH ビタミンD" ? "vitaminD_range" : `${item.name}_range`;
+      const rangeEl = document.getElementById(rangeId);
       if (rangeEl && item.normal[selectedSex]) {
         rangeEl.textContent = item.normal[selectedSex];
       }
