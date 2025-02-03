@@ -729,11 +729,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // FRAX
   document.getElementById("calculateFraxBtn").addEventListener("click", function() {
-    let ageElement = document.getElementById("ageNumber");
-
-    let age = ageElement.value;
+    let age = document.getElementById("ageNumber") ? document.getElementById("ageNumber").value : null;
     let height = document.getElementById("heightNumber") ? document.getElementById("heightNumber").value : null;
     let weight = document.getElementById("weightNumber") ? document.getElementById("weightNumber").value : null;
+    let smoking = document.getElementById("smokingInput") ? document.getElementById("smokingInput").value : null;
+    let alcohol = document.getElementById("alcoholInput") ? document.getElementById("alcoholInput").value : null;
 
     let formData = {
         age: age,
@@ -743,8 +743,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         bone_metabolism_meds: Array.from(document.querySelectorAll("input[name='bone_metabolism_meds']:checked")).map(el => el.value),
         femur_bmd: document.getElementById("femur_bmd").value ? parseFloat(document.getElementById("femur_bmd").value) : null,
         fracture_history: document.getElementById("fracture_history").value,
-        smoking: document.getElementById("smoking").value,
-        alcohol: document.getElementById("alcohol").value
+        smoking: smoking,
+        alcohol: alcohol
     };
 
     let result = calculateFRAX(formData);
