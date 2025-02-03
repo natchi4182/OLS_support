@@ -61,11 +61,6 @@
         <td>8.8 - 10.1</td>
       </tr>
       <tr>
-        <td>血清リン値 (mg/dL)</td>
-        <td id="P"></td>
-        <td>8.8 - 10.1</td>
-      </tr>
-      <tr>
         <td>血清ビタミンD (ng/mL)</td>
         <td id="25OH+ビタミンD"></td>
         <td>30 以上</td>
@@ -157,9 +152,12 @@
         const elements = document.querySelectorAll("." + className);
         const values = params.getAll(paramName); // パラメータから全て取得
 
-        elements.forEach((el, index) => {
-          el.textContent = values[index] || "-"; // 該当する要素にセット
-        });
+        if (values.length > 0) {
+          const textValue = values.join(", "); // 複数データをカンマ区切りで表示
+          elements.forEach(el => el.textContent = textValue);
+        } else {
+          elements.forEach(el => el.textContent = "-"); // データがない場合、"-" を表示
+        }
       }
 
       setMultipleValues("diseases", "diseases");
@@ -173,5 +171,6 @@
 
     window.onload = getQueryParams;
   </script>
+
 </body>
 </html>
