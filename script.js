@@ -729,10 +729,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // FRAX
   document.getElementById("calculateFraxBtn").addEventListener("click", function() {
+    let ageElement = document.getElementById("ageNumber");
+
+    let age = ageElement.value;
+    let height = document.getElementById("heightNumber") ? document.getElementById("heightNumber").value : null;
+    let weight = document.getElementById("weightNumber") ? document.getElementById("weightNumber").value : null;
+
     let formData = {
-        age: document.getElementById("age").value,
-        height: document.getElementById("height").value,
-        weight: document.getElementById("weight").value,
+        age: age,
+        height: height,
+        weight: weight,
         diseases: Array.from(document.querySelectorAll("input[name='diseases']:checked")).map(el => el.value),
         bone_metabolism_meds: Array.from(document.querySelectorAll("input[name='bone_metabolism_meds']:checked")).map(el => el.value),
         femur_bmd: document.getElementById("femur_bmd").value ? parseFloat(document.getElementById("femur_bmd").value) : null,
