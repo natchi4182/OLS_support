@@ -1,233 +1,233 @@
-    body {
-      font-family: sans-serif;
-      max-width: 800px;
-      margin: 20px auto;
-    }
-    fieldset {
-      margin-bottom: 20px;
-      border: 3px solid #ccc;
-      padding: 10px;
-      margin: 10px 0;
-      overflow: hidden;
-      transition: height 0.3s ease, opacity 0.3s ease;
-      height: auto;
-      opacity: 1;
-      background-color: #F0F8FF;
-      cursor: default;
-    }
-    fieldset.shrunkable {
-      height: auto;
-      opacity: 1;
-      background-color: #F0F8FF;
-    }
-    fieldset.non-shrunkable {
-      height: auto;
-      opacity: 1;
-      background-color: #FFEFD2;
-    }
-    fieldset.shrunkable.shrunk {
-      height: 0.5em;
-      opacity: 1;
-      padding: 10px;
-      cursor: pointer;
-      background-color: #B0D0FF;
-    }
-    legend {
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .content {
-      transition: opacity 0.3s ease; /* 内容部分の透明度をアニメーション */
-      opacity: 1; /* デフォルトで表示 */
-    }
-    .content.hidden {
-      opacity: 0; /* 非表示状態 */
-    }
-    label {
-      display: block;
-      margin: 5px 0;
-    }
-    .inline-label {
-      display: inline-block;
-      margin-right: 15px;
-      margin-bottom: 5px;
-    }
-    select, input[type=text], input[type=number], textarea {
-      width: 90%;
-      max-width: 500px;
-      font-size: 1.5em;
-    }
-    .radio-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .checkbox-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      overflow: hidden;
-      transition: height 0.3s ease, opacity 0.3s ease;
-      height: auto;
-      opacity: 1;
-    }
-    .checkbox-group.hidden, .radio-group.hidden, table.hidden {
-      height: 0; /* 非表示状態の高さ */
-      opacity: 0; /* 非表示 */
-      display: block; /* アニメーションを維持するため、blockに変更 */
-    }
-    .checkbox-group label, .radio-group label {
-      display: inline-block;
-    }
-    table {
-      border-collapse: collapse;
-      margin-top: 10px;
-      width: 100%;
-      overflow: hidden;
-      transition: height 0.3s ease, opacity 0.3s ease;
-      height: auto;
-      opacity: 1;
-    }
-    table th, table td {
-      border: 1px solid #ccc;
-      padding: 5px;
-      text-align: center;
-    }
-    .lab-table input[type="text"],
-    .lab-table input[type="number"] {
-      width: 100%;
-      max-width: 500px;
-      box-sizing: border-box;
-    }
-    /* 検査日の入力欄のスタイル */
-    input[type="date"] {
-      width: 50%;
-      max-width: 200px;
-      font-size: 1.5em;
-      padding: 10px;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px 15px;
-      background: #B8E8B8;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 3px;
-      width: 150px;
-      height: 60px;
-      font-size: 1.2em;
-    }
-    button:hover {
-      background: #45a049;
-      color: white;
-    }
-    /* クリアボタンのスタイル調整 */
-    #clearBtn {
-      background: #E8B8B8; /* 赤系 */
-      margin-left: 10px;
-    }
-    #clearBtn:hover {
-      background: #d32f2f;
-      color: white;
-    }
-    .long-slider {
-      width: 100%;
-      max-width: 500px;
-    }
-    .short-slider {
-      width: 130px;
-    }
-    #resultArea {
-      width: 100%;
-      max-width: 500px;
-      height: 500px;
-      margin-top: 20px;
-      box-sizing: border-box;
-      font-size: 1em;
-      white-space: pre-wrap;
-    }
-    /* Visually Hidden Class for Accessibility */
-    .visually-hidden {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap; /* 文字が折り返されないようにする */
-      border: 0;
-    }
-    /* エラーメッセージのスタイル */
-    .error-message {
-      color: red;
-      font-size: 0.9em;
-      margin-left: 10px;
-    }
-    /* モーダルのスタイル */
-    #modal {
-      display: none; /* 初期状態は非表示 */
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80%;
-      max-width: 600px;
-      background-color: white;
-      border: 1px solid #ccc;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      padding: 20px;
-      z-index: 1000;
-    }
-    #modal-overlay {
-      display: none; /* 初期状態は非表示 */
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 999;
-    }
-    #modal-button {
-      margin-top: 20px;
-      padding: 10px 15px;
-      background: #B8CCE8;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-      width: 130px;
-      height: 40px;
-      font-size: 0.5em;
-    }
-    #modal-button:hover {
-      background-color: #0056b3;
-      color: white;
-    }
-    #close-btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #B8CCE8;
-      color: white;
-      text-align: center;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      width: 130px;
-      height: 40px;
-      font-size: 0.5em;
-    }
-    #close-btn:hover {
-      background-color: #0056b3;
-      color: white;
-    }
-    hr {
-      border: none;            /* デフォルトのボーダーを無効化 */
-      border-top: 1px solid #eee; /* 上部に細い横線を追加 */
-      margin: 5px 0;          /* 上下の余白を設定 */
-      width: 100%;             /* 横幅を全体に広げる */
-      color: #E8E8E8;
-    }
+body {
+  font-family: sans-serif;
+  max-width: 800px;
+  margin: 20px auto;
+}
+fieldset {
+  margin-bottom: 20px;
+  border: 3px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+  overflow: hidden;
+  transition: height 0.3s ease, opacity 0.3s ease;
+  height: auto;
+  opacity: 1;
+  background-color: #F0F8FF;
+  cursor: default;
+}
+fieldset.shrunkable {
+  height: auto;
+  opacity: 1;
+  background-color: #F0F8FF;
+}
+fieldset.non-shrunkable {
+  height: auto;
+  opacity: 1;
+  background-color: #FFEFD2;
+}
+fieldset.shrunkable.shrunk {
+  height: 0.5em;
+  opacity: 1;
+  padding: 10px;
+  cursor: pointer;
+  background-color: #B0D0FF;
+}
+legend {
+  cursor: pointer;
+  font-weight: bold;
+}
+.content {
+  transition: opacity 0.3s ease; /* 内容部分の透明度をアニメーション */
+  opacity: 1; /* デフォルトで表示 */
+}
+.content.hidden {
+  opacity: 0; /* 非表示状態 */
+}
+label {
+  display: block;
+  margin: 5px 0;
+}
+.inline-label {
+  display: inline-block;
+  margin-right: 15px;
+  margin-bottom: 5px;
+}
+select, input[type=text], input[type=number], textarea {
+  width: 90%;
+  max-width: 500px;
+  font-size: 1.5em;
+}
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  overflow: hidden;
+  transition: height 0.3s ease, opacity 0.3s ease;
+  height: auto;
+  opacity: 1;
+}
+.checkbox-group.hidden, .radio-group.hidden, table.hidden {
+  height: 0; /* 非表示状態の高さ */
+  opacity: 0; /* 非表示 */
+  display: block; /* アニメーションを維持するため、blockに変更 */
+}
+.checkbox-group label, .radio-group label {
+  display: inline-block;
+}
+table {
+  border-collapse: collapse;
+  margin-top: 10px;
+  width: 100%;
+  overflow: hidden;
+  transition: height 0.3s ease, opacity 0.3s ease;
+  height: auto;
+  opacity: 1;
+}
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 5px;
+  text-align: center;
+}
+.lab-table input[type="text"],
+.lab-table input[type="number"] {
+  width: 100%;
+  max-width: 500px;
+  box-sizing: border-box;
+}
+/* 検査日の入力欄のスタイル */
+input[type="date"] {
+  width: 50%;
+  max-width: 250px;
+  font-size: 1.2em;
+  padding: 0px;
+}
+button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  background: #B8E8B8;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+  width: 150px;
+  height: 60px;
+  font-size: 1.2em;
+}
+button:hover {
+  background: #45a049;
+  color: white;
+}
+/* クリアボタンのスタイル調整 */
+#clearBtn {
+  background: #E8B8B8; /* 赤系 */
+  margin-left: 10px;
+}
+#clearBtn:hover {
+  background: #d32f2f;
+  color: white;
+}
+.long-slider {
+  width: 100%;
+  max-width: 500px;
+}
+.short-slider {
+  width: 130px;
+}
+#resultArea {
+  width: 100%;
+  max-width: 500px;
+  height: 500px;
+  margin-top: 20px;
+  box-sizing: border-box;
+  font-size: 1em;
+  white-space: pre-wrap;
+}
+/* Visually Hidden Class for Accessibility */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap; /* 文字が折り返されないようにする */
+  border: 0;
+}
+/* エラーメッセージのスタイル */
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-left: 10px;
+}
+/* モーダルのスタイル */
+#modal {
+  display: none; /* 初期状態は非表示 */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 600px;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  z-index: 1000;
+}
+#modal-overlay {
+  display: none; /* 初期状態は非表示 */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+#modal-button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  background: #B8CCE8;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 130px;
+  height: 40px;
+  font-size: 0.5em;
+}
+#modal-button:hover {
+  background-color: #0056b3;
+  color: white;
+}
+#close-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #B8CCE8;
+  color: white;
+  text-align: center;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 130px;
+  height: 40px;
+  font-size: 0.5em;
+}
+#close-btn:hover {
+  background-color: #0056b3;
+  color: white;
+}
+hr {
+  border: none;            /* デフォルトのボーダーを無効化 */
+  border-top: 1px solid #eee; /* 上部に細い横線を追加 */
+  margin: 5px 0;          /* 上下の余白を設定 */
+  width: 100%;             /* 横幅を全体に広げる */
+  color: #E8E8E8;
+}
