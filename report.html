@@ -61,6 +61,11 @@
         <td>8.8 - 10.1</td>
       </tr>
       <tr>
+        <td>血清リン値 (mg/dL)</td>
+        <td id="P"></td>
+        <td>8.8 - 10.1</td>
+      </tr>
+      <tr>
         <td>血清ビタミンD (ng/mL)</td>
         <td id="25OH+ビタミンD"></td>
         <td>30 以上</td>
@@ -129,7 +134,7 @@
 
       // 単一のデータ（今まで通り）
       document.getElementById("hospital").textContent = params.get("hospital") || "-";
-      document.getElementById("doctor").textContent = params.get("doctor") || "-;
+      document.getElementById("doctor").textContent = params.get("doctor") || "-";
       document.getElementById("age").textContent = params.get("age") || "-";
       document.getElementById("sex").textContent = params.get("sex") || "-";
       document.getElementById("height").textContent = params.get("height") || "-";
