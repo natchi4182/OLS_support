@@ -28,10 +28,12 @@
       anticancer_meds: "骨代謝に関連する抗癌剤の使用",
       others: "その他",
       otherinfo: "その他の情報",
+      bmd_exam_date: "骨密度測定日",
       lumbar_bmd: "腰椎骨密度",
       lumbar_yam: "腰椎YAM値",
       femur_bmd: "大腿骨近位骨密度",
-      femur_yam: "大腿骨近位YAM値"
+      femur_yam: "大腿骨近位YAM値",
+      lab_exam_date: "検査日"
     };
   </script>
 
@@ -171,6 +173,9 @@
 
     <fieldset class="non-shrunkable">
       <legend>骨密度（直近3か月以内）</legend>
+      <label for="bmdExamDate">検査日:</label>
+      <input type="date" id="bmdExamDate" name="bmd_exam_date">
+      <hr>
       <label for="lumbarBMD">腰椎（g/cm²）:</label>
       <input type="number" inputmode="numeric" id="lumbarBMDNumber" name="lumbar_bmd" min="0.000" max="2.000" step="0.001" placeholder="0.000〜2.000">
       <input type="range" class="long-slider" id="lumbarBMD" min="0.000" max="2.000" step="0.001">
@@ -188,6 +193,8 @@
 
     <fieldset class="shrunkable">
       <legend>検体検査データ（直近3か月以内）</legend>
+      <label for="labExamDate">検査日:</label>
+      <input type="date" id="labExamDate" name="lab_exam_date">
       <table class="lab-table content">
         <thead>
           <tr>
@@ -206,10 +213,12 @@
     <button id="checkBtn">確認</button>
     <button id="submitBtn">送信</button>
     <button id="copyBtn">コピー&GPT</button>
+    <button id="reportBtn">結果報告書</button>
     <button type="button" id="clearBtn">クリア</button>
     <br><span style="font-size: 0.8em">「確認」: この下の入力データ確認エリアにデータを表示します。
     <br>「送信」: データベースにデータを保存します。
     <br>「コピー&GPT」: 入力データ確認エリアのデータをクリップボードにコピーしてからGPTが立ち上がるのでGPTの入力欄にペーストしてください。その際にGPT側には医療機関名，医師名，患者IDは送信されません。
+    <br>「結果報告書」: 患者配布用の結果報告書を作成します。（現在未実装）</span>
     <br>「クリア」: 表示されているデータをクリアします。</span>
   </div>
 
