@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // (D) 「クリア」ボタン
+  // (E) 「クリア」ボタン
   document.getElementById('clearBtn').addEventListener('click', () => {
     if (confirm('入力データをクリアしてよろしいですか？')) {
       const form = document.getElementById('mainForm');
