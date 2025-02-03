@@ -671,6 +671,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // FRAX
+window.onload = function() {
   document.getElementById("calculateFraxBtn").addEventListener("click", function() {
     let formData = {
         age: document.getElementById("age").value,
@@ -689,6 +690,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById("majorFractureRisk").innerText = `主要骨折リスク: ${result.majorFractureRisk}%`;
     document.getElementById("hipFractureRisk").innerText = `股関節骨折リスク: ${result.hipFractureRisk}%`;
   });
+};
   
     // 要素を取得
     const modal = document.getElementById("modal");
