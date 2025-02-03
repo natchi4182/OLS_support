@@ -20,13 +20,14 @@
 <body>
   <h2>骨粗鬆症患者用サマリー</h2>
   <div class="report-container">
-    <p style="white-space: pre;">診療機関: <span id="hospital"></span>　　医師: <span id="doctor"></span></p>
-    <p style="white-space: pre;">ID: <input type="text" id="patientID" name="patientID" required>　　名前: <input type="text" id="patientName" name="patientName" required></p>
-    <p style="white-space: pre;">年齢: <span id="age"></span>歳　　性別: <span id="sex"></span></p>
-    <p style="white-space: pre;">身長: <span id="height"></span>cm　　体重: <span id="weight"></span>kg</p>
+    <p style="white-space: pre;">ID: <input type="text" id="patientID" name="patientID" required>　　　　名前: <input type="text" id="patientName" name="patientName" required></p>
+    <p style="white-space: pre;">年齢: <span id="age"></span>歳　　　　性別: <span id="sex"></span>　　　　身長: <span id="height"></span>cm　　　　体重: <span id="weight"></span>kg</p>
     
     <div class="section-title">骨粗鬆症の診断</div>
     <p><span class="diseases"></span></p>
+
+    <div class="section-title">骨折の既往</div>
+    <p class="risk-factors"><span class="fracture_history"></span></p>
 
     <div class="section-title">リスク因子</div>
     <p class="risk-factors">疾患: <span class="diseases"></span></p>
@@ -102,13 +103,13 @@
       </tr>
       <tr>
         <td>FRAX</td>
-        <td><input type="number" id="frax1" min="0.0" max="100.0" step="0.1" style="width: 100%; font-size: 1.2em"></td>
-        <td><input type="number" id="frax2" min="0.0" max="100.0" step="0.1"></td>
+        <td><input type="number" id="frax1" min="0.0" max="100.0" step="0.1" style="width: 100%; font-size: 1.2em; text-align: center"></td>
+        <td><input type="number" id="frax2" min="0.0" max="100.0" step="0.1" style="width: 100%; font-size: 1.2em; text-align: center"></td>
       </tr>
       <tr>
         <td>QFracture</td>
-        <td><input type="number" id="qfracture1" min="0.0" max="100.0" step="0.1"></td>
-        <td><input type="number" id="qfracture2" min="0.0" max="100.0" step="0.1"></td>
+        <td><input type="number" id="qfracture1" min="0.0" max="100.0" step="0.1" style="width: 100%; font-size: 1.2em; text-align: center"></td>
+        <td><input type="number" id="qfracture2" min="0.0" max="100.0" step="0.1" style="width: 100%; font-size: 1.2em; text-align: center"></td>
       </tr>
     </table>
 
@@ -136,6 +137,7 @@
     <div class="report-footer">
       <p>次回診察: <span id="nextCheckup"></span></p>
       <p>半年～1年ごとに検査を受けましょう。</p>
+      <p style="white-space: pre;">診療機関: <span id="hospital"></span>　　　　医師: <span id="doctor"></span></p>
     </div>
   </div>
 
@@ -161,10 +163,8 @@
     setSingleValue("weight", "weight");
     setSingleValue("smoking", "smoking");
     setSingleValue("alcohol", "alcohol");
-    setSingleValue("bmd_exam_date", "bmd_exam_date");
     setSingleValue("lumbar_yam", "lumbar_yam");
     setSingleValue("femur_yam", "femur_yam");
-    setSingleValue("lab_exam_date", "lab_exam_date");
     setSingleValue("補正Ca", "補正Ca");
     setSingleValue("P", "P");
     setSingleValue("25OHビタミンD", "25OH ビタミンD");
