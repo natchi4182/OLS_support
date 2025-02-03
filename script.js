@@ -734,6 +734,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let weight = document.getElementById("weightNumber") ? document.getElementById("weightNumber").value : null;
     let smoking = document.getElementById("smokingInput") ? document.getElementById("smokingInput").value : null;
     let alcohol = document.getElementById("alcoholInput") ? document.getElementById("alcoholInput").value : null;
+    let femur_bmd = document.getElementById("femurBMDNumber") ? parseFloat(document.getElementById("femurBMDNumber").value) : null;
 
     let formData = {
         age: age,
@@ -741,7 +742,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         weight: weight,
         diseases: Array.from(document.querySelectorAll("input[name='diseases']:checked")).map(el => el.value),
         bone_metabolism_meds: Array.from(document.querySelectorAll("input[name='bone_metabolism_meds']:checked")).map(el => el.value),
-        femur_bmd: document.getElementById("femur_bmd").value ? parseFloat(document.getElementById("femur_bmd").value) : null,
+        femur_bmd: femur_bmd,
         fracture_history: document.getElementById("fracture_history").value,
         smoking: smoking,
         alcohol: alcohol
