@@ -25,6 +25,11 @@
     <div class="section-title">骨粗鬆症の診断</div>
     <p><span class="diseases"></span></p>
 
+    <div class="section-title">リスク因子</div>
+    <p class="risk-factors">疾患: <span class="diseases"></span></p>
+    <p class="risk-factors">薬剤: <span class="bone_metabolism_meds"></span>，　抗癌剤など: <span class="anticancer_meds"></span></p>
+    <p class="risk-factors">生活習慣: 喫煙: <span id="smoking"></span>，　アルコール摂取: <span id="alcohol"></span></p>
+
     <div class="section-title">骨密度</div>
     <table class="report-table">
       <tr>
@@ -42,11 +47,6 @@
     </table>
 
     <p>80％以上が目標です。70％未満は骨粗鬆症、60％未満は重症骨粗鬆症で骨折リスクが高い状態です。</p>
-
-    <div class="section-title">リスク因子</div>
-    <p>疾患: <span class="diseases"></span></p>
-    <p style="white-space: pre;">薬剤: <span class="bone_metabolism_meds"></span>，　　抗癌剤など/ <span class="anticancer_meds"></span></p>
-    <p style="white-space: pre;">生活習慣: 喫煙/ <span id="smoking"></span>，　　アルコール摂取/ <span id="alcohol"></span></p>
 
     <div class="section-title">骨代謝マーカーなど</div>
     <table class="report-table">
@@ -166,12 +166,21 @@
     setSingleValue("TRACP-5b", "TRACP-5b");
     setSingleValue("eGFR", "eGFR");
 
-    // 適正範囲の設定
+    // 適正範囲の設定と色付け
     labDataItems.forEach(item => {
       let rangeId = item.name === "25OH ビタミンD" ? "vitaminD_range" : `${item.name}_range`;
       const rangeEl = document.getElementById(rangeId);
+      const valueEl = document.getElementById(item.name);
       if (rangeEl && item.normal[selectedSex]) {
         rangeEl.textContent = item.normal[selectedSex];
+      }
+      if (valueEl) {
+        const value = parseFloat(valueEl.textContent);
+        const [min, max] = item.normal[selectedSex].split('〜').map(parseFloat);
+        if (!isNaN(value)) {
+          if (value > max) valueEl.classList.add('highlight-high');
+          if (value < min) valueEl.classList.add('highlight-low');
+        }
       }
     });
  
