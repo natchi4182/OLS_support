@@ -736,7 +736,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       let smoking = document.getElementById("smokingInput") ? document.getElementById("smokingInput").value : null;
       let alcohol = document.getElementById("alcoholInput") ? document.getElementById("alcoholInput").value : null;
       let femur_bmd = document.getElementById("femurBMDNumber") ? parseFloat(document.getElementById("femurBMDNumber").value) || 0 : 0;
-      let fracture_history = document.getElementById("fracture_history") ? document.getElementById("fracture_history").value : "";
+
+      let selectedFractures = Array.from(document.querySelectorAll("#fractureHistoryContainer input[name='fracture_history']:checked"))
+                                   .map(el => el.value);
+      let fracture_history = selectedFractures.length > 0 ? selectedFractures : ["骨折歴なし"];
 
       let formData = {
         age: age,
