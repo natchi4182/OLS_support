@@ -124,52 +124,62 @@
   </div>
 
   <script>
-    function getQueryParams() {
-      const params = new URLSearchParams(window.location.search);
+  function getQueryParams() {
+    const params = new URLSearchParams(window.location.search);
 
-      // 単一のデータ（今まで通り）
-      document.getElementById("hospital").textContent = params.get("hospital") || "-";
-      document.getElementById("doctor").textContent = params.get("doctor") || "-";
-      document.getElementById("age").textContent = params.get("age") || "-";
-      document.getElementById("sex").textContent = params.get("sex") || "-";
-      document.getElementById("height").textContent = params.get("height") || "-";
-      document.getElementById("weight").textContent = params.get("weight") || "-";
-      document.getElementById("smoking").textContent = params.get("smoking") || "-";
-      document.getElementById("alcohol").textContent = params.get("alcohol") || "-";
-      document.getElementById("bmd_exam_date").textContent = params.get("bmd_exam_date") || "-";
-      document.getElementById("lumbar_yam").textContent = params.get("lumbar_yam") || "-";
-      document.getElementById("femur_yam").textContent = params.get("femur_yam") || "-";
-      document.getElementById("lab_exam_date").textContent = params.get("lab_exam_date") || "-";
-      document.getElementById("補正Ca").textContent = params.get("補正Ca") || "-";
-      document.getElementById("P").textContent = params.get("P") || "-";
-      document.getElementById("25OH+ビタミンD").textContent = params.get("25OH+ビタミンD") || "-";
-      document.getElementById("BAP").textContent = params.get("BAP") || "-";
-      document.getElementById("TRACP-5b").textContent = params.get("TRACP-5b") || "-";
-      document.getElementById("eGFR").textContent = params.get("eGFR") || "-";
+    console.log(params.toString()); // URLのデバッグ表示
 
-      // 複数のデータを処理する
-      function setMultipleValues(className, paramName) {
-        const elements = document.querySelectorAll("." + className);
-        const values = params.getAll(paramName); // パラメータから全て取得
-
-        if (values.length > 0) {
-          const textValue = values.join(", "); // 複数データをカンマ区切りで表示
-          elements.forEach(el => el.textContent = textValue);
-        } else {
-          elements.forEach(el => el.textContent = "-"); // データがない場合、"-" を表示
-        }
-      }
-
-      setMultipleValues("diseases", "diseases");
-      setMultipleValues("fracture_history", "fracture_history");
-      setMultipleValues("osteoporosis_meds", "osteoporosis_meds");
-      setMultipleValues("hrt_meds", "hrt_meds");
-      setMultipleValues("bone_metabolism_meds", "bone_metabolism_meds");
-      setMultipleValues("anticancer_meds", "anticancer_meds");
-      setMultipleValues("others", "others");
+    // 単一データの取得
+    function setSingleValue(id, key) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = params.get(key) || "-";
+      else console.warn(`ID ${id} が見つかりません`);
     }
 
-    window.onload = getQueryParams;
+    setSingleValue("hospital", "hospital");
+    setSingleValue("doctor", "doctor");
+    setSingleValue("age", "age");
+    setSingleValue("sex", "sex");
+    setSingleValue("height", "height");
+    setSingleValue("weight", "weight");
+    setSingleValue("smoking", "smoking");
+    setSingleValue("alcohol", "alcohol");
+    setSingleValue("bmd_exam_date", "bmd_exam_date");
+    setSingleValue("lumbar_yam", "lumbar_yam");
+    setSingleValue("femur_yam", "femur_yam");
+    setSingleValue("lab_exam_date", "lab_exam_date");
+    setSingleValue("補正Ca", "補正Ca");
+    setSingleValue("P", "P");
+    setSingleValue("25OH+ビタミンD", "25OH+ビタミンD");
+    setSingleValue("BAP", "BAP");
+    setSingleValue("TRACP-5b", "TRACP-5b");
+    setSingleValue("eGFR", "eGFR");
+
+    // 複数データの取得
+    function setMultipleValues(className, paramName) {
+      const elements = document.querySelectorAll("." + className);
+      const values = params.getAll(paramName);
+
+      console.log(paramName, values); // デバッグ用
+
+      if (values.length > 0) {
+        const textValue = values.join(", "); // カンマ区切りで表示
+        elements.forEach(el => el.textContent = textValue);
+      } else {
+        elements.forEach(el => el.textContent = "-");
+      }
+    }
+
+    setMultipleValues("diseases", "diseases");
+    setMultipleValues("fracture_history", "fracture_history");
+    setMultipleValues("osteoporosis_meds", "osteoporosis_meds");
+    setMultipleValues("hrt_meds", "hrt_meds");
+    setMultipleValues("bone_metabolism_meds", "bone_metabolism_meds");
+    setMultipleValues("anticancer_meds", "anticancer_meds");
+    setMultipleValues("others", "others");
+  }
+
+  window.onload = getQueryParams;
   </script>
 
 </body>
