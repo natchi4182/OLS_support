@@ -736,6 +736,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     let alcohol = document.getElementById("alcoholInput") ? document.getElementById("alcoholInput").value : null;
     let femur_bmd = document.getElementById("femurBMDNumber") ? parseFloat(document.getElementById("femurBMDNumber").value) || 0 : 0;
 
+    let sex = document.querySelector("input[name='sex']:checked") ? document.querySelector("input[name='sex']:checked").value : null;
+
     let selectedFractures = Array.from(document.querySelectorAll("#fractureHistoryContainer input[name='fracture_history']:checked"))
                                  .map(el => el.value);
     let fracture_history = selectedFractures.length > 0 ? selectedFractures : ["骨折歴なし"];
@@ -752,6 +754,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       age: age,
       height: height,
       weight: weight,
+      sex: sex,
       diseases: diseases,
       bone_metabolism_meds: bone_metabolism_meds,
       femur_bmd: femur_bmd,
