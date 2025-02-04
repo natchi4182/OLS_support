@@ -788,44 +788,46 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById("hipFractureRisk").innerText = `股関節骨折リスク: ${result.hipFractureRisk}%`;
     }
 
-    // 🔄 スライダーの修正（大腿骨近位骨密度追加）
-    let inputFields = ["ageNumber", "heightNumber", "weightNumber", "femurBMDNumber"];
-    inputFields.forEach(id => {
-        let numberInput = document.getElementById(id);
-        let rangeInput = document.getElementById(id.replace("Number", "Input")); // スライダー対応
+    // 🔄 スライダーと数値入力の同期 & FRAX 更新
+    function syncSliderWithNumber(numberId, sliderId) {
+        let numberInput = document.getElementById(numberId);
+        let sliderInput = document.getElementById(sliderId);
 
-        if (numberInput) {
+        if (numberInput && sliderInput) {
             numberInput.addEventListener("input", () => {
-                if (rangeInput) rangeInput.value = numberInput.value;
+                sliderInput.value = numberInput.value;
+                updateFRAX();
+            });
+            sliderInput.addEventListener("input", () => {
+                numberInput.value = sliderInput.value;
                 updateFRAX();
             });
         }
-        if (rangeInput) {
-            rangeInput.addEventListener("input", () => {
-                if (numberInput) numberInput.value = rangeInput.value;
-                updateFRAX();
-            });
-        }
-    });
+    }
+
+    // 🔄 すべてのスライダーと数値入力を同期
+    syncSliderWithNumber("ageNumber", "ageInput");
+    syncSliderWithNumber("heightNumber", "heightInput");
+    syncSliderWithNumber("weightNumber", "weightInput");
+    syncSliderWithNumber("femurBMDNumber", "femurBMD");
 
     // 🔄 性別の選択変更時に FRAX を更新
     document.querySelectorAll("input[name='sex']").forEach(radio => {
         radio.addEventListener("change", updateFRAX);
     });
 
-    // 🔄 チェックボックス（基礎疾患・骨折歴・骨代謝薬・両親の骨折歴）
-    let checkBoxGroups = [
-        "#fractureHistoryContainer input[name='fracture_history']",
-        "#diseasesContainer input[name='diseases']",
-        "#boneMetabolismMedsContainer input[name='bone_metabolism_meds']",
-        "#othersContainer input[name='others']"
-    ];
-    checkBoxGroups.forEach(selector => {
-        let elements = document.querySelectorAll(selector);
-        elements.forEach(el => {
-            el.addEventListener("change", updateFRAX);
+    // 🔄 チェックボックス（基礎疾患・骨折歴・骨代謝薬・両親の骨折歴）変更時に FRAX を更新
+    function addChangeListenerToCheckboxGroup(selector) {
+        let checkboxes = document.querySelectorAll(selector);
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", updateFRAX);
         });
-    });
+    }
+
+    addChangeListenerToCheckboxGroup("#fractureHistoryContainer input[name='fracture_history']");
+    addChangeListenerToCheckboxGroup("#diseasesContainer input[name='diseases']");
+    addChangeListenerToCheckboxGroup("#boneMetabolismMedsContainer input[name='bone_metabolism_meds']");
+    addChangeListenerToCheckboxGroup("#othersContainer input[name='others']");
 
     updateFRAX(); // 初回実行
 
