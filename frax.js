@@ -2,10 +2,17 @@ function calculateFRAX(data) {
     let age = parseInt(data.age);
     let height = parseFloat(data.height);
     let weight = parseFloat(data.weight);
-    let femoralNeckBmd = data.femur_bmd ? parseFloat(data.femur_bmd) : null;
+    let femoralNeckBmd = data.femur_bmd ? parseFloat(data.femur_bmd) : 0; // BMDがnullの場合は0
 
     // BMI 計算
     let bmi = weight / ((height / 100) ** 2);
+
+    // 性別の判定（男性: 1.0, 女性: 1.2 のリスク係数を適用）
+    let isMale = data.sex === "男性";
+    let sexFactor = isMale ? 1.0 : 1.2; // 女性はリスクが高いため
+
+    // 両親の大腿骨近位部骨折の既往
+    let parentHipFracture = data.parentHipFracture === true;
 
     // 骨折歴の判定
     let previousFracture = !(data.fracture_history === "" || data.fracture_history === "骨折歴なし");
@@ -33,15 +40,18 @@ function calculateFRAX(data) {
     let alcoholCategories = ["1日3〜6単位", "1日7〜9単位", "1日10単位以上"];
     let alcoholIntake = alcoholCategories.includes(data.alcohol);
 
-    // FRAX 計算
-    let majorFractureRisk = (age * 0.1) + (bmi * -0.2) + (previousFracture ? 10 : 0) +
+    // FRAX 計算（性別の影響を加味）
+    let majorFractureRisk = (age * 0.1 * sexFactor) + (bmi * -0.2) + (previousFracture ? 10 : 0) +
                             (steroidUse ? 4 : 0) + (rheumatoidArthritis ? 3 : 0) +
-                            (secondaryOsteoporosis ? 2 : 0);
+                            (secondaryOsteoporosis ? 2 : 0) + (currentSmoker ? 2 : 0) +
+                            (alcoholIntake ? 1.5 : 0) + (parentHipFracture ? 4 : 0); // ← 両親の骨折歴があると+4%
 
-    let hipFractureRisk = (age * 0.2) + (bmi * -0.3) + (previousFracture ? 5 : 0) +
+    let hipFractureRisk = (age * 0.2 * sexFactor) + (bmi * -0.3) + (previousFracture ? 5 : 0) +
                           (steroidUse ? 3 : 0) + (rheumatoidArthritis ? 2 : 0) +
-                          (secondaryOsteoporosis ? 2 : 0);
+                          (secondaryOsteoporosis ? 2 : 0) + (currentSmoker ? 1.5 : 0) +
+                          (alcoholIntake ? 1.2 : 0) + (parentHipFracture ? 4 : 0); // ← 両親の骨折歴があると+4%
 
+    // 骨密度を考慮（BMDが低いほどリスク増加）
     if (femoralNeckBmd !== null) {
         majorFractureRisk += (femoralNeckBmd * -5);
         hipFractureRisk += (femoralNeckBmd * -7);
