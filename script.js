@@ -728,52 +728,73 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
   // FRAX
-  // document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("calculateFraxBtn").addEventListener("click", function() {
-      let age = document.getElementById("ageNumber") ? document.getElementById("ageNumber").value : null;
-      let height = document.getElementById("heightNumber") ? document.getElementById("heightNumber").value : null;
-      let weight = document.getElementById("weightNumber") ? document.getElementById("weightNumber").value : null;
-      let smoking = document.getElementById("smokingInput") ? document.getElementById("smokingInput").value : null;
-      let alcohol = document.getElementById("alcoholInput") ? document.getElementById("alcoholInput").value : null;
-      let femur_bmd = document.getElementById("femurBMDNumber") ? parseFloat(document.getElementById("femurBMDNumber").value) || 0 : 0;
+  function updateFRAX() {
+    let age = document.getElementById("ageNumber") ? document.getElementById("ageNumber").value : null;
+    let height = document.getElementById("heightNumber") ? document.getElementById("heightNumber").value : null;
+    let weight = document.getElementById("weightNumber") ? document.getElementById("weightNumber").value : null;
+    let smoking = document.getElementById("smokingInput") ? document.getElementById("smokingInput").value : null;
+    let alcohol = document.getElementById("alcoholInput") ? document.getElementById("alcoholInput").value : null;
+    let femur_bmd = document.getElementById("femurBMDNumber") ? parseFloat(document.getElementById("femurBMDNumber").value) || 0 : 0;
 
-      // 🔍 チェックボックスから選択されたデータを取得
-      let selectedFractures = Array.from(document.querySelectorAll("#fractureHistoryContainer input[name='fracture_history']:checked"))
-                                   .map(el => el.value);
-      let fracture_history = selectedFractures.length > 0 ? selectedFractures : ["骨折歴なし"];
+    let selectedFractures = Array.from(document.querySelectorAll("#fractureHistoryContainer input[name='fracture_history']:checked"))
+                                 .map(el => el.value);
+    let fracture_history = selectedFractures.length > 0 ? selectedFractures : ["骨折歴なし"];
 
-      let selectedDiseases = Array.from(document.querySelectorAll("#diseasesContainer input[name='diseases']:checked"))
-                                  .map(el => el.value);
-      let diseases = selectedDiseases.length > 0 ? selectedDiseases : ["なし"];
+    let selectedDiseases = Array.from(document.querySelectorAll("#diseasesContainer input[name='diseases']:checked"))
+                                .map(el => el.value);
+    let diseases = selectedDiseases.length > 0 ? selectedDiseases : ["なし"];
 
-      let selectedBoneMeds = Array.from(document.querySelectorAll("#boneMetabolismMedsContainer input[name='bone_metabolism_meds']:checked"))
-                                  .map(el => el.value);
-      let bone_metabolism_meds = selectedBoneMeds.length > 0 ? selectedBoneMeds : ["なし"];
+    let selectedBoneMeds = Array.from(document.querySelectorAll("#boneMetabolismMedsContainer input[name='bone_metabolism_meds']:checked"))
+                                .map(el => el.value);
+    let bone_metabolism_meds = selectedBoneMeds.length > 0 ? selectedBoneMeds : ["なし"];
 
-      let formData = {
-        age: age,
-        height: height,
-        weight: weight,
-        diseases: diseases,
-        bone_metabolism_meds: bone_metabolism_meds,
-        femur_bmd: femur_bmd,
-        fracture_history: fracture_history,
-        smoking: smoking,
-        alcohol: alcohol
-      };
+    let formData = {
+      age: age,
+      height: height,
+      weight: weight,
+      diseases: diseases,
+      bone_metabolism_meds: bone_metabolism_meds,
+      femur_bmd: femur_bmd,
+      fracture_history: fracture_history,
+      smoking: smoking,
+      alcohol: alcohol
+    };
 
-      console.log("📌 取得データ:", formData); // デバッグ用
+    console.log("📌 取得データ:", formData); // デバッグ用
 
-      if (typeof calculateFRAX !== "function") {
-        console.error("🚨 エラー: calculateFRAX 関数が見つかりません！");
-        return;
-      }
+    let result = calculateFRAX(formData);
 
-      let result = calculateFRAX(formData);
+    document.getElementById("majorFractureRisk").innerText = `主要骨折リスク: ${result.majorFractureRisk}%`;
+    document.getElementById("hipFractureRisk").innerText = `股関節骨折リスク: ${result.hipFractureRisk}%`;
+  }
 
-      document.getElementById("majorFractureRisk").innerText = `主要骨折リスク: ${result.majorFractureRisk}%`;
-      document.getElementById("hipFractureRisk").innerText = `股関節骨折リスク: ${result.hipFractureRisk}%`;
+  // 🔄 自動計算用のイベントリスナーを追加
+  let inputFields = [
+    "ageNumber", "heightNumber", "weightNumber", "femurBMDNumber",
+    "smokingInput", "alcoholInput"
+  ];
+
+  inputFields.forEach(id => {
+    let element = document.getElementById(id);
+    if (element) {
+      element.addEventListener("input", updateFRAX);
+    }
+  });
+
+  let checkBoxGroups = [
+    "#fractureHistoryContainer input[name='fracture_history']",
+    "#diseasesContainer input[name='diseases']",
+    "#boneMetabolismMedsContainer input[name='bone_metabolism_meds']"
+  ];
+
+  checkBoxGroups.forEach(selector => {
+    let elements = document.querySelectorAll(selector);
+    elements.forEach(el => {
+      el.addEventListener("change", updateFRAX);
     });
-  // });
+  });
+
+  // 初期ロード時に一度計算
+  updateFRAX();
 
 }); // DOMContentLoaded end
