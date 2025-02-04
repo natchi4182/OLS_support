@@ -750,6 +750,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 .map(el => el.value);
     let bone_metabolism_meds = selectedBoneMeds.length > 0 ? selectedBoneMeds : ["なし"];
 
+    let parentHipFracture = Array.from(document.querySelectorAll("#othersContainer input[name='others']:checked"))
+                                 .some(el => el.value === "両親の大腿骨近位部骨折の既往");
+
     let formData = {
       age: age,
       height: height,
@@ -760,10 +763,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       femur_bmd: femur_bmd,
       fracture_history: fracture_history,
       smoking: smoking,
-      alcohol: alcohol
+      alcohol: alcohol,
+      parentHipFracture: parentHipFracture
     };
-
-    console.log("📌 取得データ:", formData); // デバッグ用
 
     let result = calculateFRAX(formData);
 
@@ -787,7 +789,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   let checkBoxGroups = [
     "#fractureHistoryContainer input[name='fracture_history']",
     "#diseasesContainer input[name='diseases']",
-    "#boneMetabolismMedsContainer input[name='bone_metabolism_meds']"
+    "#boneMetabolismMedsContainer input[name='bone_metabolism_meds']",
+    "#othersContainer input[name='others']"
   ];
 
   checkBoxGroups.forEach(selector => {
