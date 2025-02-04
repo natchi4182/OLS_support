@@ -745,7 +745,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         let sex = sexInput ? sexInput.value : null;
 
         // 🔹 基礎疾患の取得（修正）
-        let diseases = Array.from(document.querySelectorAll("#diseasesContainer input[name='diseases']:checked"))
+        let diseases = Array.from(document.querySelectorAll("#diseaseContainer input[name='diseases']:checked"))
                             .map(el => el.value);
         diseases = diseases.length > 0 ? diseases : ["なし"];
 
@@ -828,7 +828,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     addChangeListenerToCheckboxGroup("#fractureHistoryContainer input[name='fracture_history']");
-    addChangeListenerToCheckboxGroup("#diseasesContainer input[name='diseases']");
+    addChangeListenerToCheckboxGroup("#diseaseContainer input[name='diseases']");
     addChangeListenerToCheckboxGroup("#boneMetabolismMedsContainer input[name='bone_metabolism_meds']");
     addChangeListenerToCheckboxGroup("#othersContainer input[name='others']");
 
