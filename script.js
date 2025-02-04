@@ -820,7 +820,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     function addChangeListenerToCheckboxGroup(selector) {
         let checkboxes = document.querySelectorAll(selector);
         checkboxes.forEach(checkbox => {
-            checkbox.addEventListener("change", updateFRAX);
+            checkbox.addEventListener("change", () => {
+                console.log(`🔄 ${selector} が変更されました:`, checkbox.value);
+                updateFRAX();
+            });
         });
     }
 
@@ -828,6 +831,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     addChangeListenerToCheckboxGroup("#diseasesContainer input[name='diseases']");
     addChangeListenerToCheckboxGroup("#boneMetabolismMedsContainer input[name='bone_metabolism_meds']");
     addChangeListenerToCheckboxGroup("#othersContainer input[name='others']");
+
+    // 🔄 喫煙とアルコールの `select` に `change` イベントを追加
+    function addChangeListenerToSelect(selectId) {
+        let selectElement = document.getElementById(selectId);
+        if (selectElement) {
+            selectElement.addEventListener("change", () => {
+                console.log(`🔄 ${selectId} が変更されました:`, selectElement.value);
+                updateFRAX();
+            });
+        }
+    }
+
+    addChangeListenerToSelect("smokingInput");
+    addChangeListenerToSelect("alcoholInput");
 
     updateFRAX(); // 初回実行
 
