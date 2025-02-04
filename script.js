@@ -740,8 +740,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         let femur_bmd = document.getElementById("femurBMDNumber") ? parseFloat(document.getElementById("femurBMDNumber").value) || 0 : 0;
         let smoking = document.getElementById("smokingInput") ? document.getElementById("smokingInput").value : null;
         let alcohol = document.getElementById("alcoholInput") ? document.getElementById("alcoholInput").value : null;
-        
-        // 🔹 性別の取得（修正）
+
         let sexInput = document.querySelector("input[name='sex']:checked");
         let sex = sexInput ? sexInput.value : null;
 
@@ -755,12 +754,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     .map(el => el.value);
         fracture_history = fracture_history.length > 0 ? fracture_history : ["骨折歴なし"];
 
-        // 🔹 骨代謝薬の取得
         let bone_metabolism_meds = Array.from(document.querySelectorAll("#boneMetabolismMedsContainer input[name='bone_metabolism_meds']:checked"))
                                         .map(el => el.value);
         bone_metabolism_meds = bone_metabolism_meds.length > 0 ? bone_metabolism_meds : ["なし"];
 
-        // 🔹 両親の大腿骨骨折の取得
         let parentHipFracture = Array.from(document.querySelectorAll("#othersContainer input[name='others']:checked"))
                                      .some(el => el.value === "両親の大腿骨近位部骨折の既往");
 
@@ -778,7 +775,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             parentHipFracture: parentHipFracture
         };
 
-        console.log("📌 取得データ:", formData); // デバッグ用
+        console.log("📌 取得データ:", formData);
 
         let result = calculateFRAX(formData);
 
@@ -791,11 +788,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById("hipFractureRisk").innerText = `股関節骨折リスク: ${result.hipFractureRisk}%`;
     }
 
-    // 🔄 イベントリスナーを設定（スライダー対応）
+    // 🔄 スライダーの修正（大腿骨近位骨密度追加）
     let inputFields = ["ageNumber", "heightNumber", "weightNumber", "femurBMDNumber"];
     inputFields.forEach(id => {
         let numberInput = document.getElementById(id);
-        let rangeInput = document.getElementById(id.replace("Number", "Input")); // スライダー
+        let rangeInput = document.getElementById(id.replace("Number", "Input")); // スライダー対応
 
         if (numberInput) {
             numberInput.addEventListener("input", () => {
@@ -816,7 +813,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         radio.addEventListener("change", updateFRAX);
     });
 
-    // 🔄 チェックボックス（基礎疾患・骨折歴・薬・両親の骨折歴）
+    // 🔄 チェックボックス（基礎疾患・骨折歴・骨代謝薬・両親の骨折歴）
     let checkBoxGroups = [
         "#fractureHistoryContainer input[name='fracture_history']",
         "#diseasesContainer input[name='diseases']",
