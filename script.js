@@ -737,31 +737,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         let age = document.getElementById("ageNumber") ? document.getElementById("ageNumber").value : null;
         let height = document.getElementById("heightNumber") ? document.getElementById("heightNumber").value : null;
         let weight = document.getElementById("weightNumber") ? document.getElementById("weightNumber").value : null;
+        let femur_bmd = document.getElementById("femurBMDNumber") ? parseFloat(document.getElementById("femurBMDNumber").value) || 0 : 0;
         let smoking = document.getElementById("smokingInput") ? document.getElementById("smokingInput").value : null;
         let alcohol = document.getElementById("alcoholInput") ? document.getElementById("alcoholInput").value : null;
-        let femur_bmd = document.getElementById("femurBMDNumber") ? parseFloat(document.getElementById("femurBMDNumber").value) || 0 : 0;
-        let sex = document.querySelector("input[name='sex']:checked") ? document.querySelector("input[name='sex']:checked").value : null;
+        
+        // 🔹 性別の取得（修正）
+        let sexInput = document.querySelector("input[name='sex']:checked");
+        let sex = sexInput ? sexInput.value : null;
 
-        // 🔥 データ取得の確認
-        console.log(`📌 データ取得 - age: ${age}, height: ${height}, weight: ${weight}, BMD: ${femur_bmd}, sex: ${sex}`);
+        // 🔹 基礎疾患の取得（修正）
+        let diseases = Array.from(document.querySelectorAll("#diseasesContainer input[name='diseases']:checked"))
+                            .map(el => el.value);
+        diseases = diseases.length > 0 ? diseases : ["なし"];
 
-        if (!age || !sex) {
-            console.error("🚨 エラー: 必須データが取得できていません！");
-            return;
-        }
-
-        let selectedFractures = Array.from(document.querySelectorAll("#fractureHistoryContainer input[name='fracture_history']:checked"))
-                                     .map(el => el.value);
-        let fracture_history = selectedFractures.length > 0 ? selectedFractures : ["骨折歴なし"];
-
-        let selectedDiseases = Array.from(document.querySelectorAll("#diseasesContainer input[name='diseases']:checked"))
+        // 🔹 骨折歴の取得（修正）
+        let fracture_history = Array.from(document.querySelectorAll("#fractureHistoryContainer input[name='fracture_history']:checked"))
                                     .map(el => el.value);
-        let diseases = selectedDiseases.length > 0 ? selectedDiseases : ["なし"];
+        fracture_history = fracture_history.length > 0 ? fracture_history : ["骨折歴なし"];
 
-        let selectedBoneMeds = Array.from(document.querySelectorAll("#boneMetabolismMedsContainer input[name='bone_metabolism_meds']:checked"))
-                                    .map(el => el.value);
-        let bone_metabolism_meds = selectedBoneMeds.length > 0 ? selectedBoneMeds : ["なし"];
+        // 🔹 骨代謝薬の取得
+        let bone_metabolism_meds = Array.from(document.querySelectorAll("#boneMetabolismMedsContainer input[name='bone_metabolism_meds']:checked"))
+                                        .map(el => el.value);
+        bone_metabolism_meds = bone_metabolism_meds.length > 0 ? bone_metabolism_meds : ["なし"];
 
+        // 🔹 両親の大腿骨骨折の取得
         let parentHipFracture = Array.from(document.querySelectorAll("#othersContainer input[name='others']:checked"))
                                      .some(el => el.value === "両親の大腿骨近位部骨折の既往");
 
@@ -779,7 +778,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             parentHipFracture: parentHipFracture
         };
 
-        console.log("📌 取得データ:", formData);
+        console.log("📌 取得データ:", formData); // デバッグ用
 
         let result = calculateFRAX(formData);
 
@@ -792,14 +791,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById("hipFractureRisk").innerText = `股関節骨折リスク: ${result.hipFractureRisk}%`;
     }
 
-    let inputFields = ["ageNumber", "heightNumber", "weightNumber", "femurBMDNumber", "smokingInput", "alcoholInput"];
+    // 🔄 イベントリスナーを設定（スライダー対応）
+    let inputFields = ["ageNumber", "heightNumber", "weightNumber", "femurBMDNumber"];
     inputFields.forEach(id => {
-        let element = document.getElementById(id);
-        if (element) {
-            element.addEventListener("input", updateFRAX);
+        let numberInput = document.getElementById(id);
+        let rangeInput = document.getElementById(id.replace("Number", "Input")); // スライダー
+
+        if (numberInput) {
+            numberInput.addEventListener("input", () => {
+                if (rangeInput) rangeInput.value = numberInput.value;
+                updateFRAX();
+            });
+        }
+        if (rangeInput) {
+            rangeInput.addEventListener("input", () => {
+                if (numberInput) numberInput.value = rangeInput.value;
+                updateFRAX();
+            });
         }
     });
 
+    // 🔄 性別の選択変更時に FRAX を更新
+    document.querySelectorAll("input[name='sex']").forEach(radio => {
+        radio.addEventListener("change", updateFRAX);
+    });
+
+    // 🔄 チェックボックス（基礎疾患・骨折歴・薬・両親の骨折歴）
     let checkBoxGroups = [
         "#fractureHistoryContainer input[name='fracture_history']",
         "#diseasesContainer input[name='diseases']",
@@ -813,6 +830,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    updateFRAX();
+    updateFRAX(); // 初回実行
 
 }); // DOMContentLoaded end
