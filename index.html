@@ -119,18 +119,25 @@
 
     <fieldset class="non-shrunkable">
       <legend>生活習慣</legend>
-      <label for="smokingInput">現在の喫煙について選択してください:</label>
-      <select id="smokingInput" name="smoking">
-        <option value="">--- 選 択 ---</option>
-      </select>
-      <hr>
-      <label for="alcoholInput">アルコール摂取について選択してください:</label>
-      <select id="alcoholInput" name="alcohol">
-        <option value="">--- 選 択 ---</option>
-      </select>
-      <br><span style="font-size: 0.8em">アルコール摂取量1単位=8～10g
-      <br>　　　ビール: グラス1杯 285ml　　　蒸留酒: シングル 30ml
-      <br>　　　ワイン: グラス1杯 120ml　　　食前酒: シングル 60ml</span>
+      <div class="flex-container align-top">
+        <div class="input-block">
+          <label for="smokingInput">現在の喫煙について:</label>
+          <select id="smokingInput" name="smoking">
+            <option value="">--- 選 択 ---</option>
+          </select>
+        </div>
+        <div class="input-block">
+          <label for="alcoholInput">アルコール摂取について:</label>
+          <select id="alcoholInput" name="alcohol">
+            <option value="">--- 選 択 ---</option>
+          </select>
+          <br><span style="font-size: 0.8em">アルコール摂取量1単位=8～10g
+          <br>　　　ビール: グラス1杯 285ml
+          <br>　　　蒸留酒: シングル 30ml
+          <br>　　　ワイン: グラス1杯 120ml
+          <br>　　　食前酒: シングル 60ml</span>
+        </div>
+      </div>
     </fieldset>
 
     <fieldset class="shrunkable">
