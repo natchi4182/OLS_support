@@ -53,15 +53,20 @@
   <form id="mainForm">
     <fieldset class="non-shrunkable">
       <legend>医療機関名・医師名(※)</legend>
-      <label for="hospitalInput">医療機関を選択してください:</label>
-      <select id="hospitalInput" name="hospital" required>
-        <option value="">--- 選 択 ---</option>
-      </select>
-
-      <label for="doctorInput">医師を選択してください:</label>
-      <select id="doctorInput" name="doctor" required>
-        <option value="">--- 選 択 ---</option>
-      </select>
+      <div class="flex-container">
+        <div class="input-block">
+        <label for="hospitalInput">医療機関を選択してください:</label>
+        <select id="hospitalInput" name="hospital" required>
+          <option value="">--- 選 択 ---</option>
+        </select>
+        </div>
+        <div class="input-block">
+        <label for="doctorInput">医師を選択してください:</label>
+        <select id="doctorInput" name="doctor" required>
+          <option value="">--- 選 択 ---</option>
+        </select>
+        </div>
+      </div>
       <hr>
       <span style="font-size: 0.8em">医療機関名・医師名の追加は<a href="https://docs.google.com/spreadsheets/d/15_gNZzb_KYwdl7mrDiqUREKKAngGeG4lgnnwyFAPALw/edit?usp=sharing" target="_blank" rel="noopener noreferrer">こちら</a>をクリックして追加入力できます。</span>
     </fieldset>
@@ -182,19 +187,24 @@
       <label for="bmdExamDate">検査日:</label>
       <input type="date" id="bmdExamDate" name="bmd_exam_date">
       <hr>
-      <label for="lumbarBMD">腰椎（g/cm²）:</label>
-      <input type="number" inputmode="numeric" id="lumbarBMDNumber" name="lumbar_bmd" min="0.000" max="2.000" step="0.001" placeholder="0.000〜2.000">
-      <input type="range" class="long-slider" id="lumbarBMD" min="0.000" max="2.000" step="0.001">
-      <label for="lumbarYAM">YAM値（%）:</label>
-      <input type="number" inputmode="numeric" id="lumbarYAMNumber" name="lumbar_yam" min="0" max="200" step="1" placeholder="0〜200">
-      <input type="range" class="long-slider" id="lumbarYAM" min="0" max="200" step="1">
-      <hr>
-      <label for="femurBMD">大腿骨近位（g/cm²）:</label>
-      <input type="number" inputmode="numeric" id="femurBMDNumber" name="femur_bmd" min="0.000" max="2.000" step="0.001" placeholder="0.000〜2.000">
-      <input type="range" class="long-slider" id="femurBMD" min="0.000" max="2.000" step="0.001">
-      <label for="femurYAM">YAM値（%）:</label>
-      <input type="number" inputmode="numeric" id="femurYAMNumber" name="femur_yam" min="0" max="200" step="1" placeholder="0〜200">
-      <input type="range" class="long-slider" id="femurYAM" min="0" max="200" step="1">
+      <div class="flex-container">
+        <div class="input-block">
+          <label for="lumbarBMD">腰椎（g/cm²）:</label>
+          <input type="number" inputmode="numeric" id="lumbarBMDNumber" name="lumbar_bmd" min="0.000" max="2.000" step="0.001" placeholder="0.000〜2.000">
+          <input type="range" class="long-slider" id="lumbarBMD" min="0.000" max="2.000" step="0.001">
+          <label for="lumbarYAM">YAM値（%）:</label>
+          <input type="number" inputmode="numeric" id="lumbarYAMNumber" name="lumbar_yam" min="0" max="200" step="1" placeholder="0〜200">
+          <input type="range" class="long-slider" id="lumbarYAM" min="0" max="200" step="1">
+        </div>
+        <div class="input-block">
+          <label for="femurBMD">大腿骨近位（g/cm²）:</label>
+          <input type="number" inputmode="numeric" id="femurBMDNumber" name="femur_bmd" min="0.000" max="2.000" step="0.001" placeholder="0.000〜2.000">
+          <input type="range" class="long-slider" id="femurBMD" min="0.000" max="2.000" step="0.001">
+          <label for="femurYAM">YAM値（%）:</label>
+          <input type="number" inputmode="numeric" id="femurYAMNumber" name="femur_yam" min="0" max="200" step="1" placeholder="0〜200">
+          <input type="range" class="long-slider" id="femurYAM" min="0" max="200" step="1">
+        </div>
+      </div>
     </fieldset>
 
     <fieldset class="shrunkable">
