@@ -217,24 +217,38 @@
   }
 
   function diagnoseOsteoporosis() {
-    const lumbarYAM = parseFloat(document.getElementById("lumbar_yam").textContent) || 0;
-    const femurYAM = parseFloat(document.getElementById("femur_yam").textContent) || 0;
-    const fractureHistory = document.querySelector(".fracture_history").textContent;
+    const lumbarYAM = parseFloat(document.getElementById("lumbar_yam").textContent) || null;
+    const femurYAM = parseFloat(document.getElementById("femur_yam").textContent) || null;
+    const fractureHistory = document.querySelector(".fracture_history").textContent.trim();
 
-    let diagnosis = "正常";
+    let diagnosis = "診断不能";  // デフォルトは「診断不能」
 
-    if (lumbarYAM < 60 || femurYAM < 60) {
-      diagnosis = "重症骨粗鬆症";
-    } else if (lumbarYAM < 70 || femurYAM < 70) {
-      diagnosis = "骨粗鬆症";
-    } else if (lumbarYAM < 80 || femurYAM < 80) {
-      diagnosis = "骨萎縮";
+    // 骨折歴の有無を判定
+    const hasFractureHistory = fractureHistory && fractureHistory !== "-" && fractureHistory.length > 0;
+
+    // 骨密度のデータが少なくとも1つ存在するか確認
+    const hasBMDData = lumbarYAM !== null || femurYAM !== null;
+
+    if (hasBMDData) {
+      if ((lumbarYAM !== null && lumbarYAM < 60) || (femurYAM !== null && femurYAM < 60)) {
+        diagnosis = "重症骨粗鬆症";
+      } else if ((lumbarYAM !== null && lumbarYAM < 70) || (femurYAM !== null && femurYAM < 70)) {
+        diagnosis = "骨粗鬆症";
+      } else if ((lumbarYAM !== null && lumbarYAM < 80) || (femurYAM !== null && femurYAM < 80)) {
+        diagnosis = "骨萎縮";
+      } else if ((lumbarYAM !== null && lumbarYAM >= 80) && (femurYAM !== null && femurYAM >= 80)) {
+        diagnosis = "正常";
+      }
     }
 
-    if (fractureHistory && fractureHistory !== "-") {
-      diagnosis = "骨粗鬆症（骨折既往あり）";
+    // 骨折歴があれば骨密度に関係なく骨粗鬆症と診断
+    if (hasFractureHistory) {
+      diagnosis = (diagnosis === "重症骨粗鬆症") 
+                  ? "重症骨粗鬆症（骨折既往あり）" 
+                  : "骨粗鬆症（骨折既往あり）";
     }
 
+    // 診断結果を表示
     document.getElementById("diagnosis").textContent = diagnosis;
   }
     
