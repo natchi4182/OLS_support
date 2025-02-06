@@ -8,7 +8,7 @@ body {
 .header {
   display: flex;
   flex-direction: row;
-  height: 150px;
+  height: auto;
   background-color: #f0f0f0;
   padding: 10px;
   box-sizing: border-box;
@@ -21,14 +21,12 @@ body {
 .header-right {
   flex: 2;
   padding: 10px;
-  background-color: #e6e6e6;
   border-left: 2px solid #ccc;
 }
 .content {
   flex: 1;
   overflow-y: auto;
   padding: 10px;
-  background-color: #fafafa;
 }
 fieldset {
   margin-bottom: 20px;
