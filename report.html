@@ -134,23 +134,63 @@
         <th>薬剤</th>
       </tr>
       <tr>
-        <td><input type="text" maxlength="1" placeholder="A〜E" class="recommendation"></td>
+        <td>
+          <select class="recommendation-grade">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+          </select>
+        </td>
         <td><select class="recommendedMed"></select></td>
       </tr>
       <tr>
-        <td><input type="text" maxlength="1" placeholder="A〜E" class="recommendation"></td>
+        <td>
+          <select class="recommendation-grade">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+          </select>
+        </td>
         <td><select class="recommendedMed"></select></td>
       </tr>
       <tr>
-        <td><input type="text" maxlength="1" placeholder="A〜E" class="recommendation"></td>
+        <td>
+          <select class="recommendation-grade">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+          </select>
+        </td>
         <td><select class="recommendedMed"></select></td>
       </tr>
       <tr>
-        <td><input type="text" maxlength="1" placeholder="A〜E" class="recommendation"></td>
+        <td>
+          <select class="recommendation-grade">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+          </select>
+        </td>
         <td><select class="recommendedMed"></select></td>
       </tr>
       <tr>
-        <td><input type="text" maxlength="1" placeholder="A〜E" class="recommendation"></td>
+        <td>
+          <select class="recommendation-grade">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+          </select>
+        </td>
         <td><select class="recommendedMed"></select></td>
       </tr>
     </table>
@@ -273,7 +313,7 @@
     document.getElementById("diagnosis").textContent = diagnosis;
   }
 
-  async function loadMedications() {
+  function loadMedications() {
     try {
       const response = await fetch('https://natchi4182.github.io/OLS_support/osteoporosis_meds.json');
       const meds = await response.json();
@@ -283,8 +323,8 @@
       meds.forEach(med => {
         medSelects.forEach(select => {
           const option = document.createElement('option');
-          option.value = med;
-          option.textContent = med;
+          option.value = med.name; // Assuming each med has a 'name' property
+          option.textContent = med.name;
           select.appendChild(option);
         });
       });
