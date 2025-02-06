@@ -235,8 +235,8 @@ hr {
 .input-block {
   display: flex;
   flex-direction: column;
-  width: 30%;
-  max-width: 300px;
+  width: 40%;
+  max-width: 350px;
   min-width: 150px;
 }
 
