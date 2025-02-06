@@ -32,6 +32,10 @@ fieldset.shrunkable.shrunk {
   cursor: pointer;
   background-color: #B0D0FF;
 }
+.highlight-red {
+  background-color: #FFE5E5;
+  border: 3px solid #FF9999;
+}
 legend {
   cursor: pointer;
   font-weight: bold;
@@ -72,9 +76,9 @@ select, input[type=text], input[type=number], textarea {
   opacity: 1;
 }
 .checkbox-group.hidden, .radio-group.hidden, table.hidden {
-  height: 0; /* 非表示状態の高さ */
-  opacity: 0; /* 非表示 */
-  display: block; /* アニメーションを維持するため、blockに変更 */
+  height: 0;
+  opacity: 0;
+  display: block;
 }
 .checkbox-group label, .radio-group label {
   display: inline-block;
