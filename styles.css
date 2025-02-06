@@ -1,5 +1,5 @@
 body {
-  font-family: "メイリオ", Meiryo, sans-serif;
+  font-family: Verdana, Roboto, "Droid Sans", "游ゴシック", YuGothic, "メイリオ", Meiryo, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "ＭＳ Ｐゴシック", sans-serif;
   max-width: 800px;
   margin: 20px auto;
 }
