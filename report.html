@@ -118,24 +118,45 @@
     <div class="section-title">現在の薬物治療</div>
     <table class="report-table">
       <tr>
-        <th>薬剤名</th>
-        <th>投与間隔</th>
-        <th>投与方法</th>
+        <th>薬剤1</th>
+        <th>薬剤2</th>
       </tr>
       <tr>
-        <td id="med1"></td>
-        <td id="med1Interval"></td>
-        <td id="med1Method"></td>
+        <td><select id="currentMed1"></select></td>
+        <td><select id="currentMed2"></select></td>
+      </tr>
+    </table>
+
+    <div class="section-title">推奨する薬物治療</div>
+    <table class="report-table">
+      <tr>
+        <th>推奨度 (A〜E)</th>
+        <th>薬剤</th>
       </tr>
       <tr>
-        <td id="med2"></td>
-        <td id="med2Interval"></td>
-        <td id="med2Method"></td>
+        <td><input type="text" maxlength="1" placeholder="A〜E" class="recommendation"></td>
+        <td><select class="recommendedMed"></select></td>
+      </tr>
+      <tr>
+        <td><input type="text" maxlength="1" placeholder="A〜E" class="recommendation"></td>
+        <td><select class="recommendedMed"></select></td>
+      </tr>
+      <tr>
+        <td><input type="text" maxlength="1" placeholder="A〜E" class="recommendation"></td>
+        <td><select class="recommendedMed"></select></td>
+      </tr>
+      <tr>
+        <td><input type="text" maxlength="1" placeholder="A〜E" class="recommendation"></td>
+        <td><select class="recommendedMed"></select></td>
+      </tr>
+      <tr>
+        <td><input type="text" maxlength="1" placeholder="A〜E" class="recommendation"></td>
+        <td><select class="recommendedMed"></select></td>
       </tr>
     </table>
 
     <div class="report-footer">
-      <p>次回診察: <span id="nextCheckup"></span></p>
+      <p>次回診察: <input type="date" id="nextCheckup"></p>
       <p>半年～1年ごとに検査を受けましょう。</p>
       <p style="white-space: pre;">診療機関: <span id="hospital"></span>　　　　医師: <span id="doctor"></span></p>
     </div>
@@ -251,10 +272,31 @@
     // 診断結果を表示
     document.getElementById("diagnosis").textContent = diagnosis;
   }
-    
+
+  async function loadMedications() {
+    try {
+      const response = await fetch('https://natchi4182.github.io/OLS_support/osteoporosis_meds.json');
+      const meds = await response.json();
+
+      const medSelects = document.querySelectorAll('#currentMed1, #currentMed2, .recommendedMed');
+
+      meds.forEach(med => {
+        medSelects.forEach(select => {
+          const option = document.createElement('option');
+          option.value = med;
+          option.textContent = med;
+          select.appendChild(option);
+        });
+      });
+    } catch (error) {
+      console.error('薬剤リストの読み込みに失敗しました:', error);
+    }
+  }
+
   window.onload = async function () {
     await getQueryParams();
     diagnoseOsteoporosis();
+    loadMedications();
   };
   </script>
 
