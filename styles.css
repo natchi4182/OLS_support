@@ -242,17 +242,3 @@ hr {
   max-width: 350px;
   min-width: 150px;
 }
-@media (max-width: 768px) {
-  fieldset.non-shrunkable {
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-    overflow: visible !important;
-    min-height: 80px !important;
-    height: auto !important;
-    opacity: 1 !important;
-    -webkit-overflow-scrolling: touch;
-    transform: none !important;
-  }
-}
-
