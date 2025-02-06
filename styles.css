@@ -8,8 +8,7 @@ fieldset {
   border: 3px solid #ccc;
   padding: 10px;
   margin: 10px 0;
-/*  overflow: hidden;  */
-  overflow: visible !important;
+  overflow: hidden;
   transition: height 0.3s ease, opacity 0.3s ease;
   height: auto;
   opacity: 1;
@@ -242,5 +241,18 @@ hr {
   width: 40%;
   max-width: 350px;
   min-width: 150px;
+}
+@media (max-width: 768px) {
+  fieldset.non-shrunkable {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    overflow: visible !important;
+    min-height: 80px !important;
+    height: auto !important;
+    opacity: 1 !important;
+    -webkit-overflow-scrolling: touch;
+    transform: none !important;
+  }
 }
 
