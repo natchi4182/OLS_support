@@ -24,7 +24,7 @@
     <p style="white-space: pre;">年齢: <span id="age"></span>歳　　　　性別: <span id="sex"></span>　　　　身長: <span id="height"></span>cm　　　　体重: <span id="weight"></span>kg</p>
     
     <div class="section-title">骨粗鬆症の診断</div>
-    <p><span class="diseases"></span></p>
+    <p id="diagnosis"></p>
 
     <div class="section-title">骨折の既往</div>
     <p class="risk-factors"><span class="fracture_history"></span></p>
@@ -216,7 +216,32 @@
     setMultipleValues("others", "others");
   }
 
-  window.onload = getQueryParams;
+  function diagnoseOsteoporosis() {
+    const lumbarYAM = parseFloat(document.getElementById("lumbar_yam").textContent) || 0;
+    const femurYAM = parseFloat(document.getElementById("femur_yam").textContent) || 0;
+    const fractureHistory = document.querySelector(".fracture_history").textContent;
+
+    let diagnosis = "正常";
+
+    if (lumbarYAM < 60 || femurYAM < 60) {
+      diagnosis = "重症骨粗鬆症";
+    } else if (lumbarYAM < 70 || femurYAM < 70) {
+      diagnosis = "骨粗鬆症";
+    } else if (lumbarYAM < 80 || femurYAM < 80) {
+      diagnosis = "骨萎縮";
+    }
+
+    if (fractureHistory && fractureHistory !== "-") {
+      diagnosis = "骨粗鬆症（骨折既往あり）";
+    }
+
+    document.getElementById("diagnosis").textContent = diagnosis;
+  }
+    
+  window.onload = async function () {
+    await getQueryParams();
+    diagnoseOsteoporosis();
+  };
   </script>
 
 </body>
