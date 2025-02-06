@@ -7,8 +7,6 @@ body {
   flex-direction: column;
 }
 .header {
-  display: flex;
-  flex-direction: row;
   height: 150px;
   padding: 10px;
   box-sizing: border-box;
