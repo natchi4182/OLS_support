@@ -55,7 +55,7 @@ label {
 select, input[type=text], input[type=number], textarea {
   width: 90%;
   max-width: 500px;
-  font-size: 1.5em;
+  font-size: 1.1em;
 }
 .radio-group {
   display: flex;
