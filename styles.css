@@ -8,7 +8,7 @@ fieldset {
   border: 3px solid #ccc;
   padding: 10px;
   margin: 10px 0;
-  overflow: hidden;
+/*  overflow: hidden;  */
   transition: height 0.3s ease, opacity 0.3s ease;
   height: auto;
   opacity: 1;
