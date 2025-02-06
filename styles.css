@@ -10,19 +10,9 @@ body {
   display: flex;
   flex-direction: row;
   height: 150px;
-  background-color: #f0f0f0;
   padding: 10px;
   box-sizing: border-box;
-  border-bottom: 2px solid #ccc;
-}
-.header-left {
-  flex: 8;
-  padding: 10px;
-}
-.header-right {
-  flex: 2;
-  padding: 10px;
-  border-left: 2px solid #ccc;
+  border-bottom: 3px solid #ccc;
 }
 .body {
   flex: 1;
