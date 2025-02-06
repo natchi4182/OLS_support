@@ -15,10 +15,37 @@
     .highlight-high { color: red; font-weight: bold; }
     .highlight-low { color: blue; font-weight: bold; }
     .risk-factors { word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; white-space: normal; }
+
+    @media print {
+      body {
+        margin: 0;
+        padding: 0;
+        -webkit-print-color-adjust: exact;
+      }
+      .report-container {
+        border: none;
+        box-shadow: none;
+        margin: 0;
+        padding: 10mm;
+      }
+      button {
+        display: none;
+      }
+    }
   </style>
+
+  <!-- jsPDFとhtml2canvasのCDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
+
 <body>
   <h2>あなたの骨粗鬆症についてのまとめです</h2>
+
+  <div style="text-align: center; margin: 20px;">
+    <button onclick="downloadPDF()" style="padding: 10px 20px; font-size: 1em;">PDFとしてダウンロード</button>
+  </div>
+
   <div class="report-container">
     <p style="white-space: pre;">ID: <input type="text" id="patientID" name="patientID" style="text-align: center" required>　　　　名前: <input type="text" id="patientName" name="patientName" style="font-size: 1.1em; text-align: center" required>　　　　記載日: <input type="date" id="writeDate" name="writeDate" style="text-align: center" required></p>
     <p style="white-space: pre;">年齢: <span id="age"></span>歳　　　　性別: <span id="sex"></span>　　　　身長: <span id="height"></span>cm　　　　体重: <span id="weight"></span>kg</p>
@@ -203,154 +230,173 @@
   </div>
 
   <script>
-  async function getQueryParams() {
-    const params = new URLSearchParams(window.location.search);
-
-    // JSONデータを取得
-    const response = await fetch('https://natchi4182.github.io/OLS_support/labDataItems.json');
-    const labDataItems = await response.json();
-    const selectedSex = params.get("sex");
-
-    function setSingleValue(id, key) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = params.get(key) || "-";
-    }
-
-    setSingleValue("hospital", "hospital");
-    setSingleValue("doctor", "doctor");
-    setSingleValue("age", "age");
-    setSingleValue("sex", "sex");
-    setSingleValue("height", "height");
-    setSingleValue("weight", "weight");
-    setSingleValue("smoking", "smoking");
-    setSingleValue("alcohol", "alcohol");
-    setSingleValue("lumbar_yam", "lumbar_yam");
-    setSingleValue("femur_yam", "femur_yam");
-    setSingleValue("frax1", "majorFractureRisk");
-    setSingleValue("frax2", "hipFractureRisk");
-    setSingleValue("補正Ca", "補正Ca");
-    setSingleValue("P", "P");
-    setSingleValue("25OHビタミンD", "25OH ビタミンD");
-    setSingleValue("BAP", "BAP");
-    setSingleValue("TRACP-5b", "TRACP-5b");
-    setSingleValue("eGFR", "eGFR");
-
-    // 適正範囲の設定と色付け
-    labDataItems.forEach(item => {
-      let rangeId = item.name === "25OH ビタミンD" ? "vitaminD_range" : `${item.name}_range`;
-      const rangeEl = document.getElementById(rangeId);
-      const valueEl = document.getElementById(item.name);
-      if (rangeEl && item.normal[selectedSex]) {
-        rangeEl.textContent = item.normal[selectedSex];
+    async function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+  
+      // JSONデータを取得
+      const response = await fetch('https://natchi4182.github.io/OLS_support/labDataItems.json');
+      const labDataItems = await response.json();
+      const selectedSex = params.get("sex");
+  
+      function setSingleValue(id, key) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = params.get(key) || "-";
       }
-      if (valueEl) {
-        const value = parseFloat(valueEl.textContent);
-        const [min, max] = item.normal[selectedSex].split('〜').map(parseFloat);
-        if (!isNaN(value)) {
-          if (value > max) valueEl.classList.add('highlight-high');
-          if (value < min) valueEl.classList.add('highlight-low');
+  
+      setSingleValue("hospital", "hospital");
+      setSingleValue("doctor", "doctor");
+      setSingleValue("age", "age");
+      setSingleValue("sex", "sex");
+      setSingleValue("height", "height");
+      setSingleValue("weight", "weight");
+      setSingleValue("smoking", "smoking");
+      setSingleValue("alcohol", "alcohol");
+      setSingleValue("lumbar_yam", "lumbar_yam");
+      setSingleValue("femur_yam", "femur_yam");
+      setSingleValue("frax1", "majorFractureRisk");
+      setSingleValue("frax2", "hipFractureRisk");
+      setSingleValue("補正Ca", "補正Ca");
+      setSingleValue("P", "P");
+      setSingleValue("25OHビタミンD", "25OH ビタミンD");
+      setSingleValue("BAP", "BAP");
+      setSingleValue("TRACP-5b", "TRACP-5b");
+      setSingleValue("eGFR", "eGFR");
+  
+      // 適正範囲の設定と色付け
+      labDataItems.forEach(item => {
+        let rangeId = item.name === "25OH ビタミンD" ? "vitaminD_range" : `${item.name}_range`;
+        const rangeEl = document.getElementById(rangeId);
+        const valueEl = document.getElementById(item.name);
+        if (rangeEl && item.normal[selectedSex]) {
+          rangeEl.textContent = item.normal[selectedSex];
+        }
+        if (valueEl) {
+          const value = parseFloat(valueEl.textContent);
+          const [min, max] = item.normal[selectedSex].split('〜').map(parseFloat);
+          if (!isNaN(value)) {
+            if (value > max) valueEl.classList.add('highlight-high');
+            if (value < min) valueEl.classList.add('highlight-low');
+          }
+        }
+      });
+   
+      // 複数データの取得
+      function setMultipleValues(className, paramName) {
+        const elements = document.querySelectorAll("." + className);
+        const values = params.getAll(paramName);
+  
+        console.log(paramName, values); // デバッグ用
+  
+        if (values.length > 0) {
+          const textValue = values.join(", "); // カンマ区切りで表示
+          elements.forEach(el => el.textContent = textValue);
+        } else {
+          elements.forEach(el => el.textContent = "-");
         }
       }
-    });
- 
-    // 複数データの取得
-    function setMultipleValues(className, paramName) {
-      const elements = document.querySelectorAll("." + className);
-      const values = params.getAll(paramName);
-
-      console.log(paramName, values); // デバッグ用
-
-      if (values.length > 0) {
-        const textValue = values.join(", "); // カンマ区切りで表示
-        elements.forEach(el => el.textContent = textValue);
-      } else {
-        elements.forEach(el => el.textContent = "-");
-      }
-    }
-
-    setMultipleValues("diseases", "diseases");
-    setMultipleValues("fracture_history", "fracture_history");
-    setMultipleValues("osteoporosis_meds", "osteoporosis_meds");
-    setMultipleValues("hrt_meds", "hrt_meds");
-    setMultipleValues("bone_metabolism_meds", "bone_metabolism_meds");
-    setMultipleValues("anticancer_meds", "anticancer_meds");
-    setMultipleValues("others", "others");
-  }
-
-  function diagnoseOsteoporosis() {
-    const lumbarYAM = parseFloat(document.getElementById("lumbar_yam").textContent) || null;
-    const femurYAM = parseFloat(document.getElementById("femur_yam").textContent) || null;
-    const fractureHistory = document.querySelector(".fracture_history").textContent.trim();
-
-    let diagnosis = "診断不能";  // デフォルトは「診断不能」
-
-    // 骨折歴の有無を判定
-    const hasFractureHistory = fractureHistory && fractureHistory !== "-" && fractureHistory.length > 0;
-
-    // 骨密度のデータが少なくとも1つ存在するか確認
-    const hasBMDData = lumbarYAM !== null || femurYAM !== null;
-
-    if (hasBMDData) {
-      if ((lumbarYAM !== null && lumbarYAM < 60) || (femurYAM !== null && femurYAM < 60)) {
-        diagnosis = "重症骨粗鬆症";
-      } else if ((lumbarYAM !== null && lumbarYAM < 70) || (femurYAM !== null && femurYAM < 70)) {
-        diagnosis = "骨粗鬆症";
-      } else if ((lumbarYAM !== null && lumbarYAM < 80) || (femurYAM !== null && femurYAM < 80)) {
-        diagnosis = "骨萎縮";
-      } else if ((lumbarYAM !== null && lumbarYAM >= 80) && (femurYAM !== null && femurYAM >= 80)) {
-        diagnosis = "正常";
-      }
-    }
-
-    // 骨折歴があれば骨密度に関係なく骨粗鬆症と診断
-    if (hasFractureHistory) {
-      diagnosis = (diagnosis === "重症骨粗鬆症") 
-                  ? "重症骨粗鬆症（骨折既往あり）" 
-                  : "骨粗鬆症（骨折既往あり）";
-    }
-
-    // 診断結果を表示
-    document.getElementById("diagnosis").textContent = diagnosis;
-  }
-
-  async function loadMedications() {
-    try {
-      const response = await fetch('https://natchi4182.github.io/OLS_support/osteoporosis_meds.json');
-      if (!response.ok) {
-        throw new Error(`データ取得に失敗しました: ${response.status}`);
-      }
-      const data = await response.json();
-      const meds = data.items;
   
-      const medSelects = document.querySelectorAll('#currentMed1, #currentMed2, .recommendedMed');
+      setMultipleValues("diseases", "diseases");
+      setMultipleValues("fracture_history", "fracture_history");
+      setMultipleValues("osteoporosis_meds", "osteoporosis_meds");
+      setMultipleValues("hrt_meds", "hrt_meds");
+      setMultipleValues("bone_metabolism_meds", "bone_metabolism_meds");
+      setMultipleValues("anticancer_meds", "anticancer_meds");
+      setMultipleValues("others", "others");
+    }
   
-      medSelects.forEach(select => {
-        select.innerHTML = ""; // 既存のオプションをクリア
+    function diagnoseOsteoporosis() {
+      const lumbarYAM = parseFloat(document.getElementById("lumbar_yam").textContent) || null;
+      const femurYAM = parseFloat(document.getElementById("femur_yam").textContent) || null;
+      const fractureHistory = document.querySelector(".fracture_history").textContent.trim();
   
-        meds.forEach(item => {
-          if (item === "separator") {
-            const separatorOption = document.createElement('option');
-            separatorOption.disabled = true;
-            separatorOption.textContent = "-------------------";
-            select.appendChild(separatorOption);
-          } else {
-            const option = document.createElement('option');
-            option.value = item;
-            option.textContent = item;
-            select.appendChild(option);
-          }
+      let diagnosis = "診断不能";  // デフォルトは「診断不能」
+  
+      // 骨折歴の有無を判定
+      const hasFractureHistory = fractureHistory && fractureHistory !== "-" && fractureHistory.length > 0;
+  
+      // 骨密度のデータが少なくとも1つ存在するか確認
+      const hasBMDData = lumbarYAM !== null || femurYAM !== null;
+  
+      if (hasBMDData) {
+        if ((lumbarYAM !== null && lumbarYAM < 60) || (femurYAM !== null && femurYAM < 60)) {
+          diagnosis = "重症骨粗鬆症";
+        } else if ((lumbarYAM !== null && lumbarYAM < 70) || (femurYAM !== null && femurYAM < 70)) {
+          diagnosis = "骨粗鬆症";
+        } else if ((lumbarYAM !== null && lumbarYAM < 80) || (femurYAM !== null && femurYAM < 80)) {
+          diagnosis = "骨萎縮";
+        } else if ((lumbarYAM !== null && lumbarYAM >= 80) && (femurYAM !== null && femurYAM >= 80)) {
+          diagnosis = "正常";
+        }
+      }
+  
+      // 骨折歴があれば骨密度に関係なく骨粗鬆症と診断
+      if (hasFractureHistory) {
+        diagnosis = (diagnosis === "重症骨粗鬆症") 
+                    ? "重症骨粗鬆症（骨折既往あり）" 
+                    : "骨粗鬆症（骨折既往あり）";
+      }
+  
+      // 診断結果を表示
+      document.getElementById("diagnosis").textContent = diagnosis;
+    }
+  
+    async function loadMedications() {
+      try {
+        const response = await fetch('https://natchi4182.github.io/OLS_support/osteoporosis_meds.json');
+        if (!response.ok) {
+          throw new Error(`データ取得に失敗しました: ${response.status}`);
+        }
+        const data = await response.json();
+        const meds = data.items;
+    
+        const medSelects = document.querySelectorAll('#currentMed1, #currentMed2, .recommendedMed');
+    
+        medSelects.forEach(select => {
+          select.innerHTML = ""; // 既存のオプションをクリア
+    
+          meds.forEach(item => {
+            if (item === "separator") {
+              const separatorOption = document.createElement('option');
+              separatorOption.disabled = true;
+              separatorOption.textContent = "-------------------";
+              select.appendChild(separatorOption);
+            } else {
+              const option = document.createElement('option');
+              option.value = item;
+              option.textContent = item;
+              select.appendChild(option);
+            }
+          });
         });
-      });
-    } catch (error) {
-      console.error('薬剤リストの読み込みに失敗しました:', error);
+      } catch (error) {
+        console.error('薬剤リストの読み込みに失敗しました:', error);
+      }
     }
-  }
-
-  window.onload = async function () {
-    await getQueryParams();
-    diagnoseOsteoporosis();
-    loadMedications();
-  };
+  
+    async function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const report = document.querySelector('.report-container');
+  
+      try {
+        const canvas = await html2canvas(report, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+  
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save('骨粗鬆症サマリー.pdf');
+      } catch (error) {
+        console.error('PDFの生成に失敗しました:', error);
+      }
+    }
+  
+    window.onload = async function () {
+      await getQueryParams();
+      diagnoseOsteoporosis();
+      loadMedications();
+    };
   </script>
 
 </body>
