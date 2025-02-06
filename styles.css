@@ -37,11 +37,11 @@ legend {
   font-weight: bold;
 }
 .content {
-  transition: opacity 0.3s ease; /* 内容部分の透明度をアニメーション */
-  opacity: 1; /* デフォルトで表示 */
+  transition: opacity 0.3s ease;
+  opacity: 1;
 }
 .content.hidden {
-  opacity: 0; /* 非表示状態 */
+  opacity: 0;
 }
 label {
   display: block;
@@ -99,12 +99,11 @@ table th, table td {
   max-width: 500px;
   box-sizing: border-box;
 }
-/* 検査日の入力欄のスタイル */
 input[type="date"] {
   width: 50%;
   max-width: 250px;
   font-size: 1.2em;
-  padding: 0px;
+  padding: 10px;
 }
 button {
   margin-top: 20px;
@@ -122,9 +121,8 @@ button:hover {
   background: #45a049;
   color: white;
 }
-/* クリアボタンのスタイル調整 */
 #clearBtn {
-  background: #E8B8B8; /* 赤系 */
+  background: #E8B8B8;
   margin-left: 10px;
 }
 #clearBtn:hover {
@@ -147,7 +145,6 @@ button:hover {
   font-size: 1em;
   white-space: pre-wrap;
 }
-/* Visually Hidden Class for Accessibility */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -156,18 +153,16 @@ button:hover {
   margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
-  white-space: nowrap; /* 文字が折り返されないようにする */
+  white-space: nowrap;
   border: 0;
 }
-/* エラーメッセージのスタイル */
 .error-message {
   color: red;
   font-size: 0.9em;
   margin-left: 10px;
 }
-/* モーダルのスタイル */
 #modal {
-  display: none; /* 初期状態は非表示 */
+  display: none;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -181,7 +176,7 @@ button:hover {
   z-index: 1000;
 }
 #modal-overlay {
-  display: none; /* 初期状態は非表示 */
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -225,9 +220,21 @@ button:hover {
   color: white;
 }
 hr {
-  border: none;            /* デフォルトのボーダーを無効化 */
-  border-top: 1px solid #eee; /* 上部に細い横線を追加 */
-  margin: 5px 0;          /* 上下の余白を設定 */
-  width: 100%;             /* 横幅を全体に広げる */
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 5px 0;
+  width: 100%;
   color: #E8E8E8;
 }
+.flex-container {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.input-block {
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+}
+
