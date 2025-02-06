@@ -232,6 +232,9 @@ hr {
   align-items: center;
   flex-wrap: wrap;
 }
+.flex-container.align-top {
+  align-items: flex-start;
+}
 .input-block {
   display: flex;
   flex-direction: column;
