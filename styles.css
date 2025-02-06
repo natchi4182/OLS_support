@@ -1,21 +1,7 @@
 body {
-  font-family: Verdana, Roboto, "Droid Sans", "游ゴシック", YuGothic, "メイリオ", Meiryo, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "ＭＳ Ｐゴシック", sans-serif;
+  font-family: "メイリオ", Meiryo, sans-serif;
   max-width: 800px;
   margin: 20px auto;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-.header {
-  height: auto;
-  padding: 10px;
-  box-sizing: border-box;
-  border-bottom: 3px solid #ccc;
-}
-.body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px;
 }
 fieldset {
   margin-bottom: 20px;
