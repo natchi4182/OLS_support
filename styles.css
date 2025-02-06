@@ -33,7 +33,7 @@ fieldset.shrunkable.shrunk {
   background-color: #B0D0FF;
 }
 .highlight-red {
-  background-color: #FFE5E5;
+  background-color: #FFE5E5 !important;
   border: 3px solid #FF9999;
 }
 legend {
