@@ -373,10 +373,25 @@
       }
     }
   
+   function generateFileName() {
+      const dateInput = document.getElementById('writeDate').value;
+      const date = dateInput ? dateInput.replace(/-/g, '') : new Date().toISOString().split('T')[0].replace(/-/g, '');
+      const id = document.getElementById('patientID').value || 'UnknownID';
+      let fileName = `${date}OLS${id}.pdf`;
+
+      let counter = 1;
+      while (localStorage.getItem(fileName)) {  // localStorageを使用して簡易的なファイル名管理
+        fileName = `${date}OLS${id}${counter}.pdf`;
+        counter++;
+      }
+      localStorage.setItem(fileName, true);  // 重複管理のために保存
+      return fileName;
+    }
+
     async function downloadPDF() {
       const { jsPDF } = window.jspdf;
       const report = document.querySelector('.report-container');
-  
+
       try {
         const canvas = await html2canvas(report, { scale: 2, scrollY: -window.scrollY });
         const imgData = canvas.toDataURL('image/png');
@@ -394,7 +409,8 @@
           }
         }
 
-        pdf.save('骨粗鬆症サマリー.pdf');
+        const fileName = generateFileName();
+        pdf.save(fileName);
       } catch (error) {
         console.error('PDFの生成に失敗しました:', error);
       }
