@@ -15,6 +15,7 @@
     .highlight-high { color: red; font-weight: bold; }
     .highlight-low { color: blue; font-weight: bold; }
     .risk-factors { word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; white-space: normal; }
+    .diagnosis { text-align: center; font-size: 2em; font-weight: bold; }
 
     @media print {
       body {
@@ -30,6 +31,9 @@
       }
       button {
         display: none;
+      }
+      .page-break {
+        page-break-before: always;
       }
     }
   </style>
@@ -81,6 +85,8 @@
     </table>
 
     <p>80％以上が目標です。70％未満は骨粗鬆症、60％未満は重症骨粗鬆症で骨折リスクが高い状態です。</p>
+
+    <div class="page-break"></div>
 
     <div class="section-title">骨代謝マーカーなど</div>
     <table class="report-table">
@@ -145,12 +151,10 @@
     <div class="section-title">現在の薬物治療</div>
     <table class="report-table">
       <tr>
-        <th>薬剤1</th>
-        <th>薬剤2</th>
+        <td><select id="currentMed1" style="width: 90%;"></select></td>
       </tr>
       <tr>
-        <td><select id="currentMed1"></select></td>
-        <td><select id="currentMed2"></select></td>
+        <td><select id="currentMed2" style="width: 90%;"></select></td>
       </tr>
     </table>
 
@@ -304,6 +308,12 @@
       setMultipleValues("others", "others");
     }
   
+    document.addEventListener('DOMContentLoaded', () => {
+      const today = new Date().toISOString().split('T')[0];
+      const writeDateInput = document.getElementById('writeDate');
+      writeDateInput.value = today;
+    });
+
     function diagnoseOsteoporosis() {
       const lumbarYAM = parseFloat(document.getElementById("lumbar_yam").textContent) || null;
       const femurYAM = parseFloat(document.getElementById("femur_yam").textContent) || null;
