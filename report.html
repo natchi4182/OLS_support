@@ -535,7 +535,7 @@
 
     try {
       // クローンがDOMにある状態でhtml2canvasを実行
-      const canvas = await html2canvas(clone, { scale: 2, scrollY: -window.scrollY });
+      const canvas = await html2canvas(clone, { scale: 1, scrollY: -window.scrollY });
       // キャプチャ後、不要になったクローンは削除
       document.body.removeChild(clone);
 
