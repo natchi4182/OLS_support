@@ -249,6 +249,9 @@
       </tr>
     </table>
 
+    <div class="section-title">コメント</div>
+    <textarea id="freeNote" rows="1" style="width: 100%; font-size: 1em; padding: 8px; box-sizing: border-box; overflow: hidden; resize: none;" placeholder="コメントがあればここに自由に記載してください。"></textarea>
+
     <div class="report-footer">
       <p><b>次回診察:</b> <input type="date" id="nextCheckup"></p>
       <p>半年～1年ごとに検査を受けましょう。</p>
@@ -436,8 +439,17 @@
         console.error('薬剤リストの読み込みに失敗しました:', error);
       }
     }
-  
-   function generateFileName() {
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const freeNote = document.getElementById('freeNote');
+    
+      freeNote.addEventListener('input', function () {
+        this.style.height = 'auto';           // 高さのリセット
+        this.style.height = (this.scrollHeight) + 'px';  // 内容に応じて高さを調整
+      });
+    });
+
+    function generateFileName() {
       const dateInput = document.getElementById('writeDate').value;
       const date = dateInput ? dateInput.replace(/-/g, '') : new Date().toISOString().split('T')[0].replace(/-/g, '');
       const id = document.getElementById('patientID').value || 'UnknownID';
@@ -455,7 +467,13 @@
     async function downloadPDF() {
       const { jsPDF } = window.jspdf;
       const report = document.querySelector('.report-container');
-
+      const freeNote = document.getElementById('freeNote').value;
+      const noteContainer = document.createElement('div');
+      noteContainer.style.padding = '10px';
+      noteContainer.innerHTML = `<strong>コメント:</strong><br>${freeNote.replace(/\n/g, '<br>')}`;
+      
+      report.appendChild(noteContainer);
+      
       try {
         const canvas = await html2canvas(report, { scale: 2, scrollY: -window.scrollY });
         const imgData = canvas.toDataURL('image/png');
@@ -477,6 +495,8 @@
         pdf.save(fileName);
       } catch (error) {
         console.error('PDFの生成に失敗しました:', error);
+      } finally {
+        report.removeChild(noteContainer);
       }
     }
   
