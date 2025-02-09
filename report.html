@@ -479,11 +479,10 @@
     async function downloadPDF() {
       const { jsPDF } = window.jspdf;
       const report = document.querySelector('.report-container');
+      const clone = report.cloneNode(true);
 
-      const reportClone = report.cloneNode(true);
-
-      const inputsToReplace = reportClone.querySelectorAll('input[type="text"], input[type="date"], input[type="number"]');
-      inputsToReplace.forEach(input => {
+      const inputs = clone.querySelectorAll('input[type="text"], input[type="date"], input[type="number"]');
+      inputs.forEach(input => {
         const span = document.createElement('span');
         span.textContent = input.value || input.textContent;
         span.style.fontSize = window.getComputedStyle(input).fontSize;
@@ -491,16 +490,27 @@
         input.parentNode.replaceChild(span, input);
       });
   
-      const recRows = reportClone.querySelectorAll('tr');
-      recRows.forEach(row => {
+      const textareas = clone.querySelectorAll('textarea');
+        textareas.forEach(textarea => {
+        const span = document.createElement('span');
+        span.innerHTML = textarea.value.replace(/\n/g, '<br>');
+        span.style.fontSize = window.getComputedStyle(textarea).fontSize;
+        span.style.textAlign = window.getComputedStyle(textarea).textAlign;
+        textarea.parentNode.replaceChild(span, textarea);
+      });
+
+      const rows = clone.querySelectorAll('table.report-table tr');
+      rows.forEach(row => {
         const recSelect = row.querySelector('select.recommendation-grade');
-        if (recSelect && recSelect.value === '-') {
-          row.parentNode.removeChild(row);
+        if (recSelect) {
+          if (recSelect.value.trim() === '-' || recSelect.value.trim() === '') {
+            row.remove();
+          }
         }
       });
 
       try {
-        const canvas = await html2canvas(report, { scale: 2, scrollY: -window.scrollY });
+        const canvas = await html2canvas(clone, { scale: 2, scrollY: -window.scrollY });
         const imgData = canvas.toDataURL('image/png');
 
         const pdf = new jsPDF('p', 'mm', 'a4');
