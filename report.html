@@ -384,7 +384,7 @@
       document.getElementById("diagnosis").textContent = diagnosis;
     }
   
-    document.addEventListener('DOMContentLoaded', () => {
+    async function formatDataVertically() {
       const classesToFormat = [
         'fracture_history',
         'diseases',
@@ -394,8 +394,8 @@
       ];
   
       classesToFormat.forEach(className => {
-        const element = document.querySelector(`.${className}`);
-        if (element) {
+        const elements = document.querySelectorAll(`.${className}`);
+        elements.forEach(element => {
           const data = element.textContent.trim();
           if (data.includes(',')) {
             const formattedData = data
@@ -403,12 +403,12 @@
               .map(item => item.trim())
               .filter(item => item !== "")
               .join('<br>');
-  
+
             element.innerHTML = formattedData;
           }
-        }
+        });
       });
-    });
+    }
 
     async function loadMedications() {
       try {
@@ -490,6 +490,7 @@
       await getQueryParams();
       diagnoseOsteoporosis();
       loadMedications();
+      formatDataVertically();
     };
   </script>
 
