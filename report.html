@@ -179,14 +179,7 @@
     <p>※ いずれかの値が15％を超える場合は骨折リスクが高く，治療をお勧めします。</p>
 
     <div class="section-title">現在の薬物治療</div>
-    <table class="report-table">
-      <tr>
-        <td><select id="currentMed1" style="width: 90%;"></select></td>
-      </tr>
-      <tr>
-        <td><select id="currentMed2" style="width: 90%;"></select></td>
-      </tr>
-    </table>
+    <p class="risk-factors"><span class="osteoporosis_meds" style="display: block; white-space: pre-line;"></span></p>
 
     <div class="section-title">推奨する薬物治療</div>
     <table class="report-table">
@@ -388,6 +381,7 @@
       const classesToFormat = [
         'fracture_history',
         'diseases',
+        'osteoporosis_meds',
         'bone_metabolism_meds',
         'anticancer_meds',
         'others'
