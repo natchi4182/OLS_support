@@ -33,7 +33,7 @@
 
   <div class="report-container">
     <p style="white-space: pre;"><b>ID:</b>　<input type="text" id="patientID" name="patientID" style="font-size: 1.1em; width: 15%; text-align: center" required>　　　　<b>名前:</b>　<input type="text" id="patientName" name="patientName" style="font-size: 1.1em; width: 35%; text-align: center"" required>　　　　<b>記載日:</b>　<input type="date" id="writeDate" name="writeDate" style="font-size: 1.1em; text-align: center" required></p>
-    <p style="white-space: pre;"><b>年齢:</b> <span id="age"></span>歳　　　　<b>性別:</b> <span id="sex"></span>　　　　<b>身長:</b> <span id="height"></span>cm　　　　<b>体重:</b> <span id="weight"></span>kg</p>
+    <p style="white-space: pre;"><b>年齢:</b>　<span id="age"></span>歳　　　　<b>性別:</b>　<span id="sex"></span>　　　　<b>身長:</b>　<span id="height"></span>cm　　　　<b>体重:</b>　<span id="weight"></span>kg</p>
     
     <div class="section-title">骨粗鬆症の診断</div>
     <div class="diagnosis-box" id="diagnosis"></div>
@@ -72,7 +72,7 @@
             <td id="femur_yam" style="font-size: 1.2em;"></td>
           </tr>
         </table>
-        <p>80％以上が目標です。70％未満は骨粗鬆症と診断されます。60％未満は重症骨粗鬆症で骨折リスクが非常に高い状態です。</p>
+        <p style="font-size: 0.8em;">80％以上が目標です。\n70％未満は骨粗鬆症と診断されます。\n60％未満は重症骨粗鬆症で骨折リスクが非常に高い状態です。</p>
       </div>
 
       <div class="bone-marker-section">
@@ -85,32 +85,32 @@
           </tr>
           <tr>
             <td>血清カルシウム値 (mg/dL)</td>
-            <td id="補正Ca"></td>
+            <td id="補正Ca" style="font-size: 1.2em;"></td>
             <td id="補正Ca_range"></td>
           </tr>
           <tr>
             <td>血清リン値 (mg/dL)</td>
-            <td id="P"></td>
+            <td id="P" style="font-size: 1.2em;"></td>
             <td id="P_range"></td>
           </tr>
           <tr>
             <td>eGFR (mL/min/1.73m²)</td>
-            <td id="eGFR"></td>
+            <td id="eGFR" style="font-size: 1.2em;"></td>
             <td id="eGFR_range"></td>
           </tr>
           <tr>
             <td>血清ビタミンD (ng/mL)</td>
-            <td id="25OHビタミンD"></td>
+            <td id="25OHビタミンD" style="font-size: 1.2em;"></td>
             <td id="vitaminD_range"></td>
           </tr>
           <tr>
             <td>骨形成マーカー (BAP) (μg/L)</td>
-            <td id="BAP"></td>
+            <td id="BAP" style="font-size: 1.2em;"></td>
             <td id="BAP_range"></td>
           </tr>
           <tr>
             <td>骨吸収マーカー (TRACP-5b) (mU/dL)</td>
-            <td id="TRACP-5b"></td>
+            <td id="TRACP-5b" style="font-size: 1.2em;"></td>
             <td id="TRACP-5b_range"></td>
           </tr>
         </table>
