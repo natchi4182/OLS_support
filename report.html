@@ -479,10 +479,25 @@
     async function downloadPDF() {
       const { jsPDF } = window.jspdf;
       const report = document.querySelector('.report-container');
-      const freeNote = document.getElementById('freeNote').value;
-      const noteContainer = document.createElement('div');
-      noteContainer.style.padding = '10px';
-      noteContainer.innerHTML = `<strong>コメント:</strong><br>${freeNote.replace(/\n/g, '<br>')}`;
+
+      const reportClone = report.cloneNode(true);
+
+      const inputsToReplace = reportClone.querySelectorAll('input[type="text"], input[type="date"], input[type="number"]');
+      inputsToReplace.forEach(input => {
+        const span = document.createElement('span');
+        span.textContent = input.value || input.textContent;
+        span.style.fontSize = window.getComputedStyle(input).fontSize;
+        span.style.textAlign = window.getComputedStyle(input).textAlign;
+        input.parentNode.replaceChild(span, input);
+      });
+  
+      const recRows = reportClone.querySelectorAll('tr');
+      recRows.forEach(row => {
+        const recSelect = row.querySelector('select.recommendation-grade');
+        if (recSelect && recSelect.value === '-') {
+          row.parentNode.removeChild(row);
+        }
+      });
 
       try {
         const canvas = await html2canvas(report, { scale: 2, scrollY: -window.scrollY });
@@ -491,12 +506,10 @@
         const pdf = new jsPDF('p', 'mm', 'a4');
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
-
         const imgWidth = pdfWidth;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
         let position = 0;
-
         pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
 
         while (position + pdfHeight < imgHeight) {
