@@ -21,29 +21,6 @@
     .risk-factors-section { flex: 2.5 2.5 75%; }
     .bone-density-section { flex: 3.3 3.3 33%; }
     .bone-marker-section { flex: 6.6 6.6 66%; }
-
-    @media print {
-      body { margin: 0; padding: 0; -webkit-print-color-adjust: exact; }
-      .report-container { border: none; box-shadow: none; margin: 0; padding: 10mm; }
-      button { display: none; }
-      .page-break { page-break-before: always; }
-      input[type="text"],
-      input[type="date"],
-      input[type="number"] {
-        border: 0 !important;
-        background-color: transparent !important;
-        box-shadow: none !important;
-        outline: none !important;
-        -webkit-box-shadow: none !important;
-        -moz-box-shadow: none !important;
-        -webkit-appearance: none !important;
-        appearance: none !important;
-        color: black !important;
-        padding: 0 !important;
-        margin: 0 !important;
-      }
-      .hide-on-print { display: none !important; }
-    }
   </style>
 
   <!-- jsPDFとhtml2canvasのCDN -->
