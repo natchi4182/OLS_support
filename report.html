@@ -27,21 +27,22 @@
       .report-container { border: none; box-shadow: none; margin: 0; padding: 10mm; }
       button { display: none; }
       .page-break { page-break-before: always; }
-    input[type="text"],
-    input[type="date"],
-    input[type="number"] {
-      border: 0 !important;
-      background-color: transparent !important;
-      box-shadow: none !important;
-      outline: none !important;
-      -webkit-box-shadow: none !important;
-      -moz-box-shadow: none !important;
-      -webkit-appearance: none !important;
-      appearance: none !important;
-      color: black !important;
-      padding: 0 !important;
-      margin: 0 !important;
-    }
+      input[type="text"],
+      input[type="date"],
+      input[type="number"] {
+        border: 0 !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+        outline: none !important;
+        -webkit-box-shadow: none !important;
+        -moz-box-shadow: none !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
+        color: black !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .hide-on-print { display: none !important; }
     }
   </style>
 
@@ -425,6 +426,23 @@
         console.error('薬剤リストの読み込みに失敗しました:', error);
       }
     }
+
+    const recommendationRows = document.querySelectorAll('.recommendation-grade');
+    recommendationRows.forEach(select => {
+      select.addEventListener('change', () => {
+        const row = select.closest('tr');
+        if (select.value === "-") {
+          row.classList.add('hide-on-print');
+        } else {
+          row.classList.remove('hide-on-print');
+        }
+      });
+
+      // Initial check for existing "-" values
+      if (select.value === "-") {
+        select.closest('tr').classList.add('hide-on-print');
+      }
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
       const freeNote = document.getElementById('freeNote');
