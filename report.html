@@ -480,15 +480,19 @@
 
         const pdf = new jsPDF('p', 'mm', 'a4');
         const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+
+        const imgWidth = pdfWidth;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
         let position = 0;
-        while (position < canvas.height) {
-          pdf.addImage(imgData, 'PNG', 0, position === 0 ? 0 : -position, pdfWidth, pdfHeight);
-          position += pdf.internal.pageSize.getHeight() * (canvas.width / pdfWidth);
-          if (position < canvas.height) {
-            pdf.addPage();
-          }
+
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+
+        while (position + pdfHeight < imgHeight) {
+          position += pdfHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 0, -position, imgWidth, imgHeight);
         }
 
         const fileName = generateFileName();
