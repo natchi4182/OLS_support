@@ -453,80 +453,118 @@
       return fileName;
     }
 
-async function downloadPDF() {
-  const { jsPDF } = window.jspdf;
-  const report = document.querySelector('.report-container');
-  const clone = report.cloneNode(true);
+  async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const report = document.querySelector('.report-container');
+    const clone = report.cloneNode(true);
 
-  // ★クローンを一時的にDOMに追加（画面外に配置する）
-  clone.style.position = 'absolute';
-  clone.style.top = '0';
-  clone.style.left = '-9999px';
-  document.body.appendChild(clone);
+    // ★ クローンを一時的にDOMに追加（画面外に配置する）
+    clone.style.position = 'absolute';
+    clone.style.top = '0';
+    clone.style.left = '-9999px';
+    document.body.appendChild(clone);
 
-  // ① 入力欄（input, textarea）の置換処理
-  const inputs = clone.querySelectorAll('input[type="text"], input[type="date"], input[type="number"]');
-  inputs.forEach(input => {
-    const span = document.createElement('span');
-    span.textContent = input.value || input.textContent;
-    span.style.fontSize = window.getComputedStyle(input).fontSize;
-    span.style.textAlign = window.getComputedStyle(input).textAlign;
-    input.parentNode.replaceChild(span, input);
-  });
-
-  const textareas = clone.querySelectorAll('textarea');
-  textareas.forEach(textarea => {
-    const span = document.createElement('span');
-    span.innerHTML = textarea.value.replace(/\n/g, '<br>');
-    span.style.fontSize = window.getComputedStyle(textarea).fontSize;
-    span.style.textAlign = window.getComputedStyle(textarea).textAlign;
-    textarea.parentNode.replaceChild(span, textarea);
-  });
-
-  // ② 推奨薬剤の推奨度が "-" の行の除去処理
-  const rows = clone.querySelectorAll('table.report-table tr');
-  rows.forEach(row => {
-    const recSelect = row.querySelector('select.recommendation-grade');
-    if (recSelect) {
-      if (recSelect.value.trim() === '-' || recSelect.value.trim() === '') {
-        row.remove();
-      }
-    }
-  });
-
-  try {
-    // クローンがDOMにある状態でhtml2canvasを実行
-    const canvas = await html2canvas(clone, { scale: 2, scrollY: -window.scrollY });
-    // キャプチャ後、不要になったクローンは削除
-    document.body.removeChild(clone);
-
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pageSize.getHeight();
-    const imgWidth = pdfWidth;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    let position = 0;
-    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-
-    while (position + pdfHeight < imgHeight) {
-      position += pdfHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 0, -position, imgWidth, imgHeight);
-    }
-
-    const fileName = generateFileName();  // generateFileName() は既存の関数
-    pdf.save(fileName);
-  } catch (error) {
-    // エラー時はクローンがDOMに残らないように削除
-    if (document.body.contains(clone)) {
-      document.body.removeChild(clone);
-    }
-    console.error('PDFの生成に失敗しました:', error);
-  }
-}
+    // ① 入力欄（input, textarea）の置換処理（以前のコード通り）
+    const inputs = clone.querySelectorAll('input[type="text"], input[type="date"], input[type="number"]');
+    inputs.forEach(input => {
+      const span = document.createElement('span');
+      span.textContent = input.value || input.textContent;
+      span.style.fontSize = window.getComputedStyle(input).fontSize;
+      span.style.textAlign = window.getComputedStyle(input).textAlign;
+      input.parentNode.replaceChild(span, input);
+    });
   
+    const textareas = clone.querySelectorAll('textarea');
+    textareas.forEach(textarea => {
+      const span = document.createElement('span');
+      span.innerHTML = textarea.value.replace(/\n/g, '<br>');
+      span.style.fontSize = window.getComputedStyle(textarea).fontSize;
+      span.style.textAlign = window.getComputedStyle(textarea).textAlign;
+      textarea.parentNode.replaceChild(span, textarea);
+    });
+    
+    // ② 推奨薬物治療テーブルの処理
+    // まず、クローン内の<select class="recommendation-grade">について、
+    // オリジナルの選択状態を反映する
+    const originalRecSelects = document.querySelectorAll('select.recommendation-grade');
+    const clonedRecSelects = clone.querySelectorAll('select.recommendation-grade');
+    originalRecSelects.forEach((origSelect, index) => {
+      if (clonedRecSelects[index]) {
+        clonedRecSelects[index].value = origSelect.value;
+      }
+    });
+    
+    // 次に、クローン内から「推奨度 (A＞E)」と記載されているテーブルを特定する
+    let recommendedMedTable = null;
+    clone.querySelectorAll('table.report-table').forEach(table => {
+      const firstHeader = table.querySelector('th');
+      if (firstHeader && firstHeader.textContent.indexOf("推奨度") !== -1) {
+        recommendedMedTable = table;
+      }
+    });
+    
+    if (recommendedMedTable) {
+      // ヘッダー行以外の各行をチェック
+      const rows = recommendedMedTable.querySelectorAll('tr:not(:first-child)');
+      rows.forEach(row => {
+        const recSelect = row.querySelector('select.recommendation-grade');
+        if (recSelect) {
+          // 推奨度が "-" または空の場合は行自体を削除
+          if (recSelect.value.trim() === '-' || recSelect.value.trim() === '') {
+            row.remove();
+            return; // 次の行へ
+          } else {
+            // それ以外の場合は、<select> を <span> に置換して選択された値を表示
+            const span = document.createElement('span');
+            span.textContent = recSelect.value;
+            recSelect.parentNode.replaceChild(span, recSelect);
+          }
+        }
+        // 薬剤選択用の<select>も同様に<span>に変換
+        const medSelect = row.querySelector('select.recommendedMed');
+        if (medSelect) {
+          // ※ 必要なら、オリジナルから選択状態をコピーする処理を追加してもよい
+          const spanMed = document.createElement('span');
+          spanMed.textContent = medSelect.value;
+          medSelect.parentNode.replaceChild(spanMed, medSelect);
+        }
+      });
+    }
+    
+    // ※ 他のテーブルについては（骨密度や骨代謝マーカー）そのままでよい
+
+    try {
+      // クローンがDOMにある状態でhtml2canvasを実行
+      const canvas = await html2canvas(clone, { scale: 2, scrollY: -window.scrollY });
+      // キャプチャ後、不要になったクローンは削除
+      document.body.removeChild(clone);
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = pdfWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let position = 0;
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+
+      while (position + pdfHeight < imgHeight) {
+        position += pdfHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, -position, imgWidth, imgHeight);
+      }
+
+      const fileName = generateFileName();
+      pdf.save(fileName);
+    } catch (error) {
+      if (document.body.contains(clone)) {
+        document.body.removeChild(clone);
+      }
+      console.error('PDFの生成に失敗しました:', error);
+    }
+  }
+
     window.onload = async function () {
       await getQueryParams();
       diagnoseOsteoporosis();
