@@ -538,7 +538,7 @@
         document.body.removeChild(clone);
   
         const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', [ 210mm, 297mm ] );
+        const pdf = new jsPDF('p', 'mm', 'a5' );
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
         const imgWidth = pdfWidth;
