@@ -476,64 +476,79 @@
       return fileName;
     }
 
-    async function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      const report = document.querySelector('.report-container');
-      const clone = report.cloneNode(true);
+async function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const report = document.querySelector('.report-container');
+  const clone = report.cloneNode(true);
 
-      const inputs = clone.querySelectorAll('input[type="text"], input[type="date"], input[type="number"]');
-      inputs.forEach(input => {
-        const span = document.createElement('span');
-        span.textContent = input.value || input.textContent;
-        span.style.fontSize = window.getComputedStyle(input).fontSize;
-        span.style.textAlign = window.getComputedStyle(input).textAlign;
-        input.parentNode.replaceChild(span, input);
-      });
-  
-      const textareas = clone.querySelectorAll('textarea');
-        textareas.forEach(textarea => {
-        const span = document.createElement('span');
-        span.innerHTML = textarea.value.replace(/\n/g, '<br>');
-        span.style.fontSize = window.getComputedStyle(textarea).fontSize;
-        span.style.textAlign = window.getComputedStyle(textarea).textAlign;
-        textarea.parentNode.replaceChild(span, textarea);
-      });
+  // ★クローンを一時的にDOMに追加（画面外に配置する）
+  clone.style.position = 'absolute';
+  clone.style.top = '0';
+  clone.style.left = '-9999px';
+  document.body.appendChild(clone);
 
-      const rows = clone.querySelectorAll('table.report-table tr');
-      rows.forEach(row => {
-        const recSelect = row.querySelector('select.recommendation-grade');
-        if (recSelect) {
-          if (recSelect.value.trim() === '-' || recSelect.value.trim() === '') {
-            row.remove();
-          }
-        }
-      });
+  // ① 入力欄（input, textarea）の置換処理
+  const inputs = clone.querySelectorAll('input[type="text"], input[type="date"], input[type="number"]');
+  inputs.forEach(input => {
+    const span = document.createElement('span');
+    span.textContent = input.value || input.textContent;
+    span.style.fontSize = window.getComputedStyle(input).fontSize;
+    span.style.textAlign = window.getComputedStyle(input).textAlign;
+    input.parentNode.replaceChild(span, input);
+  });
 
-      try {
-        const canvas = await html2canvas(clone, { scale: 2, scrollY: -window.scrollY });
-        const imgData = canvas.toDataURL('image/png');
+  const textareas = clone.querySelectorAll('textarea');
+  textareas.forEach(textarea => {
+    const span = document.createElement('span');
+    span.innerHTML = textarea.value.replace(/\n/g, '<br>');
+    span.style.fontSize = window.getComputedStyle(textarea).fontSize;
+    span.style.textAlign = window.getComputedStyle(textarea).textAlign;
+    textarea.parentNode.replaceChild(span, textarea);
+  });
 
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        const imgWidth = pdfWidth;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-        let position = 0;
-        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-
-        while (position + pdfHeight < imgHeight) {
-          position += pdfHeight;
-          pdf.addPage();
-          pdf.addImage(imgData, 'PNG', 0, -position, imgWidth, imgHeight);
-        }
-
-        const fileName = generateFileName();
-        pdf.save(fileName);
-      } catch (error) {
-        console.error('PDFの生成に失敗しました:', error);
+  // ② 推奨薬剤の推奨度が "-" の行の除去処理
+  const rows = clone.querySelectorAll('table.report-table tr');
+  rows.forEach(row => {
+    const recSelect = row.querySelector('select.recommendation-grade');
+    if (recSelect) {
+      if (recSelect.value.trim() === '-' || recSelect.value.trim() === '') {
+        row.remove();
       }
     }
+  });
+
+  try {
+    // クローンがDOMにある状態でhtml2canvasを実行
+    const canvas = await html2canvas(clone, { scale: 2, scrollY: -window.scrollY });
+    // キャプチャ後、不要になったクローンは削除
+    document.body.removeChild(clone);
+
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const imgWidth = pdfWidth;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    let position = 0;
+    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+
+    while (position + pdfHeight < imgHeight) {
+      position += pdfHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'PNG', 0, -position, imgWidth, imgHeight);
+    }
+
+    const fileName = generateFileName();  // generateFileName() は既存の関数
+    pdf.save(fileName);
+  } catch (error) {
+    // エラー時はクローンがDOMに残らないように削除
+    if (document.body.contains(clone)) {
+      document.body.removeChild(clone);
+    }
+    console.error('PDFの生成に失敗しました:', error);
+  }
+}
   
     window.onload = async function () {
       await getQueryParams();
