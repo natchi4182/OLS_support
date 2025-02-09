@@ -15,7 +15,32 @@
     .highlight-high { color: red; font-weight: bold; }
     .highlight-low { color: blue; font-weight: bold; }
     .risk-factors { word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; white-space: normal; }
-    .diagnosis { text-align: center; font-size: 1.8em; font-weight: bold; }
+    .diagnosis-box {
+      border: 2px solid #000;
+      background-color: #e6f7ff;
+      padding: 10px;
+      margin: 10px 0;
+      text-align: center;
+      font-size: 1.8em;
+      font-weight: bold;
+    }
+    .flex-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .fracture-risk, .risk-factors-section {
+      flex: 2 1 20%;
+    }
+    .risk-factors-section {
+      flex: 8 1 80%;
+    }
+    .bone-density-section, .bone-marker-section {
+      flex: 3.5 1 35%;
+    }
+    .bone-marker-section {
+      flex: 6.5 1 65%;
+    }
 
     @media print {
       body {
@@ -51,76 +76,87 @@
     <p style="white-space: pre;">年齢: <span id="age"></span>歳　　　　性別: <span id="sex"></span>　　　　身長: <span id="height"></span>cm　　　　体重: <span id="weight"></span>kg</p>
     
     <div class="section-title">骨粗鬆症の診断</div>
-    <p id="diagnosis" class="diagnosis"></p>
+    <div class="diagnosis-box" id="diagnosis"></div>
 
-    <div class="section-title">骨折の既往</div>
-    <p class="risk-factors"><span class="fracture_history"></span></p>
+    <div class="flex-container">
+      <div class="fracture-risk">
+        <div class="section-title">骨折の既往</div>
+        <p class="risk-factors"><span class="fracture_history"></span></p>
+      </div>
+      
+      <div class="risk-factor-section">
+        <div class="section-title">リスク因子</div>
+        <p class="risk-factors">疾患: <span class="diseases"></span></p>
+        <p class="risk-factors">薬剤: <span class="bone_metabolism_meds"></span></p>
+        <p class="risk-factors">抗癌剤など: <span class="anticancer_meds"></span></p>
+        <p class="risk-factors">喫煙: <span id="smoking"></span></p>
+        <p class="risk-factors">アルコール摂取: <span id="alcohol"></span></p>
+        <p class="risk-factors">その他: <span class="others"></span></p>
+      </div>
+    </div>
 
-    <div class="section-title">リスク因子</div>
-    <p class="risk-factors">疾患: <span class="diseases"></span></p>
-    <p class="risk-factors">薬剤: <span class="bone_metabolism_meds"></span></p>
-    <p class="risk-factors">抗癌剤など: <span class="anticancer_meds"></span></p>
-    <p class="risk-factors">喫煙: <span id="smoking"></span></p>
-    <p class="risk-factors">アルコール摂取: <span id="alcohol"></span></p>
-    <p class="risk-factors">その他: <span class="others"></span></p>
+    <div class="flex-container">
+      <div class="bone-density-section">
+        <div class="section-title">骨密度</div>
+        <table class="report-table">
+          <tr>
+            <th>部位</th>
+            <th>％YAM</th>
+          </tr>
+          <tr>
+            <td>腰椎</td>
+            <td id="lumbar_yam"></td>
+          </tr>
+          <tr>
+            <td>大腿骨近位部</td>
+            <td id="femur_yam"></td>
+          </tr>
+        </table>
+        <p>80％以上が目標です。70％未満は骨粗鬆症、60％未満は重症骨粗鬆症で骨折リスクが高い状態です。</p>
+      </div>
 
-    <div class="section-title">骨密度</div>
-    <table class="report-table">
-      <tr>
-        <th>部位</th>
-        <th>％YAM</th>
-      </tr>
-      <tr>
-        <td>腰椎</td>
-        <td id="lumbar_yam"></td>
-      </tr>
-      <tr>
-        <td>大腿骨近位部</td>
-        <td id="femur_yam"></td>
-      </tr>
-    </table>
-
-    <p>80％以上が目標です。70％未満は骨粗鬆症、60％未満は重症骨粗鬆症で骨折リスクが高い状態です。</p>
-
-    <div class="section-title">骨代謝マーカーなど</div>
-    <table class="report-table">
-      <tr>
-        <th>項目</th>
-        <th>結果</th>
-        <th>適正範囲</th>
-      </tr>
-      <tr>
-        <td>血清カルシウム値 (mg/dL)</td>
-        <td id="補正Ca"></td>
-        <td id="補正Ca_range"></td>
-      </tr>
-      <tr>
-        <td>血清リン値 (mg/dL)</td>
-        <td id="P"></td>
-        <td id="P_range"></td>
-      </tr>
-      <tr>
-        <td>eGFR (mL/min/1.73m²)</td>
-        <td id="eGFR"></td>
-        <td id="eGFR_range"></td>
-      </tr>
-      <tr>
-        <td>血清ビタミンD (ng/mL)</td>
-        <td id="25OHビタミンD"></td>
-        <td id="vitaminD_range"></td>
-      </tr>
-      <tr>
-        <td>骨形成マーカー (BAP) (μg/L)</td>
-        <td id="BAP"></td>
-        <td id="BAP_range"></td>
-      </tr>
-      <tr>
-        <td>骨吸収マーカー (TRACP-5b) (mU/dL)</td>
-        <td id="TRACP-5b"></td>
-        <td id="TRACP-5b_range"></td>
-      </tr>
-    </table>
-
+      <div class="bone-maker-section">
+        <div class="section-title">骨代謝マーカーなど</div>
+        <table class="report-table">
+          <tr>
+            <th>項目</th>
+            <th>結果</th>
+            <th>適正範囲</th>
+          </tr>
+          <tr>
+            <td>血清カルシウム値 (mg/dL)</td>
+            <td id="補正Ca"></td>
+            <td id="補正Ca_range"></td>
+          </tr>
+          <tr>
+            <td>血清リン値 (mg/dL)</td>
+            <td id="P"></td>
+            <td id="P_range"></td>
+          </tr>
+          <tr>
+            <td>eGFR (mL/min/1.73m²)</td>
+            <td id="eGFR"></td>
+            <td id="eGFR_range"></td>
+          </tr>
+          <tr>
+            <td>血清ビタミンD (ng/mL)</td>
+            <td id="25OHビタミンD"></td>
+            <td id="vitaminD_range"></td>
+          </tr>
+          <tr>
+            <td>骨形成マーカー (BAP) (μg/L)</td>
+            <td id="BAP"></td>
+            <td id="BAP_range"></td>
+          </tr>
+          <tr>
+            <td>骨吸収マーカー (TRACP-5b) (mU/dL)</td>
+            <td id="TRACP-5b"></td>
+            <td id="TRACP-5b_range"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    
     <div class="section-title">今後10年間の骨折リスク</div>
     <table class="report-table">
       <tr>
