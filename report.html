@@ -300,7 +300,15 @@
           }
         }
       });
-   
+
+      const sexElement = document.getElementById('sex');
+      if (sexElement) {
+        const sexValue = sexElement.textContent.trim();
+        if (sexValue === '閉経後女性' || sexValue === '閉経前女性') {
+          sexElement.textContent = '女性';
+        }
+      }
+
       // 複数データの取得
       function setMultipleValues(className, paramName) {
         const elements = document.querySelectorAll("." + className);
