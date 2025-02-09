@@ -32,7 +32,7 @@
   <h2>あなたの骨粗鬆症についてのまとめです</h2>
 
   <div class="report-container">
-    <p style="white-space: pre;"><b>ID:</b> <input type="text" id="patientID" name="patientID" style="font-size: 1.2em; width: 15%; text-align: center" required>　　　　<b>名前:</b> <input type="text" id="patientName" name="patientName" style="font-size: 1.2em; width: 40%; text-align: center"" required>　　　　<b>記載日:</b> <input type="date" id="writeDate" name="writeDate" style="font-size: 1.2em; text-align: center" required></p>
+    <p style="white-space: pre;"><b>ID:</b>　<input type="text" id="patientID" name="patientID" style="font-size: 1.1em; width: 15%; text-align: center" required>　　　　<b>名前:</b>　<input type="text" id="patientName" name="patientName" style="font-size: 1.1em; width: 35%; text-align: center"" required>　　　　<b>記載日:</b>　<input type="date" id="writeDate" name="writeDate" style="font-size: 1.1em; text-align: center" required></p>
     <p style="white-space: pre;"><b>年齢:</b> <span id="age"></span>歳　　　　<b>性別:</b> <span id="sex"></span>　　　　<b>身長:</b> <span id="height"></span>cm　　　　<b>体重:</b> <span id="weight"></span>kg</p>
     
     <div class="section-title">骨粗鬆症の診断</div>
@@ -46,12 +46,12 @@
       
       <div class="risk-factors-section">
         <div class="section-title">リスク因子</div>
-        <p class="risk-factors"><b>疾患:</b><span class="diseases" style="display: block; white-space: pre-line;"></span></p>
-        <p class="risk-factors"><b>薬剤:</b><span class="bone_metabolism_meds" style="display: block; white-space: pre-line;"></span></p>
-        <p class="risk-factors"><b>抗癌剤など:</b><span class="anticancer_meds" style="display: block; white-space: pre-line;"></span></p>
-        <p class="risk-factors"><b>喫煙:</b>　<span id="smoking"></span></p>
-        <p class="risk-factors"><b>アルコール摂取:</b>　<span id="alcohol"></span></p>
-        <p class="risk-factors"><b>その他:</b><span class="others" style="display: block; white-space: pre-line;"></span></p>
+        <p class="risk-factors"><b>疾患:</b><span class="diseases" style="display: block; white-space: pre-line; font-size: 0.9em;"></span></p>
+        <p class="risk-factors"><b>薬剤:</b><span class="bone_metabolism_meds" style="display: block; white-space: pre-line; font-size: 0.9em;"></span></p>
+        <p class="risk-factors"><b>抗癌剤など:</b><span class="anticancer_meds" style="display: block; white-space: pre-line; font-size: 0.9em;"></span></p>
+        <p class="risk-factors"><b>喫煙:</b>　<span id="smoking" style="font-size: 0.9em;"></span></p>
+        <p class="risk-factors"><b>アルコール摂取:</b>　<span id="alcohol" style="font-size: 0.9em;"></span></p>
+        <p class="risk-factors"><b>その他:</b><span class="others" style="display: block; white-space: pre-line; font-size: 0.9em;"></span></p>
       </div>
     </div>
 
@@ -65,11 +65,11 @@
           </tr>
           <tr>
             <td>腰椎</td>
-            <td id="lumbar_yam"></td>
+            <td id="lumbar_yam" style="font-size: 1.2em;"></td>
           </tr>
           <tr>
             <td>大腿骨近位部</td>
-            <td id="femur_yam"></td>
+            <td id="femur_yam" style="font-size: 1.2em;"></td>
           </tr>
         </table>
         <p>80％以上が目標です。70％未満は骨粗鬆症と診断されます。60％未満は重症骨粗鬆症で骨折リスクが非常に高い状態です。</p>
@@ -217,9 +217,9 @@
     <textarea id="freeNote" rows="1" style="width: 100%; font-size: 1em; padding: 8px; box-sizing: border-box; overflow: hidden; resize: none;" placeholder="コメントがあればここに自由に記載してください。"></textarea>
 
     <div class="report-footer">
-      <p><b>次回診察:</b> <input type="date" id="nextCheckup" style="font-size: 1.2em;"></p>
+      <p><b>次回診察:</b>　<input type="date" id="nextCheckup" style="font-size: 1.1em;"></p>
       <p>半年～1年ごとに検査を受けましょう。</p>
-      <p style="white-space: pre;"><b>診療機関:</b> <span id="hospital"></span>　　　　<b>医師:</b> <span id="doctor"></span></p>
+      <p style="white-space: pre;"><b>医療機関:</b>　<span id="hospital"></span>　　　　<b>医師:</b>　<span id="doctor"></span></p>
     </div>
   </div>
 
