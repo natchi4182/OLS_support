@@ -15,51 +15,18 @@
     .highlight-high { color: red; font-weight: bold; }
     .highlight-low { color: blue; font-weight: bold; }
     .risk-factors { word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; white-space: normal; }
-    .diagnosis-box {
-      border: 2px solid #000;
-      background-color: #e6f7ff;
-      padding: 10px;
-      margin: 10px 0;
-      text-align: center;
-      font-size: 1.8em;
-      font-weight: bold;
-    }
-    .flex-container {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .fracture-risk {
-      flex: 2.5 2.5 25%;
-    }
-    .risk-factors-section {
-      flex: 2.5 2.5 75%;
-    }
-    .bone-density-section {
-      flex: 3.3 3.3 33%;
-    }
-    .bone-marker-section {
-      flex: 6.6 6.6 66%;
-    }
+    .diagnosis-box { border: 2px solid #000; background-color: #e6f7ff; padding: 10px; margin: 10px 0; text-align: center; font-size: 1.8em; font-weight: bold; }
+    .flex-container { display: flex; justify-content: space-between; gap: 10px; } 
+    .fracture-risk { flex: 2.5 2.5 25%; }
+    .risk-factors-section { flex: 2.5 2.5 75%; }
+    .bone-density-section { flex: 3.3 3.3 33%; }
+    .bone-marker-section { flex: 6.6 6.6 66%; }
 
     @media print {
-      body {
-        margin: 0;
-        padding: 0;
-        -webkit-print-color-adjust: exact;
-      }
-      .report-container {
-        border: none;
-        box-shadow: none;
-        margin: 0;
-        padding: 10mm;
-      }
-      button {
-        display: none;
-      }
-      .page-break {
-        page-break-before: always;
-      }
+      body { margin: 0; padding: 0; -webkit-print-color-adjust: exact; }
+      .report-container { border: none; box-shadow: none; margin: 0; padding: 10mm; }
+      button { display: none; }
+      .page-break { page-break-before: always; }
     }
   </style>
 
@@ -184,7 +151,7 @@
     <div class="section-title">推奨する薬物治療</div>
     <table class="report-table">
       <tr>
-        <th>推奨度 (A〜E)</th>
+        <th>推奨度 (A＞E)</th>
         <th>薬剤</th>
       </tr>
       <tr>
@@ -202,6 +169,7 @@
       <tr>
         <td>
           <select class="recommendation-grade">
+            <option value="-">-</option>
             <option value="A">A</option>
             <option value="B">B</option>
             <option value="C">C</option>
@@ -214,6 +182,7 @@
       <tr>
         <td>
           <select class="recommendation-grade">
+            <option value="-">-</option>
             <option value="A">A</option>
             <option value="B">B</option>
             <option value="C">C</option>
@@ -226,6 +195,7 @@
       <tr>
         <td>
           <select class="recommendation-grade">
+            <option value="-">-</option>
             <option value="A">A</option>
             <option value="B">B</option>
             <option value="C">C</option>
@@ -238,6 +208,7 @@
       <tr>
         <td>
           <select class="recommendation-grade">
+            <option value="-">-</option>
             <option value="A">A</option>
             <option value="B">B</option>
             <option value="C">C</option>
@@ -471,9 +442,7 @@
       const noteContainer = document.createElement('div');
       noteContainer.style.padding = '10px';
       noteContainer.innerHTML = `<strong>コメント:</strong><br>${freeNote.replace(/\n/g, '<br>')}`;
-      
-      report.appendChild(noteContainer);
-      
+
       try {
         const canvas = await html2canvas(report, { scale: 2, scrollY: -window.scrollY });
         const imgData = canvas.toDataURL('image/png');
@@ -499,8 +468,6 @@
         pdf.save(fileName);
       } catch (error) {
         console.error('PDFの生成に失敗しました:', error);
-      } finally {
-        report.removeChild(noteContainer);
       }
     }
   
