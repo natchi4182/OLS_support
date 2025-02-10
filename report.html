@@ -488,21 +488,21 @@
     // 8. ミニコラムを表示
     fetch('readme.json')
       .then(response => response.json())
-      .then(data => {
+      .then(readme => {
         const container = document.getElementById('readme');
 
         // タイトルの追加
         const title = document.createElement('h2');
-        title.textContent = data.title;
+        title.textContent = readme.title;
         container.appendChild(title);
 
         // 導入文
         const intro = document.createElement('p');
-        intro.textContent = data.introduction;
+        intro.textContent = readme.introduction;
         container.appendChild(intro);
 
         // 各セクションの追加
-        data.sections.forEach(section => {
+        readme.sections.forEach(section => {
           const sectionTitle = document.createElement('div');
           sectionTitle.className = 'section-title';
           sectionTitle.textContent = section.title;
