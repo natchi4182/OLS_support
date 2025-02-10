@@ -18,7 +18,7 @@
     .diagnosis-box { border: 2px solid #000; background-color: #e6f7ff; padding: 10px; margin: 10px 0; text-align: center; font-size: 1.8em; font-weight: bold; }
     .flex-container { display: flex; justify-content: space-between; gap: 10px; } 
     .fracture-risk { flex: 2.5 2.5 25%; }
-    .risk-factors-section { flex: 2.5 2.5 75%; }
+    .risk-factors-section { flex: 2.5 2.5 75%; height: 150mm; overflow: hidden; }
     .bone-density-section { flex: 3.3 3.3 33%; }
     .bone-marker-section { flex: 6.6 6.6 66%; }
     @media print {
@@ -382,6 +382,30 @@
         });
       });
     }
+
+    function adjustRiskFactorsFontSize() {
+      // risk-factors-section の要素を取得
+      const riskSection = document.querySelector('.risk-factors-section');
+      if (!riskSection) return;
+    
+      // 内部のすべての .risk-factors 要素について処理する
+      const riskElements = riskSection.querySelectorAll('.risk-factors');
+      riskElements.forEach(el => {
+        // 現在のフォントサイズを取得（ピクセル単位）
+        let currentFontSize = parseFloat(window.getComputedStyle(el).fontSize);
+        
+        // 要素の scrollHeight（内容の実際の高さ）が clientHeight（表示可能な高さ）を超えている間、
+        // フォントサイズを少しずつ縮小する（下限はたとえば8pxなど）
+        while (el.scrollHeight > riskSection.clientHeight && currentFontSize > 8) {
+          currentFontSize -= 1;  // 1pxずつ縮小（必要に応じて調整）
+          el.style.fontSize = currentFontSize + "px";
+        }
+      });
+    }
+    
+    // ページ読み込み時とリサイズ時に実行する
+    window.addEventListener('load', adjustRiskFactorsFontSize);
+    window.addEventListener('resize', adjustRiskFactorsFontSize);
 
     async function loadMedications() {
       try {
