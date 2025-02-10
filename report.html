@@ -21,6 +21,9 @@
     .risk-factors-section { flex: 2.5 2.5 75%; height: 110mm; overflow: hidden; }
     .bone-density-section { flex: 3.3 3.3 33%; }
     .bone-marker-section { flex: 6.6 6.6 66%; }
+    .column { display: flex; align-items: center; margin: 20px 0; }
+    .column.reverse { flex-direction: row-reverse; }
+    .text-content { flex: 1; padding: 10px; }
     .content-paragraph { margin: 0; padding: 2px 0; }
     .section-image { width: 25%; max-width: 200px; margin: 10px 0; border-radius: 8px; }
     @media print {
@@ -505,27 +508,40 @@
         container.appendChild(intro);
 
         // 各セクションの追加
-        data.sections.forEach(section => {
+        data.sections.forEach((column, index) => {
+          const sectionContainer = document.createElement('div');
+          sectionContainer.className = 'column';
+          if (index % 2 !== 0) {
+            sectionContainer.classList.add('reverse');
+          }
+
+          // テキスト部分
+          const textContent = document.createElement('div');
+          textContent.className = 'text-content';
+
           const sectionTitle = document.createElement('div');
           sectionTitle.className = 'section-title';
           sectionTitle.textContent = section.title;
-          container.appendChild(sectionTitle);
-
-          // イラストの追加 (readme.json に画像URLが含まれている前提)
-          if (section.image) {
-            const img = document.createElement('img');
-            img.src = section.image;
-            img.alt = section.title;
-            img.className = 'section-image';
-            container.appendChild(img);
-          }
+          textContent.appendChild(sectionTitle);
 
           section.content.forEach(text => {
             const paragraph = document.createElement('p');
             paragraph.className = 'content-paragraph';
             paragraph.textContent = text;
-            container.appendChild(paragraph);
+            textContent.appendChild(paragraph);
           });
+
+          // イラスト部分
+          if (section.image) {
+            const img = document.createElement('img');
+            img.src = section.image;
+            img.alt = section.title;
+            img.className = 'section-image';
+            sectionContainer.appendChild(img);
+          }
+
+          sectionContainer.appendChild(textContent);
+          container.appendChild(sectionContainer);
         });
       })
       .catch(error => console.error('データの読み込みに失敗しました:', error));
