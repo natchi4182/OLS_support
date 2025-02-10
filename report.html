@@ -237,6 +237,7 @@
   <div><p>あああ</p></div>
   
   <script>
+    // 1. URLパラメータ取得および各要素に値を設定する関数
     async function getQueryParams() {
       const params = new URLSearchParams(window.location.search);
   
@@ -271,7 +272,7 @@
   
       // 適正範囲の設定と色付け
       labDataItems.forEach(item => {
-        let rangeId = item.name === "25OH ビタミンD" ? "vitaminD_range" : `${item.name}_range`;
+        const rangeId = item.name === "25OH ビタミンD" ? "vitaminD_range" : `${item.name}_range`;
         const rangeEl = document.getElementById(rangeId);
         const valueEl = document.getElementById(item.name);
         if (rangeEl && item.normal[selectedSex]) {
@@ -286,7 +287,8 @@
           }
         }
       });
-
+  
+      // 性別の値の簡略化
       const sexElement = document.getElementById('sex');
       if (sexElement) {
         const sexValue = sexElement.textContent.trim();
@@ -294,22 +296,19 @@
           sexElement.textContent = '女性';
         }
       }
-
+  
       // 複数データの取得
       function setMultipleValues(className, paramName) {
         const elements = document.querySelectorAll("." + className);
         const values = params.getAll(paramName);
-  
         console.log(paramName, values); // デバッグ用
-  
         if (values.length > 0) {
-          const textValue = values.join(", "); // カンマ区切りで表示
+          const textValue = values.join(", ");
           elements.forEach(el => el.textContent = textValue);
         } else {
           elements.forEach(el => el.textContent = "-");
         }
       }
-  
       setMultipleValues("diseases", "diseases");
       setMultipleValues("fracture_history", "fracture_history");
       setMultipleValues("osteoporosis_meds", "osteoporosis_meds");
@@ -319,23 +318,31 @@
       setMultipleValues("others", "others");
     }
   
+    // 2. DOMContentLoaded で初期設定
     document.addEventListener('DOMContentLoaded', () => {
+      // 今日の日付を設定
       const today = new Date().toISOString().split('T')[0];
       const writeDateInput = document.getElementById('writeDate');
-      writeDateInput.value = today;
+      if (writeDateInput) {
+        writeDateInput.value = today;
+      }
+      // freeNote の自動高さ調整
+      const freeNote = document.getElementById('freeNote');
+      if (freeNote) {
+        freeNote.addEventListener('input', function () {
+          this.style.height = 'auto';
+          this.style.height = (this.scrollHeight) + 'px';
+        });
+      }
     });
-
+  
+    // 3. 骨粗鬆症診断関数
     function diagnoseOsteoporosis() {
       const lumbarYAM = parseFloat(document.getElementById("lumbar_yam").textContent) || null;
       const femurYAM = parseFloat(document.getElementById("femur_yam").textContent) || null;
       const fractureHistory = document.querySelector(".fracture_history").textContent.trim();
-  
-      let diagnosis = "診断不能";  // デフォルトは「診断不能」
-  
-      // 骨折歴の有無を判定
+      let diagnosis = "診断不能";
       const hasFractureHistory = fractureHistory && fractureHistory !== "-" && fractureHistory.length > 0;
-  
-      // 骨密度のデータが少なくとも1つ存在するか確認
       const hasBMDData = lumbarYAM !== null || femurYAM !== null;
   
       if (hasBMDData) {
@@ -349,18 +356,15 @@
           diagnosis = "正常";
         }
       }
-  
-      // 骨折歴があれば骨密度に関係なく骨粗鬆症と診断
       if (hasFractureHistory) {
-        diagnosis = (diagnosis === "重症骨粗鬆症") 
-                    ? "重症骨粗鬆症（骨折既往あり）" 
+        diagnosis = (diagnosis === "重症骨粗鬆症")
+                    ? "重症骨粗鬆症（骨折既往あり）"
                     : "骨粗鬆症（骨折既往あり）";
       }
-  
-      // 診断結果を表示
       document.getElementById("diagnosis").textContent = diagnosis;
     }
   
+    // 4. 複数行データを縦並びに整形する関数
     async function formatDataVertically() {
       const classesToFormat = [
         'fracture_history',
@@ -370,7 +374,6 @@
         'anticancer_meds',
         'others'
       ];
-  
       classesToFormat.forEach(className => {
         const elements = document.querySelectorAll(`.${className}`);
         elements.forEach(element => {
@@ -381,37 +384,29 @@
               .map(item => item.trim())
               .filter(item => item !== "")
               .join('<br>');
-
             element.innerHTML = formattedData;
           }
         });
       });
     }
-
+  
+    // 5. リスク因子セクションのフォントサイズ自動調整
     function adjustRiskFactorsFontSize() {
-      // risk-factors-section の要素を取得
       const riskSection = document.querySelector('.risk-factors-section');
       if (!riskSection) return;
-    
-      // 内部のすべての .risk-factors 要素について処理する
       const riskElements = riskSection.querySelectorAll('.risk-factors');
       riskElements.forEach(el => {
-        // 現在のフォントサイズを取得（ピクセル単位）
         let currentFontSize = parseFloat(window.getComputedStyle(el).fontSize);
-        
-        // 要素の scrollHeight（内容の実際の高さ）が clientHeight（表示可能な高さ）を超えている間、
-        // フォントサイズを少しずつ縮小する（下限はたとえば8pxなど）
+        // 内容が親の高さを超えている場合、下限8pxまで1pxずつ縮小
         while (el.scrollHeight > riskSection.clientHeight && currentFontSize > 8) {
-          currentFontSize -= 1;  // 1pxずつ縮小（必要に応じて調整）
+          currentFontSize -= 1;
           el.style.fontSize = currentFontSize + "px";
         }
       });
     }
-    
-    // ページ読み込み時とリサイズ時に実行する
-    window.addEventListener('load', adjustRiskFactorsFontSize);
     window.addEventListener('resize', adjustRiskFactorsFontSize);
-
+  
+    // 6. 薬剤リストを読み込む関数
     async function loadMedications() {
       try {
         const response = await fetch('https://natchi4182.github.io/OLS_support/osteoporosis_meds.json');
@@ -420,12 +415,9 @@
         }
         const data = await response.json();
         const meds = data.items;
-    
         const medSelects = document.querySelectorAll('#currentMed1, #currentMed2, .recommendedMed');
-    
         medSelects.forEach(select => {
           select.innerHTML = ""; // 既存のオプションをクリア
-    
           meds.forEach(item => {
             if (item === "separator") {
               const separatorOption = document.createElement('option');
@@ -444,52 +436,48 @@
         console.error('薬剤リストの読み込みに失敗しました:', error);
       }
     }
-
-    const recommendationRows = document.querySelectorAll('.recommendation-grade');
-    recommendationRows.forEach(select => {
-      select.addEventListener('change', () => {
+  
+    // 7. 推奨度関連のイベント設定
+    function setupRecommendationEvents() {
+      const recommendationRows = document.querySelectorAll('.recommendation-grade');
+      recommendationRows.forEach(select => {
+        // 初期状態のチェック
         const row = select.closest('tr');
         if (select.value === "-") {
-          row.classList.add('hide-on-print');
-        } else {
-          row.classList.remove('hide-on-print');
+          if (row) row.classList.add('hide-on-print');
         }
+        select.addEventListener('change', () => {
+          const row = select.closest('tr');
+          if (select.value === "-") {
+            if (row) row.classList.add('hide-on-print');
+          } else {
+            if (row) row.classList.remove('hide-on-print');
+          }
+        });
       });
-
-      // Initial check for existing "-" values
-      if (select.value === "-") {
-        select.closest('tr').classList.add('hide-on-print');
-      }
-    });
-
+    }
     // 印刷直前に再チェック
     window.addEventListener('beforeprint', () => {
       const recommendationRows = document.querySelectorAll('.recommendation-grade');
       recommendationRows.forEach(select => {
         const row = select.closest('tr');
         if (select.value === "-") {
-          row.classList.add('hide-on-print');
+          if (row) row.classList.add('hide-on-print');
         } else {
-          row.classList.remove('hide-on-print');
+          if (row) row.classList.remove('hide-on-print');
         }
       });
     });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const freeNote = document.getElementById('freeNote');
-    
-      freeNote.addEventListener('input', function () {
-        this.style.height = 'auto';           // 高さのリセット
-        this.style.height = (this.scrollHeight) + 'px';  // 内容に応じて高さを調整
-      });
-    });
-
-    window.onload = async function () {
+  
+    // 8. ページ読み込み完了時（load）に各処理をまとめて実行する
+    window.addEventListener('load', async () => {
       await getQueryParams();
       diagnoseOsteoporosis();
-      loadMedications();
-      formatDataVertically();
-    };
+      await loadMedications();
+      await formatDataVertically();
+      adjustRiskFactorsFontSize();
+      setupRecommendationEvents();
+    });
   </script>
 
 </body>
