@@ -21,6 +21,7 @@
     .risk-factors-section { flex: 2.5 2.5 75%; height: 110mm; overflow: hidden; }
     .bone-density-section { flex: 3.3 3.3 33%; }
     .bone-marker-section { flex: 6.6 6.6 66%; }
+    .content-paragrapg { margin: 0; padding: 2px 0; }
     @media print {
       button { display: none; }
       body { margin: 0; padding: 0; }
@@ -488,17 +489,18 @@
     // 8. ミニコラムを表示
     fetch('readme.json')
       .then(response => response.json())
-      .then(readme => {
+      .then(data => {
         const container = document.getElementById('readme');
 
         // タイトルの追加
         const title = document.createElement('h2');
-        title.textContent = readme.title;
+        title.textContent = data.title;
         container.appendChild(title);
 
         // 導入文
         const intro = document.createElement('p');
-        intro.textContent = readme.introduction;
+        intro.className = 'content-paragraph';
+        intro.textContent = data.introduction;
         container.appendChild(intro);
 
         // 各セクションの追加
@@ -510,6 +512,7 @@
 
           section.content.forEach(text => {
             const paragraph = document.createElement('p');
+            paragraph.className = 'content-paragraph';
             paragraph.textContent = text;
             container.appendChild(paragraph);
           });
