@@ -236,43 +236,7 @@
 
   <div class="page-break"></div>
 
-  <div class="report-container">
-  <h2>骨 粗 鬆 症 の 治 療 に つ い て</h1>
-  骨粗鬆症の治療には大きく4つの柱があります。
-  <div class="section-title">食事療法・栄養療法</div>
-  カルシウムとビタミンDの摂取が重要です。<br>
-  食事で補えない場合にはサプリンメントを利用することもあります。<br>
-  好き嫌い，偏食をしないことも大切です。<br>
-  過度のダイエットは栄養状態を悪化させるため，骨にも影響します。<br>
-  アルコールの多飲は骨粗鬆症の危険因子です。ほどほどにしましょう。<br>
-  <div class="section-title">運動療法</div>
-  運動は骨を丈夫にします。<br>
-  ヨガ，ラジオ体操，太極拳などの運動は背骨などの海綿骨が多い骨の骨密度を上げます。<br>
-  ジョギングなどの運動は大腿骨などの皮質骨が多い骨の骨密度を上げます。<br>
-  また，屋外での運動は日光浴にもなるので体内でビタミンDの生成が活発になります。<br>
-  骨が脆くなると軽く尻もちをついた程度のちょっとした衝撃で骨折を生じるので，転倒予防のための運動も大切です。<br>
-  体力に応じた運動をお勧めします。<br>
-  <div class="section-title">生活習慣や生活環境の見直し</div>
-  運動不足を解消しましょう。<br>
-  外に出ることで日光浴にもなります。<br>
-  生活習慣病にならないようにしましょう。<br>
-  転倒しないための家屋の設計の見直し，家具の設置の見直しも必要です。<br>
-  足下に物を置いたりすると転倒リスクが上がります。<br>
-  足腰が弱ってきたなと感じたら手すりの設置，杖の使用なども考慮しましょう。<br>
-  喫煙は敵です。受動喫煙もよくありません。<br>
-  <div class="section-title">薬物療法</div>
-  骨折リスクの高い状態であれば薬物治療は必須になります。<br>
-  骨粗鬆症の治療のためには数多くの種類の薬があり，何年かごとに新しい薬剤が開発されています。<br>
-  治療の基本になるのがカルシウム製剤とビタミンD製剤です。<br>
-  これをベースに他の薬剤を併用するのが近年の一般的な薬物療法です。<br>
-  若い方では女性ホルモンまたは女性ホルモンの受容体に作用する薬剤を用いることもあります。<br>
-  高齢者ではビスホスホネート製剤が一般的です。<br>
-  他にも骨密度を強力に上げることができる薬剤もありますが，投与期間が限られること，高額なことが問題になります（PTH製剤，ロモソズマブ，デノスマブなど）。<br>
-  どの薬が適しているかは人によって違うので，主治医と相談しながら治療を行っていくことになります。<br>
-  ただし，急に薬をやめたりするとリバウンドで急激に骨が脆くなって骨折を起こすことがあります。<br>
-  自己判断で薬をやめないようにしましょう。<br>
-  個々の薬剤の注意点については必要時に別紙で説明します。<br>
-  </div>
+  <div class="report-container" id="readme"></div>
   
   <script>
     // 1. URLパラメータ取得および各要素に値を設定する関数
@@ -520,8 +484,40 @@
         }
       });
     });
-  
-    // 8. ページ読み込み完了時（load）に各処理をまとめて実行する
+
+    // 8. ミニコラムを表示
+    fetch('readme.json')
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('readme');
+
+        // タイトルの追加
+        const title = document.createElement('h2');
+        title.textContent = data.title;
+        container.appendChild(title);
+
+        // 導入文
+        const intro = document.createElement('p');
+        intro.textContent = data.introduction;
+        container.appendChild(intro);
+
+        // 各セクションの追加
+        data.sections.forEach(section => {
+          const sectionTitle = document.createElement('div');
+          sectionTitle.className = 'section-title';
+          sectionTitle.textContent = section.title;
+          container.appendChild(sectionTitle);
+
+          section.content.forEach(text => {
+            const paragraph = document.createElement('p');
+            paragraph.textContent = text;
+            container.appendChild(paragraph);
+          });
+        });
+      })
+      .catch(error => console.error('データの読み込みに失敗しました:', error));
+
+    // 9. ページ読み込み完了時（load）に各処理をまとめて実行する
     window.addEventListener('load', async () => {
       await getQueryParams();
       diagnoseOsteoporosis();
