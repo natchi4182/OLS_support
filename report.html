@@ -398,16 +398,30 @@
     function adjustRiskFactorsFontSize() {
       const riskSection = document.querySelector('.risk-factors-section');
       if (!riskSection) return;
+      
+      // .risk-factors-section 内のすべての .risk-factors 要素を取得
       const riskElements = riskSection.querySelectorAll('.risk-factors');
-      riskElements.forEach(el => {
-        let currentFontSize = parseFloat(window.getComputedStyle(el).fontSize);
-        // 内容が親の高さを超えている場合、下限8pxまで1pxずつ縮小
-        while (el.scrollHeight > riskSection.clientHeight && currentFontSize > 8) {
-          currentFontSize -= 1;
-          el.style.fontSize = currentFontSize + "px";
-        }
-      });
+      if (riskElements.length === 0) return;
+      
+      // 初期のフォントサイズを、たとえば最初の要素から取得（すべて同じ前提）
+      let currentFontSize = parseFloat(window.getComputedStyle(riskElements[0]).fontSize);
+      const minFontSize = 8; // 最小フォントサイズ(px)
+      
+      // すべての risk-factors 要素に同じフォントサイズを適用して、全体の scrollHeight をチェックする
+      function setAllRiskFontSize(fontSize) {
+        riskElements.forEach(el => {
+          el.style.fontSize = fontSize + "px";
+        });
+      }
+      
+      // 現在の状態で全体の scrollHeight と clientHeight を比較
+      // 注意: riskSection.scrollHeight は内部の全高さ、riskSection.clientHeight は固定の高さ（ここでは 110mm 相当）
+      while (riskSection.scrollHeight > riskSection.clientHeight && currentFontSize > minFontSize) {
+        currentFontSize -= 1; // 1pxずつ縮小
+        setAllRiskFontSize(currentFontSize);
+      }
     }
+
     window.addEventListener('resize', adjustRiskFactorsFontSize);
   
     // 6. 薬剤リストを読み込む関数
