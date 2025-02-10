@@ -22,6 +22,7 @@
     .bone-density-section { flex: 3.3 3.3 33%; }
     .bone-marker-section { flex: 6.6 6.6 66%; }
     .content-paragraph { margin: 0; padding: 2px 0; }
+    .section-image { width: 100%; max-width: 600px; margin: 10px 0; border-radius: 8px; }
     @media print {
       button { display: none; }
       body { margin: 0; padding: 0; }
@@ -509,6 +510,15 @@
           sectionTitle.className = 'section-title';
           sectionTitle.textContent = section.title;
           container.appendChild(sectionTitle);
+
+          // イラストの追加 (readme.json に画像URLが含まれている前提)
+          if (section.image) {
+            const img = document.createElement('img');
+            img.src = section.image;
+            img.alt = section.title;
+            img.className = 'section-image';
+            container.appendChild(img);
+          }
 
           section.content.forEach(text => {
             const paragraph = document.createElement('p');
