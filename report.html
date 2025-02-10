@@ -8,7 +8,7 @@
     body { font-family: "メイリオ", meiryo, sans-serif; font-size: 14px; width: 210mm; margin: 20px auto; padding: 20px; }
     h2 { text-align: center; }
     .report-container { border: 2px solid #000; padding: 20px; }
-    .section-title { font-weight: bold; font-size: 1.2em; margin-top: 20px; border-bottom: 1px solid #000; padding-bottom: 5px; }
+    .section-title,.column-title { font-weight: bold; font-size: 1.2em; margin-top: 20px; border-bottom: 1px solid #000; padding-bottom: 5px; }
     .report-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     .report-table th, .report-table td { border: 1px solid #000; padding: 8px; text-align: center; }
     .report-footer { margin-top: 30px; font-size: 1em; text-align: center; }
@@ -25,7 +25,7 @@
     .column.reverse { flex-direction: row-reverse; }
     .text-content { flex: 1; padding: 10px; }
     .content-paragraph { margin: 0; padding: 2px 0; }
-    .section-image { width: 25%; max-width: 200px; margin: 10px 0; border-radius: 8px; }
+    .column-image { width: 25%; max-width: 200px; margin: 10px 0; border-radius: 8px; }
     @media print {
       button { display: none; }
       body { margin: 0; padding: 0; }
@@ -508,21 +508,21 @@
         container.appendChild(intro);
 
         // 各セクションの追加
-        data.sections.forEach((column, index) => {
-          const sectionContainer = document.createElement('div');
-          sectionContainer.className = 'column';
+        data.sections.forEach((section, index) => {
+          const columnContainer = document.createElement('div');
+          columnContainer.className = 'column';
           if (index % 2 !== 0) {
-            sectionContainer.classList.add('reverse');
+            columnContainer.classList.add('reverse');
           }
 
           // テキスト部分
           const textContent = document.createElement('div');
           textContent.className = 'text-content';
 
-          const sectionTitle = document.createElement('div');
-          sectionTitle.className = 'section-title';
-          sectionTitle.textContent = section.title;
-          textContent.appendChild(sectionTitle);
+          const columnTitle = document.createElement('div');
+          columnTitle.className = 'column-title';
+          columnTitle.textContent = section.title;
+          textContent.appendChild(columnTitle);
 
           section.content.forEach(text => {
             const paragraph = document.createElement('p');
@@ -536,12 +536,12 @@
             const img = document.createElement('img');
             img.src = section.image;
             img.alt = section.title;
-            img.className = 'section-image';
+            img.className = 'column-image';
             sectionContainer.appendChild(img);
           }
 
-          sectionContainer.appendChild(textContent);
-          container.appendChild(sectionContainer);
+          columnContainer.appendChild(textContent);
+          container.appendChild(columnContainer);
         });
       })
       .catch(error => console.error('データの読み込みに失敗しました:', error));
