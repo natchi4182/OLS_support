@@ -23,14 +23,9 @@
     .bone-marker-section { flex: 6.6 6.6 66%; }
     @media print {
       button { display: none; }
-      body {
-        margin: 0;
-        padding: 0;
-      }
-        .page-break {
-        page-break-before: always;
-        break-before: page;
-      }
+      body { margin: 0; padding: 0; }
+      .page-break { page-break-before: always; break-before: page; }
+      .hide-on-print { display: none !important; }
     }
   </style>
 </head>
@@ -467,6 +462,19 @@
       }
     });
 
+    // 印刷直前に再チェック
+    window.addEventListener('beforeprint', () => {
+      const recommendationRows = document.querySelectorAll('.recommendation-grade');
+      recommendationRows.forEach(select => {
+        const row = select.closest('tr');
+        if (select.value === "-") {
+          row.classList.add('hide-on-print');
+        } else {
+          row.classList.remove('hide-on-print');
+        }
+      });
+    });
+
     document.addEventListener('DOMContentLoaded', () => {
       const freeNote = document.getElementById('freeNote');
     
@@ -475,21 +483,6 @@
         this.style.height = (this.scrollHeight) + 'px';  // 内容に応じて高さを調整
       });
     });
-
-    function generateFileName() {
-      const dateInput = document.getElementById('writeDate').value;
-      const date = dateInput ? dateInput.replace(/-/g, '') : new Date().toISOString().split('T')[0].replace(/-/g, '');
-      const id = document.getElementById('patientID').value || 'UnknownID';
-      let fileName = `${date}OLS${id}.pdf`;
-
-      let counter = 1;
-      while (localStorage.getItem(fileName)) {  // localStorageを使用して簡易的なファイル名管理
-        fileName = `${date}OLS${id}${counter}.pdf`;
-        counter++;
-      }
-      localStorage.setItem(fileName, true);  // 重複管理のために保存
-      return fileName;
-    }
 
     window.onload = async function () {
       await getQueryParams();
