@@ -21,7 +21,7 @@
     .risk-factors-section { flex: 2.5 2.5 75%; height: 110mm; overflow: hidden; }
     .bone-density-section { flex: 3.3 3.3 33%; }
     .bone-marker-section { flex: 6.6 6.6 66%; }
-    .content-paragragh { margin: 0; padding: 2px 0; }
+    .content-paragraph { margin: 0; padding: 2px 0; }
     @media print {
       button { display: none; }
       body { margin: 0; padding: 0; }
@@ -499,12 +499,12 @@
 
         // 導入文
         const intro = document.createElement('p');
-        intro.className = 'content-paragragh';
+        intro.className = 'content-paragraph';
         intro.textContent = data.introduction;
         container.appendChild(intro);
 
         // 各セクションの追加
-        readme.sections.forEach(section => {
+        data.sections.forEach(section => {
           const sectionTitle = document.createElement('div');
           sectionTitle.className = 'section-title';
           sectionTitle.textContent = section.title;
@@ -512,7 +512,7 @@
 
           section.content.forEach(text => {
             const paragraph = document.createElement('p');
-            paragraph.className = 'content-paragragh';
+            paragraph.className = 'content-paragraph';
             paragraph.textContent = text;
             container.appendChild(paragraph);
           });
