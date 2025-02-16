@@ -182,6 +182,9 @@ button:hover {
   transform: translate(-50%, -50%);
   width: 80%;
   max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   background-color: white;
   border: 1px solid #ccc;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
