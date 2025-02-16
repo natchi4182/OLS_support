@@ -96,8 +96,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   // -----------------------------
   // 2) JSONファイルから各種選択肢を動的読込
   // -----------------------------
-//  await populateSelect('https://natchi4182.github.io/OLS_support/hospital_list.json' , 'hospitalInput');
-//  await populateSelect('https://natchi4182.github.io/OLS_support/doctor_list.json' , 'doctorInput');
   await populateCheckboxes('https://natchi4182.github.io/OLS_support/diseases_list.json' , 'diseaseContainer', 'diseases');
   await populateSelect('https://natchi4182.github.io/OLS_support/smoking_list.json' , 'smokingInput');
   await populateSelect('https://natchi4182.github.io/OLS_support/alcohol_list.json' , 'alcoholInput');
@@ -670,62 +668,62 @@ document.addEventListener('DOMContentLoaded', async () => {
     creInput.addEventListener('input', calculateUrinaryCaRatio);
   }
   
-    // 要素を取得
-    const modal = document.getElementById("modal");
-    const modalOverlay = document.getElementById("modal-overlay");
-    const closeBtn = document.getElementById("close-btn");
-    const modalTitle = document.getElementById("modal-title");
-    const modalContent = document.getElementById("modal-content");
+  // 要素を取得
+  const modal = document.getElementById("modal");
+  const modalOverlay = document.getElementById("modal-overlay");
+  const closeBtn = document.getElementById("close-btn");
+  const modalTitle = document.getElementById("modal-title");
+  const modalContent = document.getElementById("modal-content");
 
-    // ボタンをクリックした時の処理
-    document.querySelectorAll(".show-modal-btn").forEach(button => {
-      button.addEventListener("click", () => {
-        const file = button.dataset.file; // ボタンのdata-file属性からファイル名を取得
+  // ボタンをクリックした時の処理
+  document.querySelectorAll(".show-modal-btn").forEach(button => {
+    button.addEventListener("click", () => {
+      const file = button.dataset.file; // ボタンのdata-file属性からファイル名を取得
 
-        // JSONファイルを読み込む
-        fetch(file)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error(`${file} を取得できませんでした。`);
-            }
-            return response.json();
-          })
-          .then(data => {
-            // JSONデータを整形して表示
-            modalTitle.textContent = data.title || "タイトル";
-            const sections = data.sections || [];
-            modalContent.innerHTML = sections
-              .map(
-                section => `
-                  <h3>${section.heading}</h3>
-                  <p>${section.content.replace(/\n/g, "<br>")}</p>
-                `
-              )
-              .join("");
-            modal.style.display = "block";
-            modalOverlay.style.display = "block";
-          })
-          .catch(error => {
-            console.error(error);
-            modalTitle.textContent = "エラー";
-            modalContent.innerHTML = "<p>コンテンツを読み込むことができませんでした。</p>";
-            modal.style.display = "block";
-            modalOverlay.style.display = "block";
-          });
-      });
+      // JSONファイルを読み込む
+      fetch(file)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`${file} を取得できませんでした。`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          // JSONデータを整形して表示
+          modalTitle.textContent = data.title || "タイトル";
+          const sections = data.sections || [];
+          modalContent.innerHTML = sections
+            .map(
+              section => `
+                <h3>${section.heading}</h3>
+                <p>${section.content.replace(/\n/g, "<br>")}</p>
+              `
+            )
+            .join("");
+          modal.style.display = "block";
+          modalOverlay.style.display = "block";
+        })
+        .catch(error => {
+          console.error(error);
+          modalTitle.textContent = "エラー";
+          modalContent.innerHTML = "<p>コンテンツを読み込むことができませんでした。</p>";
+          modal.style.display = "block";
+          modalOverlay.style.display = "block";
+        });
     });
+  });
 
-    // モーダルを閉じるボタン
-    closeBtn.addEventListener("click", () => {
-      modal.style.display = "none";
-      modalOverlay.style.display = "none";
-    });
+  // モーダルを閉じるボタン
+  closeBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+    modalOverlay.style.display = "none";
+  });
 
-    // オーバーレイをクリックしても閉じる
-    modalOverlay.addEventListener("click", () => {
-      modal.style.display = "none";
-      modalOverlay.style.display = "none";
-    });
+  // オーバーレイをクリックしても閉じる
+  modalOverlay.addEventListener("click", () => {
+    modal.style.display = "none";
+    modalOverlay.style.display = "none";
+  });
 
   // FRAX
     function updateFRAX() {
