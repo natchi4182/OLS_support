@@ -3,6 +3,15 @@ body {
   max-width: 800px;
   margin: 20px auto;
 }
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.logo {
+  height: 50px;
+}
 fieldset {
   margin-bottom: 20px;
   border: 3px solid #ccc;
