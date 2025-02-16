@@ -183,7 +183,7 @@ button:hover {
   width: 80%;
   max-width: 600px;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   background-color: white;
   border: 1px solid #ccc;
