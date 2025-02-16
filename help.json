@@ -15,7 +15,7 @@
     },
     {
       "heading": "4. FRAXの計算結果が公式サイトとは異なることについて",
-      "content": "• 公式サイトでは独自のリスク補正係数を用いて計数しているため，このサイトで使用している近似式とは完全には一致しません。\n• 正確な値が必要な方は公式サイト（https://frax.shef.ac.uk/FRAX/tool.aspx?lang=jp&country=3）をご利用ください。"
+      "content": "• 公式サイトでは独自のリスク補正係数を用いて計数しているため，このサイトで使用している近似式とは完全には一致しません。\n• 正確な値が必要な方は<a href=\"https://frax.shef.ac.uk/FRAX/tool.aspx?lang=jp&country=3\" target=\"_blank\">公式サイト</a>をご利用ください。"
     }
   ]
 }
