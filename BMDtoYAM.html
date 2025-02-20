@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMD から YAM 値計算</title>
+    <style>
+      body { font-family: "メイリオ", Meiryo, sans-serif; }
+    </style>
+    <script>
+        function calculateYAM() {
+            // 入力値を取得
+            let lumberBMD = parseFloat(document.getElementById("lumberBMD").value);
+            let femurBMD = parseFloat(document.getElementById("femurBMD").value);
+
+            // 若年成人平均骨密度（YAM 100%） Hologic社
+            const lumberYAMBase = 0.988; // 腰椎 (L1-L4) 0.987-0.989
+            const femurYAMBase = 0.876; // 大腿骨近位部 (全体) 0.875-0.877
+
+            // YAM値計算（四捨五入）
+            if (!isNaN(lumberBMD)) {
+                let lumberYAM = Math.round((lumberBMD / lumberYAMBase) * 100);
+                document.getElementById("lumberYAM").textContent = lumberYAM + " %";
+            } else {
+                document.getElementById("lumberYAM").textContent = "-";
+            }
+
+            if (!isNaN(femurBMD)) {
+                let femurYAM = Math.round((femurBMD / femurYAMBase) * 100);
+                document.getElementById("femurYAM").textContent = femurYAM + " %";
+            } else {
+                document.getElementById("femurYAM").textContent = "-";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>BMD から YAM 値の自動計算（Hologic）</h2>
+    
+    <label for="lumberBMD">腰椎 (L1-L4) BMD (g/cm²): </label>
+    <input type="number" id="lumberBMD" step="0.01" oninput="calculateYAM()">
+    <span>YAM値: <strong id="lumberYAM">-</strong></span>
+    <br><br>
+
+    <label for="femurBMD">大腿骨近位部 (全体) BMD (g/cm²): </label>
+    <input type="number" id="femurBMD" step="0.01" oninput="calculateYAM()">
+    <span>YAM値: <strong id="femurYAM">-</strong></span>
+
+</body>
+</html>
