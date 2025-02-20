@@ -111,7 +111,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   await populateCheckboxes('https://natchi4182.github.io/OLS_support/others.json' , 'othersContainer', 'others');
 
   // -----------------------------
-  // 3) 検体検査データ テーブルの生成
+  // 3) BMD to YAM 自動計算 Hologic社
+  // -----------------------------
+  function calculateYAM() {
+    const lumberYAMBase = 0.988; // 腰椎 (L1-L4) 0.987-0.989
+    const femurYAMBase = 0.876; // 大腿骨近位部 (全体) 0.875-0.877
+
+    let lumbarBMD = parseFloat(document.getElementById("lumbarBMDNumber").value);
+    let femurBMD = parseFloat(document.getElementById("femurBMDNumber").value);
+
+    if (!isNaN(lumbarBMD)) {
+      let lumbarYAM = Math.round((lumbarBMD / lumberYAMBase) * 100);
+      document.getElementById("lumbarYAMNumber").value = lumbarYAM;
+      document.getElementById("lumbarYAM").value = lumbarYAM;
+    }
+
+    if (!isNaN(femurBMD)) {
+      let femurYAM = Math.round((femurBMD / femurYAMBase) * 100);
+      document.getElementById("femurYAMNumber").value = femurYAM;
+      document.getElementById("femurYAM").value = femurYAM;
+    }
+  }
+
+  // -----------------------------
+  // 4) 検体検査データ テーブルの生成
   // -----------------------------
   // 外部JSONからlabDataItemsを取得
   let labDataItems = [];
@@ -169,7 +192,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // -----------------------------
-  // legendによる開閉
+  // 5) legendによる開閉
   // -----------------------------
   const legends = document.querySelectorAll('legend'); // すべてのlegendを取得
 
@@ -196,7 +219,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // -----------------------------
-  // fieldsetクリックによる開閉
+  // 6) fieldsetクリックによる開閉
   // -----------------------------
   const fieldsets = document.querySelectorAll('fieldset.shrunkable'); // 縮小可能なフィールドセットを取得
 
@@ -216,7 +239,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // -----------------------------
-  // 4) ボタン別のイベント定義
+  // 7) ボタン別のイベント定義
   // -----------------------------
   // (A) 「確認」ボタン
   document.getElementById('checkBtn').addEventListener('click', (e) => {
@@ -386,7 +409,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // -----------------------------
-  // 5) populateSelect
+  // 8) populateSelect
   // -----------------------------
   async function populateSelect(jsonPath, selectId) {
     try {
@@ -410,7 +433,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // -----------------------------
-  // 6) populateCheckboxes
+  // 9) populateCheckboxes
   // -----------------------------
   async function populateCheckboxes(jsonPath, containerId, nameAttr) {
     try {
@@ -464,7 +487,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // -----------------------------
-  // 7) 検体検査データ テーブルの色変更と正常値の表示
+  // 10) 検体検査データ テーブルの色変更と正常値の表示
   // -----------------------------
   function getSelectedSex() {
     const sexRadios = document.querySelectorAll('input[name="sex"]');
@@ -558,7 +581,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // -----------------------------
-  // 8) リアルタイムバリデーションとエラーメッセージの追加
+  // 11) リアルタイムバリデーションとエラーメッセージの追加
   // -----------------------------
   const ageNumber = document.getElementById('ageNumber');
   const ageInputRange = document.getElementById('ageInput');
@@ -581,7 +604,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   ageInputRange.addEventListener('input', validateAge);
 
   // -----------------------------
-  // 9) データの保存と復元
+  // 12) データの保存と復元
   // -----------------------------
   // フォームのデータを保存
   const formElement = document.getElementById('mainForm');
