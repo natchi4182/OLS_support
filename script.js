@@ -113,25 +113,47 @@ document.addEventListener('DOMContentLoaded', async () => {
   // -----------------------------
   // 3) BMD to YAM 自動計算 Hologic社
   // -----------------------------
-  function calculateYAM() {
-    const lumberYAMBase = 0.988; // 腰椎 (L1-L4) 0.987-0.989
-    const femurYAMBase = 0.876; // 大腿骨近位部 (全体) 0.875-0.877
-
-    let lumbarBMD = parseFloat(document.getElementById("lumbarBMDNumber").value);
-    let femurBMD = parseFloat(document.getElementById("femurBMDNumber").value);
-
-    if (!isNaN(lumbarBMD)) {
-      let lumbarYAM = Math.round((lumbarBMD / lumberYAMBase) * 100);
-      document.getElementById("lumbarYAMNumber").value = lumbarYAM;
-      document.getElementById("lumbarYAM").value = lumbarYAM;
-    }
-
-    if (!isNaN(femurBMD)) {
-      let femurYAM = Math.round((femurBMD / femurYAMBase) * 100);
-      document.getElementById("femurYAMNumber").value = femurYAM;
-      document.getElementById("femurYAM").value = femurYAM;
-    }
-  }
+  document.addEventListener('DOMContentLoaded', function () {
+    function calculateYAM() {
+      const lumberYAMBase = 0.988; // 腰椎 (L1-L4) 0.987-0.989
+      const femurYAMBase = 0.876; // 大腿骨近位部 (全体) 0.875-0.877
+  
+      let lumbarBMD = parseFloat(document.getElementById("lumbarBMDNumber").value);
+      let femurBMD = parseFloat(document.getElementById("femurBMDNumber").value);
+  
+      if (!isNaN(lumbarBMD)) {
+        let lumbarYAM = Math.round((lumbarBMD / lumberYAMBase) * 100);
+        document.getElementById("lumbarYAMNumber").value = lumbarYAM;
+        document.getElementById("lumbarYAM").value = lumbarYAM;
+      }
+  
+      if (!isNaN(femurBMD)) {
+        let femurYAM = Math.round((femurBMD / femurYAMBase) * 100);
+        document.getElementById("femurYAMNumber").value = femurYAM;
+        document.getElementById("femurYAM").value = femurYAM;
+      }
+    };
+  
+    document.getElementById("lumbarBMDNumber").addEventListener("input", calculateYAM);
+    document.getElementById("lumbarBMD").addEventListener("input", function () {
+      document.getElementById("lumbarBMDNumber").value = this.value;
+      calculateYAM();
+    });
+    document.getElementById("femurBMDNumber").addEventListener("input", calculateYAM);
+    document.getElementById("femurBMD").addEventListener("input", function () {
+      document.getElementById("femurBMDNumber").value = this.value;
+      calculateYAM();
+    });
+  
+    document.getElementById("lumbarYAMNumber").addEventListener("input", function() {
+      document.getElementById("lumbarYAM").value = this.value;
+    });
+    document.getElementById("femurYAMNumber").addEventListener("input", function() {
+      document.getElementById("femurYAM").value = this.value;
+    });
+  
+    calculateYAM();
+  });
 
   // -----------------------------
   // 4) 検体検査データ テーブルの生成
