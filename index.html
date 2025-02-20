@@ -200,19 +200,19 @@
       <div class="flex-container">
         <div class="input-block">
           <label for="lumbarBMD">腰椎（g/cm²）:</label>
-          <input type="number" inputmode="numeric" id="lumbarBMDNumber" name="lumbar_bmd" min="0.000" max="2.000" step="0.001" placeholder="0.000〜2.000">
-          <input type="range" class="long-slider" id="lumbarBMD" min="0.000" max="2.000" step="0.001">
+          <input type="number" inputmode="numeric" id="lumbarBMDNumber" name="lumbar_bmd" min="0.000" max="2.000" step="0.001" placeholder="0.000〜2.000" oninput="calculateYAM()">
+          <input type="range" class="long-slider" id="lumbarBMD" min="0.000" max="2.000" step="0.001" oninput="document.getElementById('lumbarBMDNumber').value=this.value; calculateYAM()">
           <label for="lumbarYAM">YAM値（%）:</label>
           <input type="number" inputmode="numeric" id="lumbarYAMNumber" name="lumbar_yam" min="0" max="200" step="1" placeholder="0〜200">
-          <input type="range" class="long-slider" id="lumbarYAM" min="0" max="200" step="1">
+          <input type="range" class="long-slider" id="lumbarYAM" min="0" max="200" step="1" oninput="document.getElementById('lumbarYAMNumber').value=this.value">
         </div>
         <div class="input-block">
           <label for="femurBMD">大腿骨近位（g/cm²）:</label>
-          <input type="number" inputmode="numeric" id="femurBMDNumber" name="femur_bmd" min="0.000" max="2.000" step="0.001" placeholder="0.000〜2.000">
-          <input type="range" class="long-slider" id="femurBMD" min="0.000" max="2.000" step="0.001">
+          <input type="number" inputmode="numeric" id="femurBMDNumber" name="femur_bmd" min="0.000" max="2.000" step="0.001" placeholder="0.000〜2.000" oninput="calculateYAM()">
+          <input type="range" class="long-slider" id="femurBMD" min="0.000" max="2.000" step="0.001" oninput="document.getElementById('femurBMDNumber').value=this.value; calculateYAM()">
           <label for="femurYAM">YAM値（%）:</label>
           <input type="number" inputmode="numeric" id="femurYAMNumber" name="femur_yam" min="0" max="200" step="1" placeholder="0〜200">
-          <input type="range" class="long-slider" id="femurYAM" min="0" max="200" step="1">
+          <input type="range" class="long-slider" id="femurYAM" min="0" max="200" step="1" oninput="document.getElementById('femurYAMNumber').value=this.value">
         </div>
       </div>
     </fieldset>
