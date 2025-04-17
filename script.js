@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
       // WebアプリのURL (doPostを定義しているGAS)
-      const scriptUrl = 'https://script.google.com/macros/s/AKfycbxtLrBrObAdOQLs8WvufxKY2cNAeIEUkOSsrtx_264okknmYqCJMlPrvXRihR4Atqp3/exec';
+      const scriptUrl = 'https://script.google.com/macros/s/AKfycbyO-sMTmDL9IyGYbMaZ8oJJIAG6Wc8wprjxZvD49FCRvP4PcTFWeKPB5bwRATc_FyUO/exec';
 
       const response = await fetch(scriptUrl, {
         method: 'POST',
